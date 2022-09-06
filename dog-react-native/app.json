@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "dog-react-native",
+    "slug": "dog-react-native",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
