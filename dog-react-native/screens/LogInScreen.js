@@ -21,10 +21,10 @@ const LogInScreen = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.replace("Camera");
-        //navigation.replace("Home");
-      }
+      // if (user) {
+      //   navigation.replace("Camera");
+      //   //navigation.replace("Home");
+      // }
     });
 
     return unsubscribe;
@@ -76,6 +76,18 @@ const LogInScreen = () => {
             style={[styles.button, styles.buttonOutline]}
           >
             <Text style={styles.buttonOutlineText}> Register</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={()=>{navigation.replace("Camera")}}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.buttonOutlineText}> Camera </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={()=>{navigation.replace("Test")}}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.buttonOutlineText}> Go to test screen (delete this later) </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
