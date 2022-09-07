@@ -1,12 +1,11 @@
-
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebase";
 import { doc, setDoc, updateDoc , arrayUnion, getDoc} from "firebase/firestore"; 
 import {dataBase} from './firebase' 
-
+​
 // Reference to right dataset in the firestore database
 const userData = doc(dataBase, 'USER Data collection', 'USER DATA');
-
+​
 function addUserToFirestore(user){
   //takes user object as argument, user = userCredentials.user
     const {displayName,email,uid}=user
@@ -31,6 +30,7 @@ function getUserDatabyUID(uid){
       // friends are stored using uid
       }
       */
+
 }
 function getUserData(){
     return getDoc(userData).then((res)=>{
@@ -50,7 +50,25 @@ function getUserData(){
         // individual users are stored in objects with their uid as the key
       */
 }
-
+function getUserData(){
+    return getDoc(userData).then((res)=>{
+        const data = res.data()
+        return data
+      })
+      /* returns object of the form
+      {
+        123123XX2343: { 
+          uid: 123123XX2343,
+        email: joe@mama.com
+        displayName: Rick Astley,
+        dogsCaught: [pomeranian,husky],
+        friends: [97886XX564, 453VDDH456 ]
+        },
+        97886XX564:{....}
+        // individual users are stored in objects with their uid as the key
+      */
+}
+​
 function addFriend(friendId){
     const uid_friends = 
     //  loggedInUser.uid+  <----need to find a way to access this
@@ -62,7 +80,6 @@ function addFriend(friendId){
   }).then(res=>console.log({res}))
   .catch(error=>console.log({error,msg:'while adding friend'}))
 }
-
 function addCaughtDog(dogName){
     const uid_dogs = 
     //  loggedInUser.uid+  <----need to find a way to access this
@@ -110,7 +127,7 @@ function createEmailAndUser(email,password){
   })
   .catch(error=>console.log({error,msg:'while creating user'}))
 }
-
+​
 const signOut= ()=>{
     auth.signOut()
     .then(res=>{
@@ -119,6 +136,5 @@ const signOut= ()=>{
     })
     .catch(error=>console.log({error,msg:'while signing out'}))
 }
-
 // auth.onAuthStateChanged(user=>console.log(user))
 export {userData, signOut, createEmailAndUser, emailLogin, googleLogin, addCaughtDog,addFriend, getUserDatabyUID, addUserToFirestore, getUserData}

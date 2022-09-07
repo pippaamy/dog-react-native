@@ -1,17 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import Navigation from "../Navigation";
+import { StatusBar } from "expo-status-bar";
 
-const HomeScreen = () => {
+const CameraScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text onPress={() => navigation.navigate("Home")}>Home</Text>
-      <Navigation />
+      <Text onPress={() => navigation.navigate("Home")}>Camera</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default CameraScreen;
 
 const styles = StyleSheet.create({
   container: {
