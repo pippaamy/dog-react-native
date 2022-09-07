@@ -9,10 +9,11 @@ function addUserToFirestore(user){
   //takes user object as argument, user = userCredentials.user
     const {displayName,email,uid}=user
    return updateDoc(userData, {
-        [uid]:{displayName,uid, email, dogsCaught:[],friends:[]}
+        [uid]:{displayName,uid, email, dogsCaught:[],friends:[] , imageRefs:[]}
     })
     // adds user object to database with extra properties for the game
 }
+
 function getUserDatabyUID(uid){
     // uid = user.uid
     return getDoc(userData).then((res)=>{
@@ -50,6 +51,18 @@ function getUserData(){
       */
 }
 
+function addImagePath(uid,imagePath){
+    const uid_imagePath = 
+    //  loggedInUser.uid+  <----need to find a way to access this
+    uid+
+    '.imagerefs'
+
+    updateDoc(userData, {
+    [uid_imagePath]:  arrayUnion(imagePath)
+      
+  }).then(res=>console.log({res}))
+  .catch(error=>console.log({error,msg:'while adding friend'}))
+}
 function addFriend(friendId){
     const uid_friends = 
     //  loggedInUser.uid+  <----need to find a way to access this
@@ -118,4 +131,6 @@ const signOut= ()=>{
     .catch(error=>console.log({error,msg:'while signing out'}))
 }
 // auth.onAuthStateChanged(user=>console.log(user))
-export {userData, signOut, createEmailAndUser, emailLogin, googleLogin, addCaughtDog,addFriend, getUserDatabyUID, addUserToFirestore, getUserData}
+export {userData, signOut, createEmailAndUser, emailLogin, googleLogin,
+   addCaughtDog,addFriend, getUserDatabyUID, addUserToFirestore, getUserData
+  ,addImagePath}
