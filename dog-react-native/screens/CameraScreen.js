@@ -4,9 +4,10 @@ import { Camera } from 'expo-camera';
 
 export default function CameraScreen() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
-  const [previewVisible, setPreviewVisible] = useState(false)
-  const [capturedImage, setCapturedImage] = useState(null)
-  const ref = useRef(null)
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null);
+  const ref = useRef(null);
+  
 
   if (!permission) {
     return <View />;
@@ -34,15 +35,37 @@ export default function CameraScreen() {
     setCapturedImage(photo.uri)
   }
 
+  const __retakePicture = () => {
+    setCapturedImage(null)
+    setPreviewVisible(false)
+  }
+
   let PhotoPreview = null;
 
   if (previewVisible && capturedImage) {
-    console.log(capturedImage)
     PhotoPreview = () => (
-      <Image 
-        source = {{ uri: capturedImage }} 
-        style={{flex: 1}}
-      />
+      <View style={{flex: 1}}>
+        <Image 
+          source = {{ uri: capturedImage }} 
+          style={{flex: 9}}
+        />
+        <View
+          style={{
+            alignSelf: 'flex-start',
+            alignItems: 'center',
+            flexDirection: 'row',
+            minHeight: 60,
+          }}>
+          <TouchableOpacity onPress={__retakePicture}>
+            <Text style={{fontSize: 20, marginLeft: 30}}>Retake Photo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            // onPress={__matchDog}
+            >
+            <Text style={{fontSize: 20, marginLeft: 30}}>Match Dog!</Text>
+          </TouchableOpacity>
+        </View>
+      </View>  
     )
   }
 
@@ -51,15 +74,15 @@ export default function CameraScreen() {
       {previewVisible && capturedImage ? 
       (
         <View
-                  style={{
-                    backgroundColor: 'transparent',
-                    flex: 1,
-                    width: '100%',
-                    height: '100%'
-                  }}
-                >
-                <PhotoPreview />
-                </View>
+          style={{
+            backgroundColor: 'transparent',
+            flex: 1,
+            width: '100%',
+            height: '100%'
+          }}
+        >
+        <PhotoPreview />
+        </View>
       ) : (
       <Camera
         style={{flex: 1,width:"100%"}}
