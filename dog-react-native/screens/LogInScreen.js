@@ -21,9 +21,10 @@ const LogInScreen = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      // if (user) {
-      //   navigation.replace("Home");
-      // }
+      if (user) {
+        navigation.replace("Camera");
+        //navigation.replace("Home");
+      }
     });
 
     return unsubscribe;
