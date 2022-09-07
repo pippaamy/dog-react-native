@@ -1,27 +1,34 @@
-const database = firebase.firestore()
 
-const collectionName= 'USER Data collection'
-const newDocName = 'USER DATA'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase";
+import { doc, setDoc, updateDoc , arrayUnion, getDoc} from "firebase/firestore"; 
+import {dataBase} from './firebase' 
 
-const userData = database.collection(collectionName).doc(newDocName)
+const userData = doc(dataBase, 'USER Data collection', 'USER DATA');
 
 function addUserToFirestore(user){
     const {displayName,email,uid}=user
-   return userData.update({
+   return updateDoc(userData, {
         [uid]:{displayName,uid, email, dogsCaught:[],friends:[]}
     })
 }
 function getUserDatabyUID(uid){
-    return userData.get().then((res)=>{
+    return getDoc(userData).then((res)=>{
         const data = res.data()[uid]
+        return data
+      })
+}
+function getUserData(){
+    return getDoc(userData).then((res)=>{
+        const data = res.data()
         return data
       })
 }
 
 function addFriend(friendId){
     const uid_friends = loggedInUser.uid+'.friends'
-  userData.update({
-    [uid_friends]:  firebase.firestore.FieldValue.arrayUnion(friendId)
+    updateDoc(userData, {
+    [uid_friends]:  arrayUnion(friendId)
       
   }).then(res=>console.log({res}))
   .catch(error=>console.log({error,msg:'while adding friend'}))
@@ -29,8 +36,8 @@ function addFriend(friendId){
 
 function addCaughtDog(dogName){
     const uid_dogs = loggedInUser.uid+'.dogsCaught'
-  userData.update({
-    [uid_dogs]:  firebase.firestore.FieldValue.arrayUnion(dogName)
+    updateDoc(userData, {
+    [uid_dogs]:  arrayUnion(dogName)
       
   }).then(res=>console.log({res}))
   .catch(error=>console.log({error,msg:'while adding caught dog'}))
@@ -47,7 +54,7 @@ function googleLogin(){
         .catch(error=>console.log({error}))
 }
 function emailLogin(email,password){
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in
     const user = userCredential.user;
@@ -57,8 +64,8 @@ function emailLogin(email,password){
   })
   .catch(error=>console.log({error,msg:'while logging in with email'}))
 }
-function emailCreate(email,password){
-    firebase.auth().createUserWithEmailAndPassword(email,password)
+function createEmailAndUser(email,password){
+    createUserWithEmailAndPassword(auth, email,password)
   .then((userCredential) => {
    const user = userCredential.user;
     // welcomeMessage(user)
@@ -82,3 +89,4 @@ const signOut= ()=>{
 }
 
 // auth.onAuthStateChanged(user=>console.log(user))
+export {signOut, createEmailAndUser, emailLogin, googleLogin, addCaughtDog,addFriend, getUserDatabyUID, addUserToFirestore, getUserData}

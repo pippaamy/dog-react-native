@@ -8,9 +8,10 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigation } from "@react-navigation/native";
+import { createEmailAndUser } from "../api";
 
 const LogInScreen = () => {
   const [email, setEmail] = useState("");
@@ -20,26 +21,18 @@ const LogInScreen = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.replace("Home");
-      }
+      // if (user) {
+      //   navigation.replace("Home");
+      // }
     });
 
     return unsubscribe;
   }, []);
 
-  const handleSignUp = () => {
-    createUserWithEmailAndPassword(email, password, auth)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log("Registered with:", user.email);
-      })
-      .catch((error) => alert(error.message));
-  };
+  const handleSignUp = ()=>{createEmailAndUser(email,password)}
 
-  const handleLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
+  const handleLogin = () => { 
+      signInWithEmailAndPassword(auth,email,password)
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with:", user.email);
