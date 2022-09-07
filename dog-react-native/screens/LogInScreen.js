@@ -78,6 +78,8 @@ const LogInScreen = () => {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
+      {/* LINE BELOW LINKS TO TEST SCREEN */}
+      <View><TouchableOpacity onPress={()=>{navigation.replace("Test")}}><Text> Test Screen </Text></TouchableOpacity></View>
     </>
   );
 };

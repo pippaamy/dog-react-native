@@ -1,5 +1,6 @@
 
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword ,
+  onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 import { doc, setDoc, updateDoc , arrayUnion, getDoc} from "firebase/firestore"; 
 import {dataBase} from './firebase' 
@@ -120,5 +121,5 @@ const signOut= ()=>{
     .catch(error=>console.log({error,msg:'while signing out'}))
 }
 
-// auth.onAuthStateChanged(user=>console.log(user))
+
 export {userData, signOut, createEmailAndUser, emailLogin, googleLogin, addCaughtDog,addFriend, getUserDatabyUID, addUserToFirestore, getUserData}
