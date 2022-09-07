@@ -4,29 +4,58 @@ import { auth } from "./firebase";
 import { doc, setDoc, updateDoc , arrayUnion, getDoc} from "firebase/firestore"; 
 import {dataBase} from './firebase' 
 
+// Reference to right dataset in the firestore database
 const userData = doc(dataBase, 'USER Data collection', 'USER DATA');
 
 function addUserToFirestore(user){
+  //takes user object as argument, user = userCredentials.user
     const {displayName,email,uid}=user
    return updateDoc(userData, {
         [uid]:{displayName,uid, email, dogsCaught:[],friends:[]}
     })
+    // adds user object to database with extra properties for the game
 }
 function getUserDatabyUID(uid){
+    // uid = user.uid
     return getDoc(userData).then((res)=>{
         const data = res.data()[uid]
         return data
       })
+      /* returns object of the form
+      { 
+        uid: 123123XX2343,
+      email: joe@mama.com
+      displayName: Rick Astley,
+      dogsCaught: [pomeranian,husky],
+      friends: [97886XX564, 453VDDH456 ]
+      // friends are stored using uid
+      }
+      */
 }
 function getUserData(){
     return getDoc(userData).then((res)=>{
         const data = res.data()
         return data
       })
+      /* returns object of the form
+      {
+        123123XX2343: { 
+          uid: 123123XX2343,
+        email: joe@mama.com
+        displayName: Rick Astley,
+        dogsCaught: [pomeranian,husky],
+        friends: [97886XX564, 453VDDH456 ]
+        },
+        97886XX564:{....}
+        // individual users are stored in objects with their uid as the key
+      */
 }
 
 function addFriend(friendId){
-    const uid_friends = loggedInUser.uid+'.friends'
+    const uid_friends = 
+    //  loggedInUser.uid+  <----need to find a way to access this
+    '.friends'
+
     updateDoc(userData, {
     [uid_friends]:  arrayUnion(friendId)
       
@@ -35,13 +64,16 @@ function addFriend(friendId){
 }
 
 function addCaughtDog(dogName){
-    const uid_dogs = loggedInUser.uid+'.dogsCaught'
+    const uid_dogs = 
+    //  loggedInUser.uid+  <----need to find a way to access this
+    '.dogsCaught'
     updateDoc(userData, {
     [uid_dogs]:  arrayUnion(dogName)
       
   }).then(res=>console.log({res}))
   .catch(error=>console.log({error,msg:'while adding caught dog'}))
 }
+// we probably wont need google login
 function googleLogin(){
     const provider = new firebase.auth.GoogleAuthProvider()
   
@@ -89,4 +121,4 @@ const signOut= ()=>{
 }
 
 // auth.onAuthStateChanged(user=>console.log(user))
-export {signOut, createEmailAndUser, emailLogin, googleLogin, addCaughtDog,addFriend, getUserDatabyUID, addUserToFirestore, getUserData}
+export {userData, signOut, createEmailAndUser, emailLogin, googleLogin, addCaughtDog,addFriend, getUserDatabyUID, addUserToFirestore, getUserData}
