@@ -25,4 +25,4 @@ const auth = getAuth(firebaseApp);
 const dataBase= getFirestore(firebaseApp)
 getStorage(firebaseApp)
 // onAuthStateChanged(auth, (user) => {});
-export { auth,dataBase };
+export { auth,dataBase ,firebaseApp};
