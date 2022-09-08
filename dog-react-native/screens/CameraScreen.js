@@ -51,18 +51,19 @@ export default function CameraScreen() {
         />
         <View          
           style={{            
+            backgroundColor: '#c79e58',
             justifyContent: 'center',            
             alignItems: 'center',            
             flexDirection: 'row',            
             minHeight: 60,          
           }}>         
           <TouchableOpacity onPress={__retakePicture}>            
-            <Text style={{backgroundColor: "#312280", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>          
+            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>          
           </TouchableOpacity>          
           <TouchableOpacity            
             // onPress={__matchDog}            
           >            
-            <Text style={{backgroundColor: "#312280", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>          
+            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>          
           </TouchableOpacity>       
          </View>
       </View>  
