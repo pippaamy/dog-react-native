@@ -8,7 +8,7 @@
     "wsl-start": "NODE_OPTIONS=--openssl-legacy-provider npx expo start --web",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "test":"jest"
+    "test": "jest"
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.2",
@@ -27,7 +27,7 @@
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "firebase": "^9.9.4",
-    "jest": "^29.0.2",
+    "jest": "^26.6.3",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "0.69.5",
@@ -35,7 +35,7 @@
     "react-native-fs": "^2.20.0",
     "react-native-safe-area-context": "4.3.1",
     "react-native-screens": "~3.15.0",
-    "react-native-svg": "^12.3.0",
+    "react-native-svg": "12.3.0",
     "react-native-web": "~0.18.7"
   },
   "devDependencies": {
