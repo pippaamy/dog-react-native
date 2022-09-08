@@ -1,17 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-// import Navigation from "../Navigation";
 
-const HomeScreen = () => {
+const GalleryScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text onPress={() => navigation.navigate("Home")}>Home</Text>
-      {/* <Navigation /> */}
+      <Text onPress={() => navigation.navigate("Home")}>Gallery</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default GalleryScreen;
 
 const styles = StyleSheet.create({
   container: {

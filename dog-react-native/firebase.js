@@ -1,6 +1,8 @@
 // syntac for firebase 9 is different
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -20,5 +22,7 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
-onAuthStateChanged(auth, (user) => {});
-export { auth };
+const dataBase= getFirestore(firebaseApp)
+getStorage(firebaseApp)
+// onAuthStateChanged(auth, (user) => {});
+export { auth,dataBase ,firebaseApp};
