@@ -46,6 +46,7 @@ function getUserDatabyUID(uid) {
     return data;
   });
   /* returns object of the form
+
       { 
         uid: 123123XX2343,
       email: joe@mama.com
@@ -55,6 +56,7 @@ function getUserDatabyUID(uid) {
       // friends are stored using uid
       }
       */
+
 }
 function getUserData() {
   return getDoc(userData).then((res) => {
@@ -75,8 +77,21 @@ function getUserData() {
       */
 }
 
-function addFriend(friendId) {
-  const uid_friends =
+
+function addImagePath(uid,imagePath){
+    const uid_imagePath = 
+    //  loggedInUser.uid+  <----need to find a way to access this
+    uid+
+    '.imagerefs'
+
+    updateDoc(userData, {
+    [uid_imagePath]:  arrayUnion(imagePath)
+      
+  }).then(res=>console.log({res}))
+  .catch(error=>console.log({error,msg:'while adding friend'}))
+}
+function addFriend(friendId){
+    const uid_friends = 
     //  loggedInUser.uid+  <----need to find a way to access this
     ".friends";
 
@@ -87,8 +102,8 @@ function addFriend(friendId) {
     .catch((error) => console.log({ error, msg: "while adding friend" }));
 }
 
-function addCaughtDog(dogName) {
-  const uid_dogs =
+function addCaughtDog(dogName){
+    const uid_dogs = 
     //  loggedInUser.uid+  <----need to find a way to access this
     ".dogsCaught";
   updateDoc(userData, {
@@ -166,3 +181,4 @@ export {
   getUserData,
   getBadges,
 };
+
