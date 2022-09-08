@@ -90,6 +90,7 @@ function getUserDatabyUID(uid) {
       */
 }
 
+
 function addImagePath(imagePath) {
   return auth.onAuthStateChanged((user) => {
     const { uid } = user;
@@ -112,6 +113,7 @@ function addCaughtDog(dogName) {
       dogsCaught: arrayUnion(dogName),
     }).catch((error) => console.log({ error, msg: "while adding caught dog" }));
   });
+
 }
 
 function emailLogin(email, password) {
@@ -141,10 +143,12 @@ function createEmailAndUser(email, password) {
 const signOut = () => {
   return auth
     .signOut()
+
     .then((res) => {
       console.log("signed out");
       return res;
     })
+
     .catch((error) => console.log({ error, msg: "while signing out" }));
 };
 
