@@ -40,7 +40,6 @@ const LogInScreen = () => {
       })
       .catch((error) => alert(error.message));
   };
-
   return (
     <>
       <Image
