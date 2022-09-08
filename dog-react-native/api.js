@@ -98,6 +98,16 @@ function addImagePath(imagePath) {
     }).catch((error) => console.log({ error, msg: "while adding Image" }));
   });
 }
+function addProfilePic(path) {
+  return auth.onAuthStateChanged((user) => {
+    const { uid } = user;
+    return updateDoc(userDoc(uid), {
+      profilePic: path,
+    }).catch((error) =>
+      console.log({ error, msg: "while adding Profile Image" })
+    );
+  });
+}
 function addFriend(friendId) {
   return auth.onAuthStateChanged((user) => {
     updateDoc(userDoc(user.uid), {
@@ -161,4 +171,5 @@ export {
   getUserData,
   getBadges,
   addImagePath,
+  addProfilePic,
 };
