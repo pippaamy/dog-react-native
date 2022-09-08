@@ -31,7 +31,7 @@ function getBadges(breed) {
       const parseBadge = badge.data();
       if (parseBadge.breed === breed) {
         return parseBadge;
-        // provides all info on the breed 
+        // provides all info on the breed
       }
     });
   });
@@ -62,7 +62,6 @@ function getUserDatabyUID(uid) {
       // friends are stored using uid
       }
       */
-
 }
 function getUserData() {
   return getDoc(userData).then((res) => {
@@ -96,9 +95,10 @@ function addImagePath(imagePath){
   .catch(error=>console.log({error,msg:'while adding friend'}))
 
   });
+
 }
-function addFriend(friendId){
-    const uid_friends = 
+function addFriend(friendId) {
+  const uid_friends =
     //  loggedInUser.uid+  <----need to find a way to access this
     ".friends";
 
@@ -109,8 +109,8 @@ function addFriend(friendId){
     .catch((error) => console.log({ error, msg: "while adding friend" }));
 }
 
-function addCaughtDog(dogName){
-    const uid_dogs = 
+function addCaughtDog(dogName) {
+  const uid_dogs =
     //  loggedInUser.uid+  <----need to find a way to access this
     ".dogsCaught";
   updateDoc(userData, {
@@ -164,12 +164,9 @@ function createEmailAndUser(email, password) {
 }
 
 const signOut = () => {
-  auth
+  return auth
     .signOut()
-    .then((res) => {
-      // welcome.innerHTML='logged out!'
-      // loggedInUser={}
-    })
+    .then((res) => {})
     .catch((error) => console.log({ error, msg: "while signing out" }));
 };
 
@@ -187,4 +184,3 @@ export {
   getBadges,
   addImagePath
 };
-
