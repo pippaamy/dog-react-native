@@ -1,14 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-
-<iframe
-  src="https://giphy.com/embed/ZE5aeSFHu5tWR7OeWl"
-  width="380"
-  height="480"
-  frameBorder="0"
-  class="giphy-embed"
-  allowFullScreen
-></iframe>;
+import { Image, StyleSheet, Text, View } from "react-native";
 
 const LoadingScreen = () => {
   return (
