@@ -4,11 +4,10 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LogInScreen from "./screens/LogInScreen";
-import HomeScreen from "./screens/HomeScreen";
-import CameraScreen from "./screens/CameraScreen";
-import TestScreen from "./screens/TestScreen";
+import MainScreen from "./screens/MainScreen";
 
 const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   return (
@@ -19,9 +18,10 @@ export default function App() {
           name="Login"
           component={LogInScreen}
         />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Main" component={MainScreen} options={{ title: 'Gone For A Bork!' }} />
+        {/* <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Camera" component={CameraScreen} />
-        <Stack.Screen name="Test" component={TestScreen} />
+        <Stack.Screen name="Test" component={TestScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

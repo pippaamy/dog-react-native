@@ -5,8 +5,7 @@ import React from "react";
 const HomeScreen = () => {
   return (
     <View style={styles.container}>
-      <Text onPress={() => navigation.navigate("Home")}>Home</Text>
-      {/* <Navigation /> */}
+      <Text>Home</Text>
     </View>
   );
 };
