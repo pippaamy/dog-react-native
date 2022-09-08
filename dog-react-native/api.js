@@ -16,15 +16,16 @@ import { dataBase } from "./firebase";
 
 // Reference to right dataset in the firestore database
 const userData = doc(dataBase, "USER Data collection", "USER DATA");
-const badgeData = collection(dataBase, "badges")
-
+const badgeData = collection(dataBase, "badges");
 
 function getBadges(breed) {
+  // take the breed name as an argument
   return getDocs(badgeData).then((res) => {
     res.docs.map((badge) => {
       const parseBadge = badge.data();
       if (parseBadge.breed === breed) {
         return parseBadge;
+        // provides all info on the breed 
       }
     });
   });
