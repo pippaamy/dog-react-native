@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../firebase";
+import { signOut } from "../api";
 
 // import Navigation from "../Navigation";
 
@@ -9,11 +9,9 @@ const HomeScreen = () => {
   const navigation = useNavigation();
 
   const handleLogOut = () => {
-    console.log("Im logging out");
-    auth
-      .signOut()
+    signOut()
       .then(() => {
-        navigation.replace("LogInScreen");
+        // navigation.replace("LogInScreen");
       })
       .catch((error) => alert(error.message));
   };
@@ -24,11 +22,12 @@ const HomeScreen = () => {
         <Text onPress={() => navigation.navigate("Home")}>Home</Text>
         {/* <Navigation /> */}
       </View>
-      <View style={styles.button}>
-        <TouchableOpacity OnPress={handleLogOut} style={styles.button}>
+
+      <TouchableOpacity onPress={handleLogOut} style={styles.button}>
+        <View style={styles.button}>
           <Text style={styles.buttonText}>Log out</Text>
-        </TouchableOpacity>
-      </View>
+        </View>
+      </TouchableOpacity>
     </>
   );
 };
