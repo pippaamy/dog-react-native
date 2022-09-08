@@ -42,6 +42,7 @@ const LogInScreen = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with:", user.email);
+        navigation.replace("Main")
       })
       .catch((error) => alert(error.message));
   };
@@ -82,6 +83,10 @@ const LogInScreen = () => {
             <Text style={styles.buttonOutlineText}> Register</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={()=>{navigation.replace("Main")}}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.buttonOutlineText}> ShortCut to Main (delete later) </Text>
             onPress={() => {
               navigation.replace("Camera");
             }}

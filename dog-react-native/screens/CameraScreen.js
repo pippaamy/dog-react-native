@@ -46,6 +46,30 @@ export default function CameraScreen() {
 
   if (previewVisible && capturedImage) {
     PhotoPreview = () => (
+      <View style={{flex: 1}}>
+        <Image 
+          source = {{ uri: capturedImage }} 
+          style={{flex: 9}}
+        />
+        <View          
+          style={{            
+            backgroundColor: '#c79e58',
+            justifyContent: 'center',            
+            alignItems: 'center',            
+            flexDirection: 'row',            
+            minHeight: 60,          
+          }}>         
+          <TouchableOpacity onPress={__retakePicture}>            
+            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>          
+          </TouchableOpacity>          
+          <TouchableOpacity            
+            // onPress={__matchDog}            
+          >            
+            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>          
+          </TouchableOpacity>       
+         </View>
+      </View>  
+    )
       <View style={{ flex: 1 }}>
         <Image source={{ uri: capturedImage }} style={{ flex: 9 }} />
         <View
