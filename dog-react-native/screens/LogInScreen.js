@@ -42,10 +42,12 @@ const LogInScreen = () => {
   };
   return (
     <>
+    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignContent: 'center', paddingTop: 20}}>
       <Image
-        source={require("../unknown2.jpg")}
-        style={{ width: 420, height: 350 }}
+        source={require("../public/images/weenies.gif")}
+        style={{width: 320, height: 200, display: 'flex', flexDirection: 'row'}} resizeMode='contain' resizeMethod="resize" justifyContent='center' alignItems='center'
       />
+      </View>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
           <TextInput
