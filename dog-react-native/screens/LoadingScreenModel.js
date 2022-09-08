@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 
-const LoadingScreen = () => {
+const LoadingScreenModel = () => {
   return (
     <>
       <Image
@@ -12,7 +12,7 @@ const LoadingScreen = () => {
   );
 };
 
-export default LoadingScreen;
+export default LoadingScreenModel;
 
 const styles = StyleSheet.create({
   container: {

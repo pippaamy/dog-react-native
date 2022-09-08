@@ -8,7 +8,10 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigation } from "@react-navigation/native";
 import { createEmailAndUser } from "../api";
@@ -24,20 +27,23 @@ const LogInScreen = () => {
       if (user) {
         // console.log(user);
         // // navigation.replace("Camera");
-        // navigation.replace("Home");
+        navigation.replace("Home");
       }
     });
 
     return unsubscribe;
   }, []);
 
-  const handleSignUp = ()=>{createEmailAndUser(email,password)}
+  const handleSignUp = () => {
+    createEmailAndUser(email, password);
+  };
 
-  const handleLogin = () => { 
-      signInWithEmailAndPassword(auth,email,password)
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with:", user.email);
+        navigation.replace("Main")
       })
       .catch((error) => alert(error.message));
   };
@@ -78,16 +84,27 @@ const LogInScreen = () => {
             <Text style={styles.buttonOutlineText}> Register</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={()=>{navigation.replace("Camera")}}
+            onPress={()=>{navigation.replace("Main")}}
+            style={[styles.button, styles.buttonOutline]}
+          >
+            <Text style={styles.buttonOutlineText}> ShortCut to Main (delete later) </Text>
+            onPress={() => {
+              navigation.replace("Camera");
+            }}
             style={[styles.button, styles.buttonOutline]}
           >
             <Text style={styles.buttonOutlineText}> Camera </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={()=>{navigation.replace("Test")}}
+            onPress={() => {
+              navigation.replace("Test");
+            }}
             style={[styles.button, styles.buttonOutline]}
           >
-            <Text style={styles.buttonOutlineText}> Go to test screen (delete this later) </Text>
+            <Text style={styles.buttonOutlineText}>
+              {" "}
+              Go to test screen (delete this later){" "}
+            </Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
