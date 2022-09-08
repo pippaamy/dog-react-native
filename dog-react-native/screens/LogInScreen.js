@@ -22,6 +22,7 @@ const LogInScreen = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
+        // console.log(user);
         // // navigation.replace("Camera");
         // navigation.replace("Home");
       }

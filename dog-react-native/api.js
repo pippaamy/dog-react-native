@@ -18,6 +18,12 @@ import { dataBase } from "./firebase";
 const userData = doc(dataBase, "USER Data collection", "USER DATA");
 const badgeData = collection(dataBase, "badges");
 
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    console.log(user);
+  }
+});
+
 function getBadges(breed) {
   // take the breed name as an argument
   return getDocs(badgeData).then((res) => {
@@ -35,7 +41,7 @@ function addUserToFirestore(user) {
   //takes user object as argument, user = userCredentials.user
   const { displayName, email, uid } = user;
   return updateDoc(userData, {
-    [uid]: { displayName, uid, email, dogsCaught: [], friends: [] },
+    [uid]: { displayName, uid, email, dogsCaught: [], friends: [], imagePaths:[] },
   });
   // adds user object to database with extra properties for the game
 }
@@ -77,18 +83,19 @@ function getUserData() {
       */
 }
 
-
-function addImagePath(uid,imagePath){
-    const uid_imagePath = 
+function addImagePath(imagePath){
+  auth.onAuthStateChanged((user) => {
+     const uid_imagePath = 
     //  loggedInUser.uid+  <----need to find a way to access this
-    uid+
-    '.imagerefs'
+    user.uid+'.imagePaths'
 
     updateDoc(userData, {
     [uid_imagePath]:  arrayUnion(imagePath)
       
   }).then(res=>console.log({res}))
   .catch(error=>console.log({error,msg:'while adding friend'}))
+
+  });
 }
 function addFriend(friendId){
     const uid_friends = 
@@ -113,20 +120,19 @@ function addCaughtDog(dogName){
     .catch((error) => console.log({ error, msg: "while adding caught dog" }));
 }
 // we probably wont need google login
-function googleLogin() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then((userCredential) => {
-      const { user } = userCredential;
-      addUserToFirestore(user);
-      loggedInUser = user;
-      welcomeMessage(user);
-    })
-    .catch((error) => console.log({ error }));
-}
+// function googleLogin() {
+//   const provider = new firebase.auth.GoogleAuthProvider();
+//   firebase
+//     .auth()
+//     .signInWithPopup(provider)
+//     .then((userCredential) => {
+//       const { user } = userCredential;
+//       addUserToFirestore(user);
+//       loggedInUser = user;
+//       welcomeMessage(user);
+//     })
+//     .catch((error) => console.log({ error }));
+// }
 function emailLogin(email, password) {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -173,12 +179,12 @@ export {
   signOut,
   createEmailAndUser,
   emailLogin,
-  googleLogin,
   addCaughtDog,
   addFriend,
   getUserDatabyUID,
   addUserToFirestore,
   getUserData,
   getBadges,
+  addImagePath
 };
 

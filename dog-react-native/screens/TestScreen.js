@@ -1,27 +1,35 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { firebaseApp } from "../firebase";
-import { imageRef } from "../storage-api";
+import React, { useEffect, useState } from "react";
+import { auth, firebaseApp } from "../firebase";
+import { getImageUrl, imageRef, uploadImage, userUploadImage } from "../storage-api";
 import { uploadBytes } from "firebase/storage";
 import MobilenetScreen from "./MobilenetTestScreen";
-import Eeviepom from "../Eeviepom.jpg"
+import { addImagePath } from "../api";
 
 const TestScreen = () => {
-  
+  const[image,setImage] = useState('')
  const FR = new FileReader
   function onFileChange(event){
     const file=event.target.files[0]
-    uploadBytes(imageRef, file).then((snapshot) => {
-      console.log('Uploaded a blob or file!');
-      console.log(snapshot);
-    }).catch((error)=>console.log({error}))
-   const img = <img src={Eeviepom} alt="eevie" />
-   console.log(img);
-  
+    userUploadImage(file)
   }
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      console.log(user);
+    }
+  });
+
+  useEffect(()=>{
+  getImageUrl('image').then(url=>{
+    console.log(url);
+    setImage(<img src = {url}></img>)
+  })
+},[])
   return (
     <View>
-      <Text>Test Screen</Text>
+      <Text>Test Screen
+       
+      </Text>
       <input type ="file" onChange={onFileChange}></input>
       {/* <MobilenetScreen/> */}
     </View>
