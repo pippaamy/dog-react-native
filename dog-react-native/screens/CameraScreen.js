@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, Image, Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 
@@ -49,22 +49,22 @@ export default function CameraScreen() {
           source = {{ uri: capturedImage }} 
           style={{flex: 9}}
         />
-        <View
-          style={{
-            alignSelf: 'flex-start',
-            alignItems: 'center',
-            flexDirection: 'row',
-            minHeight: 60,
-          }}>
-          <TouchableOpacity onPress={__retakePicture}>
-            <Text style={{fontSize: 20, marginLeft: 30}}>Retake Photo</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            // onPress={__matchDog}
-            >
-            <Text style={{fontSize: 20, marginLeft: 30}}>Match Dog!</Text>
-          </TouchableOpacity>
-        </View>
+        <View          
+          style={{            
+            justifyContent: 'center',            
+            alignItems: 'center',            
+            flexDirection: 'row',            
+            minHeight: 60,          
+          }}>         
+          <TouchableOpacity onPress={__retakePicture}>            
+            <Text style={{backgroundColor: "#312280", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>          
+          </TouchableOpacity>          
+          <TouchableOpacity            
+            // onPress={__matchDog}            
+          >            
+            <Text style={{backgroundColor: "#312280", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>          
+          </TouchableOpacity>       
+         </View>
       </View>  
     )
   }
