@@ -1,11 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
 // import Navigation from "../Navigation";
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
   const handleLogOut = () => {
-    console.log("logging out");
-    navigation.replace("LogIn");
+    console.log("Im logging out");
+    navigation.replace("LogInScreen");
   };
 
   return (
