@@ -2,9 +2,9 @@ import { StyleSheet, Text } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "./screens/HomeScreen";
-import CameraScreen from "./screens/CameraScreen";
+import CameraScreen from "./screens/CameraScreenNav";
 import GalleryScreen from "./screens/GalleryScreen";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Icon from "react-native-ionicons";
 
 const homeName = "Home";
 const cameraName = "Camera";
@@ -29,7 +29,7 @@ const Navigation = () => {
             iconName = focused ? "settings" : "settings-outline";
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Icon name={iconName} size={size} color={color} />;
         },
       })}
     >
