@@ -11,18 +11,13 @@ const HomeScreen = () => {
   const handleLogOut = () => {
     signOut()
       .then(() => {
-        // navigation.replace("LogInScreen");
+        navigation.replace("Login");
       })
       .catch((error) => alert(error.message));
   };
 
   return (
     <>
-      <View style={styles.container}>
-        <Text onPress={() => navigation.navigate("Home")}>Home</Text>
-        {/* <Navigation /> */}
-      </View>
-
       <TouchableOpacity onPress={handleLogOut} style={styles.button}>
         <View style={styles.button}>
           <Text style={styles.buttonText}>Log out</Text>
