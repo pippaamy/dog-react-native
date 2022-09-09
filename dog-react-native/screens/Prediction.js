@@ -21,7 +21,7 @@ class Prediction extends React.Component {
     isTfReady: false,
     isModelReady: false,
     predictions: null,
-    image: null
+    image: this.props.capturedImage || null
   }
 
   async componentDidMount() {
@@ -32,6 +32,7 @@ class Prediction extends React.Component {
     this.model = await mobilenet.load()
     this.setState({ isModelReady: true })
     this.getPermissionAsync()
+    console.log(this.props.capturedImage)
   }
 
   getPermissionAsync = async () => {
@@ -60,15 +61,18 @@ class Prediction extends React.Component {
     return tf.tensor3d(buffer, [height, width, 3])
   }
 
-  classifyImage = async () => {
+  classifyImage = async (image) => {
+    // console.log(image, "image")
     try {
-      const imageAssetPath = Image.resolveAssetSource(this.state.image)
-      const response = await fetch(imageAssetPath.uri, {}, { isBinary: true })
+      // const imageAssetPath = Image.resolveAssetSource(this.state.image)
+      const response = await fetch(image, {}, { isBinary: true })
+      // console.log(response, "response")
       const rawImageData = await response.arrayBuffer()
       const imageTensor = this.imageToTensor(rawImageData)
+      console.log(imageTensor, "imagetensor")
       const predictions = await this.model.classify(imageTensor)
       this.setState({ predictions })
-      console.log(predictions)
+      console.log(predictions, "predictions")
     } catch (error) {
       console.log(error)
     }
@@ -93,17 +97,25 @@ class Prediction extends React.Component {
   }
 
   renderPrediction = prediction => {
+    console.log(prediction, "djknsjcsnk")
     return (
       <Text key={prediction.className} style={styles.text}>
         {prediction.className}
       </Text>
     )
   }
+  
 
   render() {
     const { isTfReady, isModelReady, predictions, image } = this.state
+    if (isTfReady && isModelReady && image) {
+
+      this.classifyImage(image)
+    }
 
     return (
+      <>
+      <Image source={image}/>
       <View style={styles.container}>
         <StatusBar barStyle='light-content' />
         <View style={styles.loadingContainer}>
@@ -143,6 +155,7 @@ class Prediction extends React.Component {
           <Text style={styles.poweredBy}>Powered by:</Text>
         </View>
       </View>
+      </>
     )
   }
 }
