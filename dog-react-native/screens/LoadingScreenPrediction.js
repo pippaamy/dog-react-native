@@ -6,11 +6,20 @@ const LoadingScreen = () => {
   return (
     <>
       <View style={StyleSheet.container}>
-        <Text style={StyleSheet.title}>FETCHING YOUR DOG</Text>
         <Image
           source={require("../dograinbow.gif")}
-          style={{ width: 420, height: 350 }}
+          style={{
+            width: 400,
+            height: 350,
+            display: "flex",
+            flexDirection: "row",
+          }}
+          resizeMode="contain"
+          resizeMethod="resize"
+          justifyContent="center"
+          alignItems="center"
         />
+        <Text style={StyleSheet.title}>FETCHING YOUR DOG...</Text>
       </View>
     </>
   );
@@ -21,8 +30,13 @@ export default LoadingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#dc7646",
     alignItems: "center",
     justifyContent: "center",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "black",
   },
 });

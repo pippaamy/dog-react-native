@@ -21,8 +21,8 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <Text style={styles.mainText}>
           The pawsome app that allows you to collect dogs. Go for a walk, snap a
-          dog picture and add it to your collection. Compare your collections to
-          your friends. There are 30 dogs to collect!
+          dog picture and add it to your collection. Compare your collections
+          with your friends. There are 30 dogs to collect!
         </Text>
         <Text style={styles.warning}>
           Make sure you have permission to take a dog picture!
@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#dc7646",
     width: "100%",
     padding: 15,
-    borderTopEndRadius: 10,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     alignItems: "center",
   },
 
