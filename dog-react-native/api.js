@@ -20,28 +20,49 @@ const userCollection = collection(dataBase, "USER DATA");
 const userDoc = (uid) => doc(dataBase, "USER DATA", uid);
 const badgeData = collection(dataBase, "badges");
 
-function getBadges(breed) {
+function getBadges(breed, catchFunction) {
   // take the breed name as an argument
-  return getDocs(badgeData).then((res) => {
-    res.docs.map((badge) => {
-      const parseBadge = badge.data();
-      if (parseBadge.breed === breed) {
-        return parseBadge;
-        // provides all info on the breed
-      }
-    });
-  });
+  return getDocs(badgeData)
+    .then((res) => {
+      res.docs.map((badge) => {
+        const parseBadge = badge.data();
+        if (parseBadge.breed === breed) {
+          return parseBadge;
+          // provides all info on the breed
+        }
+      });
+    })
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({ error }, "error while getting badge");
+        })
+    );
 }
-function getAllBadges() {
-  return getDocs(badgeData).then((res) => {
-    res.docs.map((badge) => badge.data());
-  });
+function getAllBadges(catchFunc) {
+  return getDocs(badgeData)
+    .then((res) => {
+      res.docs.map((badge) => badge.data());
+    })
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({ error }, "error while getting badges");
+        })
+    );
 }
-function getUserData() {
-  return getDocs(userCollection).then((res) => {
-    const documents = res.docs;
-    return documents.map((doc) => doc.data());
-  });
+function getUserData(catchFunc) {
+  return getDocs(userCollection)
+    .then((res) => {
+      const documents = res.docs;
+      return documents.map((doc) => doc.data());
+    })
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({ error }, "error while getting user data");
+        })
+    );
   /* returns array of the form
       [
          { 
@@ -57,7 +78,7 @@ function getUserData() {
       */
 }
 
-function addUserToFirestore(user) {
+function addUserToFirestore(user, catchFunction) {
   //takes user object as argument, user = userCredentials.user
   const { displayName, email, uid } = user;
   return setDoc(doc(dataBase, "USER DATA", user.uid), {
@@ -67,16 +88,18 @@ function addUserToFirestore(user) {
     dogsCaught: [],
     friends: [],
     imagePaths: [],
-  });
+  }).catch(catchFunction || console.log);
   // adds user object to database with extra properties for the game
 }
 
-function getUserDatabyUID(uid) {
+function getUserDatabyUID(uid, catchFunction) {
   // uid = user.uid
-  return getDoc(userDoc(uid)).then((res) => {
-    const data = res.data();
-    return data;
-  });
+  return getDoc(userDoc(uid))
+    .then((res) => {
+      const data = res.data();
+      return data;
+    })
+    .catch(catchFunction || console.log);
   /* returns object of the form
       { 
         uid: 123123XX2343,
@@ -90,53 +113,67 @@ function getUserDatabyUID(uid) {
       */
 }
 
-function addImagePath(imagePath) {
+function addImagePath(imagePath, catchFunction) {
   return auth.onAuthStateChanged((user) => {
     const { uid } = user;
     return updateDoc(userDoc(uid), {
       imagePaths: arrayUnion(imagePath),
-    }).catch((error) => console.log({ error, msg: "while adding Image" }));
+    }).catch(
+      catchFunction ||
+        ((error) => console.log({ error, msg: "while adding Image" }))
+    );
   });
 }
-function addProfilePic(path) {
+function addProfilePic(path, catchFunction) {
   return auth.onAuthStateChanged((user) => {
     const { uid } = user;
     return updateDoc(userDoc(uid), {
       profilePic: path,
-    }).catch((error) =>
-      console.log({ error, msg: "while adding Profile Image" })
+    }).catch(
+      catchFunction ||
+        ((error) => {
+          console.log({ error, msg: "while adding Profile Image" });
+        })
     );
   });
 }
-function addFriend(friendId) {
+function addFriend(friendId, catchFunction) {
   return auth.onAuthStateChanged((user) => {
     updateDoc(userDoc(user.uid), {
       friends: arrayUnion(friendId),
-    }).catch((error) => console.log({ error, msg: "while adding friend" }));
+    }).catch(
+      catchFunction ||
+        ((error) => console.log({ error, msg: "while adding friend" }))
+    );
   });
 }
 
-function addCaughtDog(dogName) {
+function addCaughtDog(dogName, catchFunction) {
   return auth.onAuthStateChanged((user) => {
-    updateDoc(userDoc(user.uid), {
-      dogsCaught: arrayUnion(dogName),
-    }).catch((error) => console.log({ error, msg: "while adding caught dog" }));
+    if (user) {
+      updateDoc(userDoc(user.uid), {
+        dogsCaught: arrayUnion(dogName),
+      }).catch(
+        catchFunction ||
+          ((error) => console.log({ error, msg: "while adding caught dog" }))
+      );
+    } else console.log("not logged in");
   });
-
 }
 
-function emailLogin(email, password) {
+function emailLogin(email, password, catchFunction) {
   return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
       console.log(user.displayName || user.email + "logged in!");
       return userCredential;
     })
-    .catch((error) =>
-      console.log({ error, msg: "while logging in with email" })
+    .catch(
+      catchFunction ||
+        ((error) => console.log({ error, msg: "while logging in with email" }))
     );
 }
-function createEmailAndUser(email, password) {
+function createEmailAndUser(email, password, catchFunction) {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -146,18 +183,23 @@ function createEmailAndUser(email, password) {
       );
       return userCredential;
     })
-    .catch((error) => console.log({ error, msg: "while creating user" }));
+    .catch(
+      catchFunction ||
+        ((error) => console.log({ error, msg: "while creating user" }))
+    );
 }
 
-const signOut = () => {
+const signOut = (catchFunction) => {
   return auth
     .signOut()
     .then((res) => {
       console.log("signed out");
       return res;
     })
-
-    .catch((error) => console.log({ error, msg: "while signing out" }));
+    .catch(
+      catchFunction ||
+        ((error) => console.log({ error, msg: "while signing out" }))
+    );
 };
 
 export {
