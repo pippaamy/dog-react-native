@@ -47,6 +47,7 @@ const LogInScreen = () => {
       })
       .catch((error) => alert(error.message));
   };
+
   return (
     <>
       <View
@@ -56,6 +57,7 @@ const LogInScreen = () => {
           justifyContent: "center",
           alignContent: "center",
           paddingTop: 20,
+          backgroundColor: "#f6d186",
         }}
       >
         <Image
@@ -134,6 +136,7 @@ export default LogInScreen;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#f6d186",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   button: {
-    backgroundColor: "#0782F9",
+    backgroundColor: "#dc7646",
     width: "100%",
     padding: 15,
     borderRadius: 10,
@@ -164,7 +167,7 @@ const styles = StyleSheet.create({
   buttonOutline: {
     backgroundColor: "white",
     marginTop: 5,
-    borderColor: "#0782F9",
+    borderColor: "#dc7646",
     borderWidth: 2,
   },
   buttonText: {
@@ -173,7 +176,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonOutlineText: {
-    color: "#0782F9",
+    color: "#dc7646",
     fontWeight: "700",
     fontSize: 16,
   },

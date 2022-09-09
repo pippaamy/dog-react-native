@@ -17,20 +17,20 @@ export default GalleryScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f6d186",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
-  mainText: { 
-    color: "#a45c5c", 
-    fontWeight: "700", 
-    fontSize: 16, 
-    padding: 20 
+  mainText: {
+    color: "#a45c5c",
+    fontWeight: "700",
+    fontSize: 16,
+    padding: 20,
   },
-  titleText: { 
-    color: "#a45c5c", 
-    fontWeight: "900", 
-    fontSize: 24, 
-    padding: 20 
+  titleText: {
+    color: "#a45c5c",
+    fontWeight: "900",
+    fontSize: 24,
+    padding: 20,
   },
 });
