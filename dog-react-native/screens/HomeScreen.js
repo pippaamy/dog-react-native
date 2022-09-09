@@ -3,8 +3,6 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "../api";
 
-// import Navigation from "../Navigation";
-
 const HomeScreen = () => {
   const navigation = useNavigation();
 
