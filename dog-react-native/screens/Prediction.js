@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import LoadingScreen from "./LoadingScreenPrediction";
+import { PredictedDog } from "./PredictedDog";
 
 class Prediction extends React.Component {
   state = {
@@ -23,6 +24,7 @@ class Prediction extends React.Component {
     isModelReady: false,
     predictions: null,
     image: this.props.capturedImage || null,
+    hasRendered: false
   };
 
   async componentDidMount() {
@@ -33,6 +35,7 @@ class Prediction extends React.Component {
     this.model = await mobilenet.load();
     this.setState({ isModelReady: true });
     this.getPermissionAsync();
+    this.setState({hasRendered: true})
     console.log(this.props.capturedImage);
   }
 
@@ -98,65 +101,35 @@ class Prediction extends React.Component {
   };
 
   renderPrediction = (prediction) => {
-    console.log(prediction, "djknsjcsnk");
-    return (
-      <Text key={prediction.className} style={styles.text}>
+    const hasRendered = this.state
+    if (this.hasRendered) {
+      this.setState({
+        hasRendered: false,
+      });
+      console.log(prediction, "djknsjcsnk");
+      return (
+        <Text key={prediction.className} style={styles.text}>
         {prediction.className}
       </Text>
     );
+  }
   };
 
+  // handleRender = () => {
+  //   this.setState({
+  //     hasRendered: true
+  //   })
+  // }
+  
   render() {
-    const { isTfReady, isModelReady, predictions, image } = this.state;
-    if (isTfReady && isModelReady && image) {
+    const { isTfReady, isModelReady, predictions, image, hasRendered } = this.state;
+    if (isTfReady && isModelReady && image && hasRendered === false) {
       this.classifyImage(image);
     }
 
     if (predictions !== null) {
       return (
-        <>
-          <Image source={image} />
-          <View style={styles.container}>
-            <StatusBar barStyle="light-content" />
-            <View style={styles.loadingContainer}>
-              <Text style={styles.text}>
-                TFJS ready? {isTfReady ? <Text>✅</Text> : ""}
-              </Text>
-
-              <View style={styles.loadingModelContainer}>
-                <Text style={styles.text}>Model ready? </Text>
-                {isModelReady ? (
-                  <Text style={styles.text}>✅</Text>
-                ) : (
-                  <ActivityIndicator size="small" />
-                )}
-              </View>
-            </View>
-            <TouchableOpacity
-              style={styles.imageWrapper}
-              onPress={isModelReady ? this.selectImage : undefined}
-            >
-              {image && <Image source={image} style={styles.imageContainer} />}
-
-              {isModelReady && !image && (
-                <Text style={styles.transparentText}>Tap to choose image</Text>
-              )}
-            </TouchableOpacity>
-            <View style={styles.predictionWrapper}>
-              {isModelReady && image && (
-                <Text style={styles.text}>
-                  Predictions: {predictions ? "" : "Predicting..."}
-                </Text>
-              )}
-              {isModelReady &&
-                predictions &&
-                predictions.map((p) => this.renderPrediction(p))}
-            </View>
-            <View style={styles.footer}>
-              <Text style={styles.poweredBy}>Powered by:</Text>
-            </View>
-          </View>
-        </>
+        <PredictedDog image={image} predictions={predictions}/>
       );
     }
     return (
