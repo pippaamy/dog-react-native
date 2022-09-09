@@ -5,12 +5,12 @@ const LoadingScreen = () => {
   console.log("in loading screen");
   return (
     <>
-      <View style={StyleSheet.container}>
+      <View style={styles.container}>
         <Image
           source={require("../dograinbow.gif")}
           style={{
-            width: 400,
-            height: 350,
+            width: 420,
+            height: 370,
             display: "flex",
             flexDirection: "row",
           }}
@@ -19,7 +19,7 @@ const LoadingScreen = () => {
           justifyContent="center"
           alignItems="center"
         />
-        <Text style={StyleSheet.title}>FETCHING YOUR DOG...</Text>
+        <Text style={styles.title}>FETCHING YOUR DOG...</Text>
       </View>
     </>
   );
@@ -30,7 +30,7 @@ export default LoadingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#dc7646",
+    backgroundColor: "#f6d186",
     alignItems: "center",
     justifyContent: "center",
   },
