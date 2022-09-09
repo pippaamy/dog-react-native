@@ -16,6 +16,8 @@ import { dataBase } from "./firebase";
 
 // Reference to right dataset in the firestore database
 const userData = doc(dataBase, "USER Data collection", "USER DATA");
+const userCollection = collection(dataBase, "USER DATA");
+const userDoc = (uid) => doc(dataBase, "USER DATA", uid);
 const badgeData = collection(dataBase, "badges");
 
 function getBadges(breed) {
@@ -30,126 +32,119 @@ function getBadges(breed) {
     });
   });
 }
-
-function addUserToFirestore(user) {
-  //takes user object as argument, user = userCredentials.user
-  const { displayName, email, uid } = user;
-  return updateDoc(userData, {
-    [uid]: { displayName, uid, email, dogsCaught: [], friends: [] },
+function getAllBadges() {
+  return getDocs(badgeData).then((res) => {
+    res.docs.map((badge) => badge.data());
   });
-  // adds user object to database with extra properties for the game
-}
-function getUserDatabyUID(uid) {
-  // uid = user.uid
-  return getDoc(userData).then((res) => {
-    const data = res.data()[uid];
-    return data;
-  });
-  /* returns object of the form
-
-      { 
-        uid: 123123XX2343,
-      email: joe@mama.com
-      displayName: Rick Astley,
-      dogsCaught: [pomeranian,husky],
-      friends: [97886XX564, 453VDDH456 ]
-      // friends are stored using uid
-      }
-      */
 }
 function getUserData() {
-  return getDoc(userData).then((res) => {
-    const data = res.data();
-    return data;
+  return getDocs(userCollection).then((res) => {
+    const documents = res.docs;
+    return documents.map((doc) => doc.data());
   });
-  /* returns object of the form
-      {
-        123123XX2343: { 
+  /* returns array of the form
+      [
+         { 
           uid: 123123XX2343,
         email: joe@mama.com
         displayName: Rick Astley,
         dogsCaught: [pomeranian,husky],
         friends: [97886XX564, 453VDDH456 ]
         },
-        97886XX564:{....}
+        {....}
+      ]
         // individual users are stored in objects with their uid as the key
       */
 }
 
-function addImagePath(uid, imagePath) {
-  const uid_imagePath =
-    //  loggedInUser.uid+  <----need to find a way to access this
-    uid + ".imagerefs";
+function addUserToFirestore(user) {
+  //takes user object as argument, user = userCredentials.user
+  const { displayName, email, uid } = user;
+  return setDoc(doc(dataBase, "USER DATA", user.uid), {
+    displayName,
+    uid,
+    email,
+    dogsCaught: [],
+    friends: [],
+    imagePaths: [],
+  });
+  // adds user object to database with extra properties for the game
+}
 
-  updateDoc(userData, {
-    [uid_imagePath]: arrayUnion(imagePath),
-  })
-    .then((res) => console.log({ res }))
-    .catch((error) => console.log({ error, msg: "while adding friend" }));
+function getUserDatabyUID(uid) {
+  // uid = user.uid
+  return getDoc(userDoc(uid)).then((res) => {
+    const data = res.data();
+    return data;
+  });
+  /* returns object of the form
+      { 
+        uid: 123123XX2343,
+      email: joe@mama.com
+      displayName: Rick Astley,
+      dogsCaught: [pomeranian,husky],
+      friends: [97886XX564, 453VDDH456 ]
+      // friends are stored using uid,
+      imagePaths:['123123124','2524352435235']
+      }
+      */
+}
+
+function addImagePath(imagePath) {
+  return auth.onAuthStateChanged((user) => {
+    const { uid } = user;
+    return updateDoc(userDoc(uid), {
+      imagePaths: arrayUnion(imagePath),
+    }).catch((error) => console.log({ error, msg: "while adding Image" }));
+  });
+}
+function addProfilePic(path) {
+  return auth.onAuthStateChanged((user) => {
+    const { uid } = user;
+    return updateDoc(userDoc(uid), {
+      profilePic: path,
+    }).catch((error) =>
+      console.log({ error, msg: "while adding Profile Image" })
+    );
+  });
 }
 function addFriend(friendId) {
-  const uid_friends =
-    //  loggedInUser.uid+  <----need to find a way to access this
-    ".friends";
-
-  updateDoc(userData, {
-    [uid_friends]: arrayUnion(friendId),
-  })
-    .then((res) => console.log({ res }))
-    .catch((error) => console.log({ error, msg: "while adding friend" }));
+  return auth.onAuthStateChanged((user) => {
+    updateDoc(userDoc(user.uid), {
+      friends: arrayUnion(friendId),
+    }).catch((error) => console.log({ error, msg: "while adding friend" }));
+  });
 }
 
 function addCaughtDog(dogName) {
-  const uid_dogs =
-    //  loggedInUser.uid+  <----need to find a way to access this
-    ".dogsCaught";
-  updateDoc(userData, {
-    [uid_dogs]: arrayUnion(dogName),
-  })
-    .then((res) => console.log({ res }))
-    .catch((error) => console.log({ error, msg: "while adding caught dog" }));
-}
-// we probably wont need google login
-function googleLogin() {
-  const provider = new firebase.auth.GoogleAuthProvider();
+  return auth.onAuthStateChanged((user) => {
+    updateDoc(userDoc(user.uid), {
+      dogsCaught: arrayUnion(dogName),
+    }).catch((error) => console.log({ error, msg: "while adding caught dog" }));
+  });
 
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then((userCredential) => {
-      const { user } = userCredential;
-      addUserToFirestore(user);
-      loggedInUser = user;
-      welcomeMessage(user);
-    })
-    .catch((error) => console.log({ error }));
 }
+
 function emailLogin(email, password) {
-  signInWithEmailAndPassword(auth, email, password)
+  return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      // Signed in
       const user = userCredential.user;
-      // loggedInUser=user
-      // welcomeMessage(user)
-      // ...
+      console.log(user.displayName || user.email + "logged in!");
+      return userCredential;
     })
     .catch((error) =>
       console.log({ error, msg: "while logging in with email" })
     );
 }
 function createEmailAndUser(email, password) {
-  createUserWithEmailAndPassword(auth, email, password)
+  return createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      // welcomeMessage(user)
       addUserToFirestore(user);
-      return user.uid;
-    })
-    .then((uid) => {
-      return getUserDatabyUID(uid);
-    })
-    .then((user) => {
-      // loggedInUser=user
+      console.log(
+        user.displayName || user.email + "user created and logged in!"
+      );
+      return userCredential;
     })
     .catch((error) => console.log({ error, msg: "while creating user" }));
 }
@@ -157,21 +152,26 @@ function createEmailAndUser(email, password) {
 const signOut = () => {
   return auth
     .signOut()
-    .then((res) => {})
+    .then((res) => {
+      console.log("signed out");
+      return res;
+    })
+
     .catch((error) => console.log({ error, msg: "while signing out" }));
 };
 
-// auth.onAuthStateChanged(user=>console.log(user))
 export {
   userData,
+  getAllBadges,
   signOut,
   createEmailAndUser,
   emailLogin,
-  googleLogin,
   addCaughtDog,
   addFriend,
   getUserDatabyUID,
   addUserToFirestore,
   getUserData,
   getBadges,
+  addImagePath,
+  addProfilePic,
 };
