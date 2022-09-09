@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Button, Image, Text, View, TouchableOpacity } from "react-native";
-import { Camera } from "expo-camera";
-import LoadingScreen from "./LoadingScreenPrediction";
+import React, { useState, useRef } from 'react';
+import { Button, Image, Text, View, TouchableOpacity } from 'react-native';
+import { Camera } from 'expo-camera';
 
 export default function CameraScreen() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -15,15 +14,13 @@ export default function CameraScreen() {
 
   if (!permission.granted) {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "#fff",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Text style={{ textAlign: "center" }}>
+      <View style={{
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <Text style={{ textAlign: 'center' }}>
           We need your permission to show the camera
         </Text>
         <Button onPress={requestPermission} title="grant permission" />
@@ -32,113 +29,96 @@ export default function CameraScreen() {
   }
 
   const _takePhoto = async () => {
-    const photo = await ref.current.takePictureAsync();
-    setPreviewVisible(true);
-    setCapturedImage(photo.uri);
-  };
+    const photo = await ref.current.takePictureAsync()
+    setPreviewVisible(true)
+    setCapturedImage(photo.uri)
+  }
 
   const __retakePicture = () => {
-    setCapturedImage(null);
-    setPreviewVisible(false);
-  };
+    setCapturedImage(null)
+    setPreviewVisible(false)
+  }
 
   let PhotoPreview = null;
 
   if (previewVisible && capturedImage) {
     PhotoPreview = () => (
       <View style={{flex: 1}}>
-        <Image 
-          source = {{ uri: capturedImage }} 
+        <Image
+          source = {{ uri: capturedImage }}
           style={{flex: 9}}
         />
-        <View          
-          style={{            
-            backgroundColor: '#c79e58',
-            justifyContent: 'center',            
-            alignItems: 'center',            
-            flexDirection: 'row',            
-            minHeight: 60,          
-          }}>         
-          <TouchableOpacity onPress={__retakePicture}>            
-            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>          
-          </TouchableOpacity>          
-          <TouchableOpacity            
-            // onPress={__matchDog}            
-          >            
-            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>          
-          </TouchableOpacity>       
-         </View>
-      </View>  
-    )
-      <View style={{ flex: 1 }}>
-        <Image source={{ uri: capturedImage }} style={{ flex: 9 }} />
         <View
           style={{
-            alignSelf: "flex-start",
-            alignItems: "center",
-            flexDirection: "row",
+            backgroundColor: '#C79E58',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row',
             minHeight: 60,
-          }}
-        >
+          }}>
           <TouchableOpacity onPress={__retakePicture}>
-            <Text style={{ fontSize: 20, marginLeft: 30 }}>Retake Photo</Text>
+            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity
-          // onPress={__matchDog}
+            // onPress={__matchDog}
           >
-            <Text style={{ fontSize: 20, marginLeft: 30 }}>Match Dog!</Text>
+            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>
           </TouchableOpacity>
-        </View>
+         </View>
       </View>
-    );
+    )
   }
-
+  
   return (
     <View style={{ flex: 1 }}>
-      {previewVisible && capturedImage ? (
+      {previewVisible && capturedImage ?
+      (
         <View
           style={{
-            backgroundColor: "transparent",
+            backgroundColor: 'transparent',
             flex: 1,
-            width: "100%",
-            height: "100%",
+            width: '100%',
+            height: '100%'
           }}
         >
-          <PhotoPreview />
+        <PhotoPreview />
         </View>
       ) : (
-        <Camera style={{ flex: 1, width: "100%" }} ref={ref}>
+      <Camera
+        style={{flex: 1,width:"100%"}}
+        ref = {ref}
+      >
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            flexDirection: 'row',
+            flex: 1,
+            width: '100%',
+            padding: 20,
+            justifyContent: 'space-between'
+          }}
+        >
           <View
             style={{
-              position: "absolute",
-              bottom: 0,
-              flexDirection: "row",
+              alignSelf: 'center',
               flex: 1,
-              width: "100%",
-              padding: 20,
-              justifyContent: "space-between",
+              alignItems: 'center'
             }}
           >
-            <View
+            <TouchableOpacity
+              onPress={_takePhoto}
               style={{
-                alignSelf: "center",
-                flex: 1,
-                alignItems: "center",
+                width: 70,
+                height: 70,
+                bottom: 0,
+                borderRadius: 50,
+                backgroundColor: '#fff'
               }}
-            >
-              <TouchableOpacity
-                onPress={_takePhoto}
-                style={{
-                  width: 70,
-                  height: 70,
-                  bottom: 0,
-                  borderRadius: 50,
-                  backgroundColor: "#fff",
-                }}
-              />
-            </View>
+            />
           </View>
-        </Camera>
+        </View>
+      </Camera>
       )}
     </View>
   );
