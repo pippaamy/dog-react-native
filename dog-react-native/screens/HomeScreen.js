@@ -22,7 +22,7 @@ const HomeScreen = () => {
         <Text style={styles.mainText}>
           The pawsome app that allows you to collect dogs. Go for a walk, snap a
           dog picture and add it to your collection. Compare your collections
-          with your friends. There are 30 dogs to collect!
+          with your friends. There are 30 dogs to collect! WOOF.
         </Text>
         <Text style={styles.warning}>
           Make sure you have permission to take a dog picture!

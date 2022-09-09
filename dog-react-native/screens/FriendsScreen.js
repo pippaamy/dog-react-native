@@ -14,7 +14,7 @@ export default FriendsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f6d186",
     alignItems: "center",
     justifyContent: "center",
   },
