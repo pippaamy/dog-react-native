@@ -29,7 +29,7 @@ const HomeScreen = () => {
         </Text>
         <Text>{"\n"}</Text>
         <Image
-          source={require("../autmndognew.gif")}
+          source={require("../public/assets/autmndognew.gif")}
           style={{
             paddingLeft: 20,
             width: 320,
