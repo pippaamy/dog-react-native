@@ -43,17 +43,34 @@ const LogInScreen = () => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         console.log("Logged in with:", user.email);
-        navigation.replace("Main")
+        navigation.replace("Main");
       })
       .catch((error) => alert(error.message));
   };
   return (
     <>
-    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignContent: 'center', paddingTop: 20}}>
-      <Image
-        source={require("../public/images/weenies.gif")}
-        style={{width: 320, height: 200, display: 'flex', flexDirection: 'row'}} resizeMode='contain' resizeMethod="resize" justifyContent='center' alignItems='center'
-      />
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "center",
+          alignContent: "center",
+          paddingTop: 20,
+        }}
+      >
+        <Image
+          source={require("../public/images/weenies.gif")}
+          style={{
+            width: 320,
+            height: 200,
+            display: "flex",
+            flexDirection: "row",
+          }}
+          resizeMode="contain"
+          resizeMethod="resize"
+          justifyContent="center"
+          alignItems="center"
+        />
       </View>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
@@ -86,11 +103,16 @@ const LogInScreen = () => {
             <Text style={styles.buttonOutlineText}> Register</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={()=>{navigation.replace("Main")}}
+            onPress={() => {
+              navigation.replace("Main");
+            }}
             style={[styles.button, styles.buttonOutline]}
           >
-            <Text style={styles.buttonOutlineText}> ShortCut to Main (delete later) </Text>
-            </TouchableOpacity>
+            <Text style={styles.buttonOutlineText}>
+              {" "}
+              ShortCut to Main (delete later){" "}
+            </Text>
+          </TouchableOpacity>
           {/* <TouchableOpacity
             onPress={() => {
               navigation.replace("Test");

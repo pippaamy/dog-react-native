@@ -7,11 +7,11 @@ const LoadingScreen = () => {
     <>
       <View style={StyleSheet.container}>
         <Text style={StyleSheet.title}>FETCHING YOUR DOG</Text>
+        <Image
+          source={require("../dograinbow.gif")}
+          style={{ width: 420, height: 350 }}
+        />
       </View>
-      <Image
-        source={require("../dograinbow.gif")}
-        style={{ width: 420, height: 350 }}
-      />
     </>
   );
 };
