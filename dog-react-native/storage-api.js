@@ -6,7 +6,8 @@ import {
   deleteObject,
   listAll,
 } from "firebase/storage";
-import { addImagePath, addProfilePic } from "./api";
+import { addImagePath, addProfilePic, getUserDatabyUID } from "./api";
+import { auth } from "./firebase";
 
 const storage = getStorage();
 
@@ -83,8 +84,28 @@ function getAllImagePaths(catchFunction) {
       console.log({ error, code: error.code });
     }));
 }
+async function getAllImageURLs(catchFunction){
+  return getAllImagePaths(catchFunction)
+  .then((paths)=>{
+    return paths.map(async path=>await getImageUrl(path))
+  }).catch(catchFunction||((error) => {
+    console.log({ error, code: error.code });
+  }));
+}
+function getAllImageURLsByUser(uid,catchFunction){
+    return getUserDatabyUID(uid)
+    .then(data=>{
+      return Promise.all (data.imagePaths.map(async (path)=> await getImageUrl(path))
+      )
+    })
+    .catch(catchFunction||((error) => {
+      console.log({ error, code: error.code });
+    }));
+  }
 
 export {
+  getAllImageURLsByUser,
+  getAllImageURLs,
   imageRef,
   uploadImage,
   getImageUrl,
