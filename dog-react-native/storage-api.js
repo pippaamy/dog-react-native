@@ -22,6 +22,20 @@ function uploadImage(file, name_make_it_unique) {
       console.log({ error, code: error.code });
     });
 }
+function uploadImageFromUri(uri, name_make_it_unique) {
+  return fetch(uri)
+    .then((res) => res.blob())
+    .then((blob) => {
+      userUploadImage(blob, name_make_it_unique);
+    });
+}
+function uploadProfileImageFromUri(uri, name_make_it_unique) {
+  return fetch(uri)
+    .then((res) => res.blob())
+    .then((blob) => {
+      userUploadProfileImage(blob, name_make_it_unique);
+    });
+}
 
 function getImageUrl(path) {
   return getDownloadURL(ref(storage, path)).catch((error) => {
@@ -32,8 +46,8 @@ function getImageUrl(path) {
 function userUploadImage(file, uniqueName_eg_DateNow) {
   return uploadImage(file, uniqueName_eg_DateNow)
     .then(() => {
-      addImagePath(uniqueName_eg_DateNow);
       console.log("image uploaded");
+      addImagePath(uniqueName_eg_DateNow);
     })
     .catch((error) => console.log({ error, code: error.code }));
 }
@@ -75,4 +89,6 @@ export {
   deleteImage,
   storage,
   getAllImagePaths,
+  uploadImageFromUri,
+  uploadProfileImageFromUri,
 };
