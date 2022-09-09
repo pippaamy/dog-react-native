@@ -17,8 +17,8 @@ const HomeScreen = () => {
   };
 
   return (
-
     <>
+      <Text> Welcome!</Text>
       <TouchableOpacity onPress={handleLogOut} style={styles.button}>
         <View style={styles.button}>
           <Text style={styles.buttonText}>Log out</Text>
