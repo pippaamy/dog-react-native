@@ -18,6 +18,8 @@ const HomeScreen = () => {
     <>
       <View style={styles.container}>
         <Text style={styles.mainText}>
+          {"\n"}
+          {"\n"}
           The pawsome app that allows you to collect dogs. Go for a walk, snap a
           dog picture and add it to your collection. Compare your collections
           with your friends. There are 30 dogs to collect! WOOF.
@@ -29,6 +31,7 @@ const HomeScreen = () => {
         <Image
           source={require("../autmndognew.gif")}
           style={{
+            paddingLeft: 20,
             width: 320,
             height: 200,
             display: "flex",
@@ -39,7 +42,7 @@ const HomeScreen = () => {
           justifyContent="center"
           alignItems="center"
         />
-        <Text>{"\n"}</Text>
+
         <TouchableOpacity onPress={handleLogOut} style={styles.button}>
           <View style={styles.button}>
             <Text style={styles.buttonText}>Log out</Text>
