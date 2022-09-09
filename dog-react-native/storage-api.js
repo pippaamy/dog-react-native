@@ -4,6 +4,7 @@ import {
   uploadBytes,
   getDownloadURL,
   deleteObject,
+  listAll,
 } from "firebase/storage";
 import { addImagePath, addProfilePic } from "./api";
 
@@ -14,7 +15,7 @@ const imageRef = ref(storage, "image");
 function uploadImage(file, name_make_it_unique) {
   return uploadBytes(ref(storage, name_make_it_unique), file)
     .then((snapshot) => {
-      console.log("Uploaded a  file!");
+      console.log("Uploaded file" + name_make_it_unique);
       return snapshot;
     })
     .catch((error) => {
@@ -22,8 +23,8 @@ function uploadImage(file, name_make_it_unique) {
     });
 }
 
-function getImageUrl(name) {
-  return getDownloadURL(ref(storage, name)).catch((error) => {
+function getImageUrl(path) {
+  return getDownloadURL(ref(storage, path)).catch((error) => {
     console.log({ error, code: error.code });
   });
 }
@@ -32,6 +33,7 @@ function userUploadImage(file, uniqueName_eg_DateNow) {
   return uploadImage(file, uniqueName_eg_DateNow)
     .then(() => {
       addImagePath(uniqueName_eg_DateNow);
+      console.log("image uploaded");
     })
     .catch((error) => console.log({ error, code: error.code }));
 }
@@ -40,6 +42,7 @@ function userUploadProfileImage(file, uniqueName_eg_DateNow) {
   return uploadImage(file, uniqueName_eg_DateNow)
     .then(() => {
       addProfilePic(uniqueName_eg_DateNow);
+      console.log("profile pic updated");
     })
     .catch((error) => console.log({ error, code: error.code }));
 }
@@ -47,12 +50,22 @@ function userUploadProfileImage(file, uniqueName_eg_DateNow) {
 function deleteImage(imageName) {
   return deleteObject(ref(storage, imageName))
     .then(() => {
-      console.log("File deleted successfully");
+      console.log("File" + imageName + "deleted successfully");
     })
     .catch((error) => {
       console.log("Uh-oh, an error occurred!", { error });
     });
 }
+function getAllImagePaths() {
+  return listAll(ref(storage))
+    .then((res) => {
+      return res.items.map((item) => item.fullPath);
+    })
+    .catch((error) => {
+      console.log("Uh-oh, an error occurred!", { error });
+    });
+}
+
 export {
   imageRef,
   uploadImage,
@@ -60,4 +73,6 @@ export {
   userUploadImage,
   userUploadProfileImage,
   deleteImage,
+  storage,
+  getAllImagePaths,
 };
