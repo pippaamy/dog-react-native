@@ -1,21 +1,49 @@
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { addImagePath, addProfilePic } from "./api";
 
-// Get a reference to the storage service, which is used to create references in your storage bucket
 const storage = getStorage();
 
-// Create a storage reference from our storage service
-const storageRef = ref(storage);
-const imageRef = ref(storage, 'image');
-// 'file' comes from the Blob or File API
+const imageRef = ref(storage, "image");
 
-
-function uploadImage(file,name){
-uploadBytes(ref(storage, name), file).then((snapshot) => {
-    
-    console.log('Uploaded a blob or file!');
-    console.log(snapshot);
-  }).catch(error=>{console.log({error});})
+function uploadImage(file, name) {
+  return uploadBytes(ref(storage, name), file)
+    .then((snapshot) => {
+      console.log("Uploaded a  file!");
+      return snapshot;
+    })
+    .catch((error) => {
+      console.log({ error, code: error.code });
+    });
 }
 
+function getImageUrl(name) {
+  return getDownloadURL(ref(storage, name)).catch((error) => {
+    console.log({ error, code: error.code });
+  });
+}
 
-export {imageRef}
+function userUploadImage(file) {
+  const name = Date.now().toString();
+  uploadImage(file, name)
+    .then(() => {
+      addImagePath(name);
+    })
+    .catch((error) => console.log({ error, code: error.code }));
+}
+
+function userUploadProfileImage(file) {
+  const name = Date.now().toString();
+  uploadImage(file, name)
+    .then(() => {
+      addProfilePic(name);
+    })
+    .catch((error) => console.log({ error, code: error.code }));
+}
+
+export {
+  imageRef,
+  uploadImage,
+  getImageUrl,
+  userUploadImage,
+  userUploadProfileImage,
+};

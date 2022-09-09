@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, Image, Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import Prediction from './Prediction';
@@ -9,12 +9,11 @@ export default function CameraScreen() {
   const [capturedImage, setCapturedImage] = useState(null);
   const [isHidden, setisHidden] = useState(true)
   const ref = useRef(null);
-  
 
   if (!permission) {
     return <View />;
   }
-  
+
   if (!permission.granted) {
     return (
       <View style={{
@@ -51,31 +50,32 @@ export default function CameraScreen() {
   if (previewVisible && capturedImage) {
     PhotoPreview = () => (
       <View style={{flex: 1}}>
-        <Image 
-          source = {{ uri: capturedImage }} 
+        <Image
+          source = {{ uri: capturedImage }}
           style={{flex: 9}}
         />
         <View
           style={{
-            alignSelf: 'flex-start',
+            backgroundColor: '#C79E58',
+            justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',
             minHeight: 60,
           }}>
           <TouchableOpacity onPress={__retakePicture}>
-            <Text style={{fontSize: 20, marginLeft: 30}}>Retake Photo</Text>
+            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handlePress}
             // onPress={__matchDog}
-            >
-            <Text style={{fontSize: 20, marginLeft: 30}}>Match Dog!</Text>
+          >
+            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>
           </TouchableOpacity>
-        </View>
-      </View>  
+         </View>
+      </View>
     )
   }
-
+  
   return (
     <>
     {isHidden ? <View style={{ flex: 1 }}>
