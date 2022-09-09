@@ -27,7 +27,7 @@ const LogInScreen = () => {
       if (user) {
         // console.log(user);
         // // navigation.replace("Camera");
-        navigation.replace("Home");
+        navigation.replace("Main");
       }
     });
 
@@ -88,14 +88,8 @@ const LogInScreen = () => {
             style={[styles.button, styles.buttonOutline]}
           >
             <Text style={styles.buttonOutlineText}> ShortCut to Main (delete later) </Text>
-            onPress={() => {
-              navigation.replace("Camera");
-            }}
-            style={[styles.button, styles.buttonOutline]}
-          >
-            <Text style={styles.buttonOutlineText}> Camera </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+            </TouchableOpacity>
+          {/* <TouchableOpacity
             onPress={() => {
               navigation.replace("Test");
             }}
@@ -105,7 +99,7 @@ const LogInScreen = () => {
               {" "}
               Go to test screen (delete this later){" "}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </KeyboardAvoidingView>
     </>
