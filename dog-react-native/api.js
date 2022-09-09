@@ -201,8 +201,15 @@ const signOut = (catchFunction) => {
         ((error) => console.log({ error, msg: "while signing out" }))
     );
 };
+function useLoggedInUser(functionWithUserAsParameter){
+  auth.onAuthStateChanged((user)=>{
+    if(user){
+        functionWithUserAsParameter(user)
+  } else console.log('not logged in')})
+}
 
 export {
+  useLoggedInUser,
   userData,
   getAllBadges,
   signOut,
