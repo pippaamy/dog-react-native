@@ -2,13 +2,14 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 
 const LoadingScreen = () => {
+  console.log("in loading screen");
   return (
     <>
       <View style={StyleSheet.container}>
-        <Text>COLLECTING YOUR DOG</Text>
+        <Text style={StyleSheet.title}>FETCHING YOUR DOG</Text>
       </View>
       <Image
-        source={require("../doggiphy.gif")}
+        source={require("../dograinbow.gif")}
         style={{ width: 420, height: 350 }}
       />
     </>
