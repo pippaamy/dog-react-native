@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { Button, Image, Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
+import Prediction from './Prediction';
 
 export default function CameraScreen() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [isHidden, setisHidden] = useState(true)
   const ref = useRef(null);
 
   if (!permission) {
@@ -39,6 +41,10 @@ export default function CameraScreen() {
     setPreviewVisible(false)
   }
 
+  const handlePress = () => {
+    setisHidden(false)
+  }
+
   let PhotoPreview = null;
 
   if (previewVisible && capturedImage) {
@@ -60,6 +66,7 @@ export default function CameraScreen() {
             <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={handlePress}
             // onPress={__matchDog}
           >
             <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>
@@ -70,24 +77,25 @@ export default function CameraScreen() {
   }
   
   return (
-    <View style={{ flex: 1 }}>
-      {previewVisible && capturedImage ?
+    <>
+    {isHidden ? <View style={{ flex: 1 }}>
+      {previewVisible && capturedImage ? 
       (
         <View
-          style={{
-            backgroundColor: 'transparent',
-            flex: 1,
-            width: '100%',
-            height: '100%'
-          }}
+        style={{
+          backgroundColor: 'transparent',
+          flex: 1,
+          width: '100%',
+          height: '100%'
+        }}
         >
         <PhotoPreview />
         </View>
       ) : (
-      <Camera
+        <Camera
         style={{flex: 1,width:"100%"}}
         ref = {ref}
-      >
+        >
         <View
           style={{
             position: 'absolute',
@@ -98,14 +106,14 @@ export default function CameraScreen() {
             padding: 20,
             justifyContent: 'space-between'
           }}
-        >
+          >
           <View
             style={{
               alignSelf: 'center',
               flex: 1,
               alignItems: 'center'
             }}
-          >
+            >
             <TouchableOpacity
               onPress={_takePhoto}
               style={{
@@ -115,11 +123,14 @@ export default function CameraScreen() {
                 borderRadius: 50,
                 backgroundColor: '#fff'
               }}
-            />
+              />
           </View>
         </View>
       </Camera>
-      )}
-    </View>
+      )} 
+
+    </View> : <Prediction capturedImage={capturedImage}/>}
+    
+      </>
   );
 }
