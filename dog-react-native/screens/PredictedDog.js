@@ -1,7 +1,10 @@
 import { View, Text, Image, TouchableOpacity } from "react-native"
 import { Button } from "react-native-elements"
 import { useNavigation } from "@react-navigation/native";
-import { uploadImageFromUri } from '../storage-api';
+import { uploadImageFromUri, userUploadImage } from "../storage-api"
+import { TouchableOpacity } from "react-native"
+import { StyleSheet } from "react-native"
+
 
 export const PredictedDog = ({image, predictions}) => {
     const navigation = useNavigation();
@@ -10,35 +13,93 @@ export const PredictedDog = ({image, predictions}) => {
     }
 
 
-    const handleYes = (image) => {
 
-    }
 
     const saveUnmatched = () => {    
-        console.log(image)    
-        const id = Date.now().toString()    
-        console.log(id)    
-        uploadImageFromUri(image, "carlieTest4")
-      }
+        const id = `__${Date.now().toString()}`; 
+        uploadImageFromUri(image, id)
+    }
+
+       const handleYes = (image, predictions) => {
+        uploadImageFromUri(image, predictions)
+       }
+
 
     return (
         <>
-        <View>
-            <Text>
-                There is a {(predictions[0].probability * 100).toFixed(1)}% chance that is a {predictions[0].className}!
+        <View style={style.container}>
+        <Image style={style.image} 
+        source={{uri: image}}/>
+            <Text style={style.mainText}>
+                There is a {(predictions[0].probability * 100).toFixed(1)}% chance that dog is a {predictions[0].className}!
             </Text>
-            <Text>
+            <Text style={style.confirmText}>
                 Is that right?
             </Text>
-            <Button>Yes, collect badge</Button>
-            <Button onPress={handleNo}>No, retake</Button>
-            <TouchableOpacity onPress={saveUnmatched}>
-                <Text style={{backgroundColor: "#7a4815", color: "#fff", fontSize: 20, padding: 5, width:135 }}>Save Anyway</Text>
-            </TouchableOpacity>
-        </View>
-        <View>
-        <Image style={{width: 400, height: 400}} source={{uri: image}}/>
+            
+            <View style={style.buttonWrapper}>
+
+            <TouchableOpacity 
+            style={style.button}
+            onPress={handleYes}>
+                <Text style={style.buttonText}>
+                    Yes
+                </Text>
+                </TouchableOpacity> 
+                <TouchableOpacity 
+            style={style.button}
+            onPress={handleNo}>
+                <Text style={style.buttonText}>
+                    No
+                </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                style={style.button} 
+                onPress={saveUnmatched}>
+                  <Text style={style.buttonText}>
+                    Save Anyway
+                  </Text>
+                </TouchableOpacity>
+                </View>
         </View>
         </>
     )
 }
+
+const style = StyleSheet.create({
+    button: {
+        backgroundColor: "#dc7646",
+        width: "30%",
+        padding: 15,
+        borderRadius: 10,
+        alignItems: "center",
+        margin: 10
+      },
+      buttonText: {
+        color: "white",
+        fontWeight: "700",
+        fontSize: 16,
+      },
+    container: {
+        flex: 1,
+        backgroundColor: "#f6d186",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      buttonWrapper: {
+        flexDirection: "row"
+      },
+      image: {
+        width: 300,
+        height: 300,
+        borderRadius: 15,
+        margin: 10
+      },
+      confirmText: {
+        fontSize: 22
+      },
+      mainText: {
+        fontSize: 30,
+        // fontWeight: 500
+      }
+})

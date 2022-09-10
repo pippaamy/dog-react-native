@@ -1,21 +1,13 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  StatusBar,
-  Image,
-  TouchableOpacity,
+  Text
 } from "react-native";
 import * as tf from "@tensorflow/tfjs";
 import * as FileSystem from 'expo-file-system';
 import {decodeJpeg, fetch} from '@tensorflow/tfjs-react-native';
 import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as jpeg from "jpeg-js";
-import * as ImagePicker from "expo-image-picker";
-import Constants from "expo-constants";
-import * as Permissions from "expo-permissions";
 import LoadingScreen from "./LoadingScreenPrediction";
 import { PredictedDog } from "./PredictedDog";
 
@@ -35,20 +27,9 @@ class Prediction extends React.Component {
     });
     this.model = await mobilenet.load();
     this.setState({ isModelReady: true });
-    this.getPermissionAsync();
     this.setState({hasRendered: true})
     console.log(this.props.capturedImage);
   }
-
-  getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
-    }
-  };
-
   imageToTensor(rawImageData) {
     const TO_UINT8ARRAY = true;
     const { width, height, data } = jpeg.decode(rawImageData, TO_UINT8ARRAY);
@@ -90,24 +71,6 @@ class Prediction extends React.Component {
     }
   };
 
-  selectImage = async () => {
-    try {
-      let response = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-      });
-
-      if (!response.cancelled) {
-        const source = { uri: response.uri };
-        this.setState({ image: source });
-        this.classifyImage();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   renderPrediction = (prediction) => {
     const hasRendered = this.state
     if (this.hasRendered) {
@@ -122,12 +85,6 @@ class Prediction extends React.Component {
     );
   }
   };
-
-  // handleRender = () => {
-  //   this.setState({
-  //     hasRendered: true
-  //   })
-  // }
   
   render() {
     const { isTfReady, isModelReady, predictions, image, hasRendered } = this.state;
