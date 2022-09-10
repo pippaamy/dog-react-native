@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { Button, Image, Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import Prediction from './Prediction';
-import { uploadImageFromUri } from '../storage-api';
 
 export default function CameraScreen() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -46,13 +45,6 @@ export default function CameraScreen() {
     setisHidden(false)
   }
 
-  const saveUnmatched = () => {    
-    console.log(capturedImage)    
-    const id = Date.now().toString()    
-    console.log(id)    
-    uploadImageFromUri(capturedImage, "carlieTest3")
-  }
-
   let PhotoPreview = null;
 
   if (previewVisible && capturedImage) {
@@ -75,9 +67,6 @@ export default function CameraScreen() {
           </TouchableOpacity>
           <TouchableOpacity onPress={handlePress}>            
             <Text style={{backgroundColor: "#7a4815", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>          
-          </TouchableOpacity>          
-          <TouchableOpacity onPress={saveUnmatched}>            
-            <Text style={{backgroundColor: "#7a4815", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Save</Text>          
           </TouchableOpacity>
          </View>
       </View>
