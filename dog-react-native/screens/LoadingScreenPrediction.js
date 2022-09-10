@@ -7,7 +7,7 @@ const LoadingScreen = () => {
     <>
       <View style={styles.container}>
         <Image
-          source={require("../dograinbow.gif")}
+          source={require("../public/assets/dograinbow.gif")}
           style={{
             width: 420,
             height: 370,
