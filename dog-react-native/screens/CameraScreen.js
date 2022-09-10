@@ -71,13 +71,13 @@ export default function CameraScreen() {
             minHeight: 60,
           }}>
           <TouchableOpacity onPress={__retakePicture}>
-            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>
+            <Text style={{backgroundColor: "#7a4815", color: "#fff", fontSize: 20, padding: 5 }}>Retake Photo</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handlePress}>            
-            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>          
+            <Text style={{backgroundColor: "#7a4815", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Match Dog!</Text>          
           </TouchableOpacity>          
           <TouchableOpacity onPress={saveUnmatched}>            
-            <Text style={{backgroundColor: "#314159", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Save</Text>          
+            <Text style={{backgroundColor: "#7a4815", color: "#fff", fontSize: 20, padding: 5, marginLeft:30 }}>Save</Text>          
           </TouchableOpacity>
          </View>
       </View>
