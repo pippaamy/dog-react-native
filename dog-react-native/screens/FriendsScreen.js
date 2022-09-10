@@ -4,7 +4,7 @@ import React from "react";
 const FriendsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Friends</Text>
+      <Text style={styles.title}>Friends</Text>
     </View>
   );
 };
