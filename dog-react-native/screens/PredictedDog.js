@@ -2,7 +2,6 @@ import { View, Text, Image, TouchableOpacity } from "react-native"
 import { Button } from "react-native-elements"
 import { useNavigation } from "@react-navigation/native";
 import { uploadImageFromUri, userUploadImage } from "../storage-api"
-import { TouchableOpacity } from "react-native"
 import { StyleSheet } from "react-native"
 
 
