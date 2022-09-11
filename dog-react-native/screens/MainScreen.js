@@ -57,7 +57,7 @@ export default function MainScreen() {
           tabBarIcon: () => (
             <View style={styles.tabView}>
               <Image 
-                source={require('../assets/icons/profile-light.png')}
+                source={require('../public/assets/icons/profile-light.png')}
                 resizeMode='contain'
                 style={styles.tabImage}
               />
