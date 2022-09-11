@@ -19,8 +19,8 @@ export const PredictedDog = ({image, predictions}) => {
         uploadImageFromUri(image, id)
     }
 
-       const handleYes = (image, predictions) => {
-        uploadImageFromUri(image, predictions)
+       const handleYes = () => {
+        uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
        }
 
 
