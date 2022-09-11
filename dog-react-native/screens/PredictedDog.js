@@ -1,20 +1,28 @@
-import { View, Text, Image } from "react-native"
+import { View, Text, Image, TouchableOpacity } from "react-native"
 import { Button } from "react-native-elements"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native";
 import { uploadImageFromUri, userUploadImage } from "../storage-api"
-import { TouchableOpacity } from "react-native"
 import { StyleSheet } from "react-native"
+
 
 export const PredictedDog = ({image, predictions}) => {
     const navigation = useNavigation();
     const handleNo = () => {
         navigation.replace("Camera");
-       }
+    }
 
 
-       const handleYes = (image, predictions) => {
-        uploadImageFromUri(image, predictions)
+
+
+    const saveUnmatched = () => {    
+        const id = `__${Date.now().toString()}`; 
+        uploadImageFromUri(image, id)
+    }
+
+       const handleYes = () => {
+        uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
        }
+
 
     return (
         <>
@@ -27,6 +35,7 @@ export const PredictedDog = ({image, predictions}) => {
             <Text style={style.confirmText}>
                 Is that right?
             </Text>
+            
             <View style={style.buttonWrapper}>
 
             <TouchableOpacity 
@@ -42,7 +51,14 @@ export const PredictedDog = ({image, predictions}) => {
                 <Text style={style.buttonText}>
                     No
                 </Text>
-                </TouchableOpacity> 
+                </TouchableOpacity>
+                <TouchableOpacity 
+                style={style.button} 
+                onPress={saveUnmatched}>
+                  <Text style={style.buttonText}>
+                    Save Anyway
+                  </Text>
+                </TouchableOpacity>
                 </View>
         </View>
         </>

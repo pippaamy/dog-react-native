@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import HomeScreen from "./HomeScreen";
 import GalleryScreen from "./GalleryScreen";
 import FriendsScreen from "./FriendsScreen";
+import ProfileScreen from "./ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,6 +47,23 @@ export default function MainScreen() {
               <Text style={styles.tabText}>HOME</Text>
             </View>
           ),
+        }} 
+       />
+      <Tab.Screen 
+        name="Profile" 
+        component={ProfileScreen} 
+        options={{
+          ...headerOptions,
+          tabBarIcon: () => (
+            <View style={styles.tabView}>
+              <Image 
+                source={require('../assets/icons/profile-light.png')}
+                resizeMode='contain'
+                style={styles.tabImage}
+              />
+              <Text style={styles.tabText}>PROFILE</Text>
+            </View>
+          ),
         }}
       />
       <Tab.Screen
@@ -56,7 +74,7 @@ export default function MainScreen() {
           tabBarIcon: () => (
             <View style={styles.tabView}>
               <Image
-                source={require("../public/assets/icons/images-light.png")}
+                source={require("../public/assets/icons/gallery-light.png")}
                 resizeMode="contain"
                 style={styles.tabImage}
               />
@@ -73,7 +91,7 @@ export default function MainScreen() {
           tabBarIcon: () => (
             <View style={styles.tabView}>
               <Image
-                source={require("../public/assets/icons/people-light.png")}
+                source={require("../public/assets/icons/friends-light.png")}
                 resizeMode="contain"
                 style={styles.tabImage}
               />
@@ -88,9 +106,9 @@ export default function MainScreen() {
 
 const styles = StyleSheet.create({
   cameraButton: {
-    backgroundColor: "#314159",
-    color: "#fff",
-    fontSize: 20,
+    backgroundColor: "#7a4815", 
+    color: "#fff", 
+    fontSize: 20, 
     marginRight: 10,
     padding: 5,
   },

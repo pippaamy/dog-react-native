@@ -4,7 +4,8 @@ import {
   Text
 } from "react-native";
 import * as tf from "@tensorflow/tfjs";
-import { fetch } from "@tensorflow/tfjs-react-native";
+import * as FileSystem from 'expo-file-system';
+import {decodeJpeg, fetch} from '@tensorflow/tfjs-react-native';
 import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as jpeg from "jpeg-js";
 import LoadingScreen from "./LoadingScreenPrediction";
@@ -47,13 +48,20 @@ class Prediction extends React.Component {
   }
 
   classifyImage = async (image) => {
-    // console.log(image, "image")
+    console.log(image, "image")
     try {
       // const imageAssetPath = Image.resolveAssetSource(this.state.image)
-      const response = await fetch(image, {}, { isBinary: true });
-      // console.log(response, "response")
-      const rawImageData = await response.arrayBuffer();
-      const imageTensor = this.imageToTensor(rawImageData);
+      //const response = await fetch(image, {}, { isBinary: true });
+      //console.log(response, "response")
+      //const rawImageData = await response.arrayBuffer();
+      const fileUri = image;      
+      const imgB64 = await FileSystem.readAsStringAsync(fileUri, {
+	      encoding: FileSystem.EncodingType.Base64,
+      });
+      const imgBuffer = tf.util.encodeString(imgB64, 'base64').buffer;
+      const raw = new Uint8Array(imgBuffer)  
+      const imageTensor = decodeJpeg(raw);
+      //const imageTensor = this.imageToTensor(rawImageData);
       console.log(imageTensor, "imagetensor");
       const predictions = await this.model.classify(imageTensor);
       this.setState({ predictions });
