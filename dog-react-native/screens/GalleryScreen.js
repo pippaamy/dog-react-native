@@ -63,8 +63,10 @@ const GalleryScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
       <Text style={styles.titleText}>Matched Dogs!</Text>
-      <Text style={styles.mainText}>How many will you collect?</Text>
+      <Text style={styles.subtitleText}>How many will you collect?</Text>
+      <Text style={styles.mainText}>Nine most popular breeds...</Text>
       <GalleryNine />
+      <Text style={styles.mainText}>All breeds...</Text>
       {!allCardsLoaded? (
         <TouchableOpacity onPress={loadAllCards}>
           <Text style={styles.button}>View All</Text>
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10,
     padding: 5,
-    width: 83
+    width: 82
   },
   container: {
     alignItems: "flex-start",
@@ -139,6 +141,10 @@ const styles = StyleSheet.create({
     flexWrap: "wrap"
   },
   mainText: { 
+    color: "#a45c5c", 
+    fontSize: 16, 
+  },
+  subtitleText: { 
     color: "#a45c5c", 
     fontWeight: "700", 
     fontSize: 16, 
