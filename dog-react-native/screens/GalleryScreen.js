@@ -1,14 +1,24 @@
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Breeds from '../public/breeds.js';
 import Common from '../public/common.js';
 import GalleryCard from "../public/components/GalleryCard.js";
+import {auth} from "../firebase.js"
+import { getAllImageURLsByUser } from '../storage-api.js';
 
 
 const GalleryScreen = () => {
   const [allCardsLoaded, setAllCardsLoaded] = useState(false);
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
+  const [userPhotos, setUserPhotos] = useState([]);
   
+  useEffect(()=>{
+    getAllImageURLsByUser(auth.currentUser.uid).then(arrayOfUrls=>{
+      setUserPhotos(arrayOfUrls);
+      console.log(userPhotos)
+    })
+  },[])
+
   const GalleryNine = () => (
     <View style={styles.list}>
       {Breeds.breeds.map((dog)=>{
@@ -38,26 +48,35 @@ const GalleryScreen = () => {
   )
 
   const GalleryUnmatched = () => (
-    <View>
-      <Text>Unmatched photos</Text>
+    <View style={styles.list}>
+      {userPhotos.map((photoUrl)=>{
+        if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
+          return (
+            <Image 
+              style={{width: 100, height: 150}}
+              source={{uri: photoUrl}}
+              />
+          )
+        }
+      })}
     </View>
   )
 
   const loadAllCards = () => {
-    setAllCardsLoaded(true)
-  }
+    setAllCardsLoaded(true);
+  };
 
   const hideAllCards = () => {
-    setAllCardsLoaded(false)
-  }
+    setAllCardsLoaded(false);
+  };
 
   const loadUnmatched = () => {
-    setUnmatchedLoaded(true)
+    setUnmatchedLoaded(true);
   }
 
   const hideUnmatched = () => {
-    setUnmatchedLoaded(false)
-  }
+    setUnmatchedLoaded(false);
+  };
   
   return (
     <SafeAreaView style={styles.container}>
@@ -109,9 +128,6 @@ const GalleryScreen = () => {
       )}
       </ScrollView>
     </SafeAreaView>
-
-      
-
   );
 };
 
