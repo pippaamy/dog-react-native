@@ -20,7 +20,7 @@ function uploadImage(file, name_make_it_unique,catchFunction) {
       return snapshot;
     })
     .catch(catchFunction||((error) => {
-      console.log({ error, code: error.code });
+      console.log({ errorMessage: error.message, error });
     }));
 }
 function uploadImageFromUri(uri, name_make_it_unique, catchFunction) {
@@ -29,7 +29,7 @@ function uploadImageFromUri(uri, name_make_it_unique, catchFunction) {
     .then((blob) => {
       userUploadImage(blob, name_make_it_unique);
     }) .catch(catchFunction||((error) => {
-      console.log({ error, code: error.code });
+      console.log({ errorMessage: error.message, error});
     }));
 }
 function uploadProfileImageFromUri(uri, name_make_it_unique, catchFunction) {
@@ -38,13 +38,13 @@ function uploadProfileImageFromUri(uri, name_make_it_unique, catchFunction) {
     .then((blob) => {
       userUploadProfileImage(blob, name_make_it_unique);
     }) .catch(catchFunction||((error) => {
-      console.log({ error, code: error.code });
+      console.log({ errorMessage: error.message, error });
     }));
 }
 
 function getImageUrl(path, catchFunction) {
   return getDownloadURL(ref(storage, path)) .catch(catchFunction||((error) => {
-    console.log({ error, code: error.code });
+    console.log({ errorMessage: error.message, error });
   }));
 }
 
@@ -64,7 +64,7 @@ function userUploadProfileImage(file, uniqueName_eg_DateNow, catchFunction) {
       addProfilePic(uniqueName_eg_DateNow);
       console.log("profile pic updated");
     }) .catch(catchFunction||((error) => {
-      console.log({ error, code: error.code });
+      console.log({errorMessage: error.message, error });
     }));
 }
 
@@ -73,7 +73,7 @@ function deleteImage(imageName, catchFunction) {
     .then(() => {
       console.log("File" + imageName + "deleted successfully");
     }) .catch(catchFunction||((error) => {
-      console.log({ error, code: error.code });
+      console.log({ errorMessage: error.message, error });
     }));
 }
 function getAllImagePaths(catchFunction) {
@@ -81,15 +81,15 @@ function getAllImagePaths(catchFunction) {
     .then((res) => {
       return res.items.map((item) => item.fullPath);
     }) .catch(catchFunction||((error) => {
-      console.log({ error, code: error.code });
+      console.log({errorMessage: error.message, error });
     }));
 }
 async function getAllImageURLs(catchFunction){
   return getAllImagePaths(catchFunction)
   .then((paths)=>{
-    return paths.map(async path=>await getImageUrl(path))
+    return Promise.all( paths.map(async path=>await getImageUrl(path)))
   }).catch(catchFunction||((error) => {
-    console.log({ error, code: error.code });
+    console.log({errorMessage: error.message, error });
   }));
 }
 function getAllImageURLsByUser(uid,catchFunction){
@@ -99,7 +99,7 @@ function getAllImageURLsByUser(uid,catchFunction){
       )
     })
     .catch(catchFunction||((error) => {
-      console.log({ error, code: error.code });
+      console.log({ errorMessage: error.message, error });
     }));
   }
 
