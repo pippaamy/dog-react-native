@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from 'react';
 import Breeds from '../public/breeds.js';
 import Common from '../public/common.js';
@@ -10,28 +10,31 @@ const GalleryScreen = () => {
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
   
   const GalleryNine = () => (
-    //console.log(Common.common)
-    Breeds.breeds.map((dog)=>{
-      if (Common.common.indexOf(dog.breed) !== -1) {
+    <View style={styles.list}>
+      {Breeds.breeds.map((dog)=>{
+        if (Common.common.indexOf(dog.breed) !== -1) {
+          return (
+            <GalleryCard 
+              key = {dog.breed}
+              breed={dog.breed}
+            />
+          )
+        }
+      })}
+    </View>
+  )
+
+  const GalleryPlus = () => (
+    <View style={styles.list}>
+      {Breeds.breeds.map((dog)=>{
         return (
           <GalleryCard 
             key = {dog.breed}
             breed={dog.breed}
           />
         )
-      }
-    })
-  )
-
-  const GalleryPlus = () => (
-    Breeds.breeds.map((dog)=>{
-      return (
-        <GalleryCard 
-          key = {dog.breed}
-          breed={dog.breed}
-        />
-      )
-    })
+    })}
+    </View>
   )
 
   const GalleryUnmatched = () => (
@@ -57,7 +60,8 @@ const GalleryScreen = () => {
   }
   
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
       <Text style={styles.titleText}>Matched Dogs!</Text>
       <Text style={styles.mainText}>How many will you collect?</Text>
       <GalleryNine />
@@ -101,7 +105,11 @@ const GalleryScreen = () => {
       ) : (
         <></>
       )}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
+
+      
+
   );
 };
 
@@ -114,7 +122,8 @@ const styles = StyleSheet.create({
     fontSize: 20, 
     marginBottom: 10,
     marginTop: 10,
-    padding: 5
+    padding: 5,
+    width: 83
   },
   container: {
     alignItems: "flex-start",
@@ -123,8 +132,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     padding: 20,
   },
-  gallery: {
-
+  list: {
+    marginHorizontal: "auto",
+    width: 360,
+    flexDirection: "row",
+    flexWrap: "wrap"
   },
   mainText: { 
     color: "#a45c5c", 

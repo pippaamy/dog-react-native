@@ -3,7 +3,7 @@ export default {
         "Border Collie", 
         "Chihuahua",
         "Cocker Spaniel", 
-        "Dachsund", 
+        "Dachshund", 
         "French Bulldog", 
         "German Shepherd Dog",
         "Golden Retriever",
