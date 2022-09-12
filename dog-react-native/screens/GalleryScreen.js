@@ -52,8 +52,8 @@ const GalleryScreen = () => {
       {userPhotos.map((photoUrl)=>{
         if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
           return (
-            <Image 
-              style={{width: 100, height: 150}}
+            <Image
+              style={styles.unmatched}
               source={{uri: photoUrl}}
               />
           )
@@ -170,4 +170,12 @@ const styles = StyleSheet.create({
     fontWeight: "900", 
     fontSize: 24, 
   },
+  unmatched: {
+    borderColor: "#7a4815",
+    borderRadius: 5,
+    borderWidth: 3,
+    height: 150,
+    margin: 10,
+    width: 100, 
+  }
 });
