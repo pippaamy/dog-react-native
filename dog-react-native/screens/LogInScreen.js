@@ -75,6 +75,7 @@ const LogInScreen = () => {
           alignItems="center"
         />
       </View>
+      <Text style={styles.title}> GONE FOR A BORK</Text>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
           <TextInput
@@ -187,5 +188,11 @@ const styles = StyleSheet.create({
     color: "#dc7646",
     fontWeight: "700",
     fontSize: 16,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    backgroundColor: "#f6d186",
   },
 });
