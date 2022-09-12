@@ -1,10 +1,18 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { getUserDatabyUID, useLoggedInUser } from "../api";
+import { auth } from "../firebase";
 
 const ProfileScreen = () => {
+  const [user, setUser] = useState({});
+
+  getUserDatabyUID(auth.currentUser.uid).then((loggedInUser) => {
+    setUser(loggedInUser);
+  });
+
   return (
     <View style={styles.container}>
-      <Text>Profile</Text>
+      <Text>{user.email}</Text>
     </View>
   );
 };
