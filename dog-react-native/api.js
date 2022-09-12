@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "./firebase";
 import {
@@ -133,6 +134,16 @@ function addProfilePic(path, catchFunction) {
     }));
   });
 }
+function addProfilePicURL(URL, catchFunction) {
+  return auth.onAuthStateChanged((user) => {
+    const { uid } = user;
+    return updateDoc(userDoc(uid), {
+      profilePicURL: URL,
+    }).catch(catchFunction||((error) => {
+      console.log({ errorMessage: error.message, msg: "while adding Profile Image", error });
+    }));
+  });
+}
 function addFriend(friendId, catchFunction) {
   return auth.onAuthStateChanged((user) => {
     updateDoc(userDoc(user.uid), {
@@ -166,7 +177,7 @@ function emailLogin(email, password, catchFunction) {
       console.log({ errorMessage: error.message, msg: "while logging in with email", error });
     }));
 }
-function createEmailAndUser(email, password, catchFunction) {
+function createEmailAndUser(email, password, username,catchFunction) {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -176,11 +187,12 @@ function createEmailAndUser(email, password, catchFunction) {
       );
       return userCredential;
     })
+    .then(()=>username?patchProfile(username,undefined,catchFunction):undefined)
+    .then(()=>username?addDisplayNameToUserDatabase(username):null)
     .catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message,msg: "while creating user" ,error });
     }));
 }
-
 const signOut = (catchFunction) => {
   return auth
     .signOut()
@@ -193,13 +205,41 @@ const signOut = (catchFunction) => {
     }));
 };
 function useLoggedInUser(functionWithUserAsParameter){
-  auth.onAuthStateChanged((user)=>{
+  return auth.onAuthStateChanged((user)=>{
     if(user){
         functionWithUserAsParameter(user)
   } else console.log('not logged in')})
 }
+function patchProfile(displayName,photoURL, catchFunction){
+  const updateObj={}
+  if(displayName) updateObj.displayName= displayName
+  if (photoURL) updateObj.photoURL=photoURL
+  return updateProfile(auth.currentUser, updateObj).then((res) => {
+   console.log(' Profile updated!'); 
+   if (displayName )return addDisplayNameToUserDatabase(displayName)
+  }).then(()=>{ if (photoURL) return addProfilePicURL(photoURL)})
+  .catch(catchFunction||((error) => {
+    console.log({ errorMessage: error.message,msg: "while updating user" ,error });
+  }));
+}
+function addDisplayNameToUserDatabase(displayName, catchFunction) {
+    const {uid}= auth.currentUser
+    return displayName? updateDoc(userDoc(uid), {
+      displayName
+    }).catch(catchFunction||((error) => {
+      console.log({ errorMessage: error.message, msg: "while adding Display Name", error });
+    }))
+    : updateDoc(userDoc(uid), {
+    }).catch(catchFunction||((error) => {
+      console.log({ errorMessage: error.message, msg: "while adding Display Name", error });
+    }))
+  
+}
 
 export {
+  addProfilePicURL,
+  addDisplayNameToUserDatabase,
+  patchProfile,
   useLoggedInUser,
   userData,
   getAllBadges,
