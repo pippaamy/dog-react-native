@@ -18,6 +18,7 @@ import { createEmailAndUser } from "../api";
 
 const LogInScreen = () => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
@@ -35,7 +36,7 @@ const LogInScreen = () => {
   }, []);
 
   const handleSignUp = () => {
-    createEmailAndUser(email, password);
+    createEmailAndUser(email, password,name);
   };
 
   const handleLogin = () => {
@@ -76,6 +77,13 @@ const LogInScreen = () => {
       </View>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Name (optional)"
+            placeholderTextColor="gray"
+            value={name}
+            onChangeText={(text) => setName(text)}
+            style={styles.input}
+          />
           <TextInput
             placeholder="Email"
             placeholderTextColor="gray"
