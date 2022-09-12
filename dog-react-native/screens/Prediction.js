@@ -4,7 +4,9 @@ import {
   Text
 } from "react-native";
 import * as tf from "@tensorflow/tfjs";
-import { fetch } from "@tensorflow/tfjs-react-native"; // comment out this line for wsl
+
+import * as FileSystem from 'expo-file-system';
+import {decodeJpeg, fetch} from '@tensorflow/tfjs-react-native'; // comment out this line for wsl
 import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as jpeg from "jpeg-js";
 import LoadingScreen from "./LoadingScreenPrediction";
@@ -62,6 +64,18 @@ class Prediction extends React.Component {
       console.log(error);
     }
   };
+  /* // DONT REMOVE!!  Replace the above function with this one for wsl
+  classifyImage = async (image) => {
+    try {
+        const imageId= document.getElementById('imageId')
+        console.log(imageId);
+      const imageTensor = tf.browser.fromPixels( imageId)
+      const predictions = await this.model.classify(imageTensor)
+      this.setState({ predictions:predictions })
+      console.log({predictions})
+    } catch (error) { console.log(error)    } 
+  } */
+
 
     /* // DONT REMOVE!!  Replace the above function with this one for wsl
   classifyImage = async (image) => {
