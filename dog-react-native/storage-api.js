@@ -60,9 +60,10 @@ function userUploadImage(file, uniqueName_eg_DateNow, catchFunction) {
 
 function userUploadProfileImage(file, uniqueName_eg_DateNow, catchFunction) {
   return uploadImage(file, uniqueName_eg_DateNow)
-    .then(() => {
+    .then((res) => {
       addProfilePic(uniqueName_eg_DateNow);
       console.log("profile pic updated");
+      return res
     }) .catch(catchFunction||((error) => {
       console.log({errorMessage: error.message, error });
     }));
@@ -102,8 +103,16 @@ function getAllImageURLsByUser(uid,catchFunction){
       console.log({ errorMessage: error.message, error });
     }));
   }
-
+function uploadProfileImagefromFile(file,path){
+  if(!path) path = Date.now().toString()
+    userUploadProfileImage(file, path)
+    .then(()=>{
+     return getImageUrl(path)
+    }).then((url)=>patchProfile(undefined,url))
+  
+}
 export {
+  uploadProfileImagefromFile,
   getAllImageURLsByUser,
   getAllImageURLs,
   imageRef,
