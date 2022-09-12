@@ -1,6 +1,9 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   signInWithEmailAndPassword,
+  updateEmail,
+  updatePassword,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "./firebase";
@@ -15,7 +18,6 @@ import {
 } from "firebase/firestore";
 import { dataBase } from "./firebase";
 
-// Reference to right dataset in the firestore database
 const userData = doc(dataBase, "USER Data collection", "USER DATA");
 const userCollection = collection(dataBase, "USER DATA");
 const userDoc = (uid) => doc(dataBase, "USER DATA", uid);
@@ -131,7 +133,7 @@ function addProfilePic(path, catchFunction) {
       console.log({ errorMessage: error.message, msg: "while adding Profile Image", error });
     }));
 }
-function addProfilePicURL(URL, catchFunction) {
+function addProfilePicURL_db_only(URL, catchFunction) {
     const { uid } = auth.currentUser
     return updateDoc(userDoc(uid), {
       photoURL: URL,
@@ -205,14 +207,24 @@ function useLoggedInUser(functionWithUserAsParameter){
         functionWithUserAsParameter(user)
   } else console.log('not logged in')})
 }
-function patchProfile(displayName,photoURL, catchFunction){
+function patchProfile(displayName,photoURL, newEmail, newPassword, catchFunction){
   const updateObj={}
-  if(displayName) updateObj.displayName= displayName
-  if (photoURL) updateObj.photoURL=photoURL
+  let updateStr=''
+  if(displayName) {updateObj.displayName= displayName
+  updateStr+='Name updated,'}
+  if (photoURL) {updateObj.photoURL=photoURL
+  updateStr+='photo updated,'}
   return updateProfile(auth.currentUser, updateObj).then((res) => {
-   console.log(' Profile updated!'); 
+   console.log(updateStr); 
    if (displayName )return addDisplayNameToUserDatabase(displayName)
-  }).then(()=>{ if (photoURL) return addProfilePicURL(photoURL)})
+  }).then(()=>{ if (photoURL) return addProfilePicURL_db_only(photoURL)})
+  .then(()=>{
+    console.log('database updated');
+   return newEmail? setNewEmail(newEmail):null})
+   .catch(console.log)
+  .then(()=>{newEmail? console.log('email updated'):null 
+  return newPassword?setPassword(newPassword):null})
+  .then(()=>newPassword?console.log('password updated'):null)
   .catch(catchFunction||((error) => {
     console.log({ errorMessage: error.message,msg: "while updating user" ,error });
   }));
@@ -230,9 +242,28 @@ function addDisplayNameToUserDatabase(displayName, catchFunction) {
     }))
   
 }
-
+function setPassword(newPassword,catchFunction){
+  return updatePassword(auth.currentUser, newPassword).then(() => {
+    console.log('Password changed');
+  }).catch(catchFunction||((error) => {
+    console.log({ errorMessage: error.message,msg: "while updating password" ,error });
+  }));
+}
+function deleteAccount(catchFunction){
+  return deleteUser(auth.currentUser).then((res) => {
+    console.log('User deleted.');
+    return res
+  }).catch(catchFunction||console.log)
+}
+function setNewEmail(newEmail,catchFunction){
+  return updateEmail(auth.currentUser, newEmail).then((res) => {
+    console.log('Email updated!'); 
+    return res
+  }).catch(catchFunction||console.log)
+}
 export {
-  addProfilePicURL,
+  deleteAccount,
+  addProfilePicURL_db_only,
   patchProfile,
   useLoggedInUser,
   userData,
