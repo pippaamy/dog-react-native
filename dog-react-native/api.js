@@ -221,6 +221,7 @@ function patchProfile(displayName,photoURL, newEmail, newPassword, catchFunction
   .then(()=>{
     console.log('database updated');
    return newEmail? setNewEmail(newEmail):null})
+   .catch(console.log)
   .then(()=>{newEmail? console.log('email updated'):null 
   return newPassword?setPassword(newPassword):null})
   .then(()=>newPassword?console.log('password updated'):null)
