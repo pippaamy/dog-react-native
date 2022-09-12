@@ -115,28 +115,24 @@ function getUserDatabyUID(uid, catchFunction) {
 }
 
 function addImagePath(imagePath, catchFunction) {
-  return auth.onAuthStateChanged((user) => {
-    const { uid } = user;
+    const { uid } = auth.currentUser
     return updateDoc(userDoc(uid), {
       imagePaths: arrayUnion(imagePath),
     }).catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message, msg: "while adding Image", error });
-    }));
-  });
+    }))
 }
 function addProfilePic(path, catchFunction) {
-  return auth.onAuthStateChanged((user) => {
-    const { uid } = user;
+ 
+    const { uid } = auth.currentUser
     return updateDoc(userDoc(uid), {
       profilePic: path,
     }).catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message, msg: "while adding Profile Image", error });
     }));
-  });
 }
 function addProfilePicURL(URL, catchFunction) {
-  return auth.onAuthStateChanged((user) => {
-    const { uid } = user;
+    const { uid } = auth.currentUser
     return updateDoc(userDoc(uid), {
       photoURL: URL,
     })
@@ -145,29 +141,25 @@ function addProfilePicURL(URL, catchFunction) {
     .catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message, msg: "while adding Profile Image", error });
     }));
-  });
 }
 function addFriend(friendId, catchFunction) {
-  return auth.onAuthStateChanged((user) => {
-    updateDoc(userDoc(user.uid), {
+  return updateDoc(userDoc(auth.currentUser.uid), {
       friends: arrayUnion(friendId),
     }).then(()=>console.log('friend added'))
     .catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message, msg: "while adding friend", error });
     }));
-  });
+
 }
 function addCaughtDog(dogName, catchFunction) {
-  return auth.onAuthStateChanged((user) => {
-    if (user) {
-      updateDoc(userDoc(user.uid), {
+    if (auth.currentUser) {
+      updateDoc(userDoc(auth.currentUser.uid), {
         dogsCaught: arrayUnion(dogName),
       }).then(()=>console.log('caught dog added'))
       .catch(catchFunction||((error) => {
         console.log({ errorMessage: error.message, msg: "while adding caught dog",error });
       }));
     } else console.log("not logged in");
-  });
 }
 function emailLogin(email, password, catchFunction) {
   return signInWithEmailAndPassword(auth, email, password)
@@ -190,7 +182,7 @@ function createEmailAndUser(email, password, username,catchFunction) {
       );
       return userCredential;
     })
-    .then(()=>username?patchProfile(username,undefined,catchFunction):undefined)
+    .then(()=>patchProfile(username,'https://cdn-icons-png.flaticon.com/512/1250/1250689.png',catchFunction))
     .then(()=>username?addDisplayNameToUserDatabase(username):null)
     .catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message,msg: "while creating user" ,error });
