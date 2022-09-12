@@ -182,7 +182,7 @@ function createEmailAndUser(email, password, username,catchFunction) {
       );
       return userCredential;
     })
-    .then(()=>username?patchProfile(username,undefined,catchFunction):undefined)
+    .then(()=>patchProfile(username,'https://cdn-icons-png.flaticon.com/512/1250/1250689.png',catchFunction))
     .then(()=>username?addDisplayNameToUserDatabase(username):null)
     .catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message,msg: "while creating user" ,error });
