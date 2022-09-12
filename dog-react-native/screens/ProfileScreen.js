@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getUserDatabyUID, patchProfile, useLoggedInUser } from "../api";
 import { auth } from "../firebase";
 import UploadImage from "./uploadImage";
@@ -9,6 +9,12 @@ const ProfileScreen = () => {
   const [name, setName] = useState("guest");
 
   // patchProfile()
+
+  useEffect(() => {
+    getUserDatabyUID(auth.currentUser.uid).then((loggedInUser) => {
+      setUser(loggedInUser);
+    });
+  }, []);
 
   getUserDatabyUID(auth.currentUser.uid).then((loggedInUser) => {
     setUser(loggedInUser);
