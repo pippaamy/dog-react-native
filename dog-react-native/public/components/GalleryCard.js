@@ -3,11 +3,11 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Breeds from '../breeds.js'
 
 
-const GalleryCard = () => {
+const GalleryCard = ({breed}) => {
 
     return (
         <View>
-          <Text>{Breeds.breeds[0].breed}</Text>
+          <Text>{breed}</Text>
         </View>
       )
 

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from 'react';
-import Breeds from '../public/breeds.js'
+import Breeds from '../public/breeds.js';
+import Common from '../public/common.js';
 import GalleryCard from "../public/components/GalleryCard.js";
 
 
@@ -9,13 +10,28 @@ const GalleryScreen = () => {
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
   
   const GalleryNine = () => (
-    <GalleryCard />
+    //console.log(Common.common)
+    Breeds.breeds.map((dog)=>{
+      if (Common.common.indexOf(dog.breed) !== -1) {
+        return (
+          <GalleryCard 
+            key = {dog.breed}
+            breed={dog.breed}
+          />
+        )
+      }
+    })
   )
 
   const GalleryPlus = () => (
-    <View>
-      <Text>Full Gallery</Text>
-    </View>
+    Breeds.breeds.map((dog)=>{
+      return (
+        <GalleryCard 
+          key = {dog.breed}
+          breed={dog.breed}
+        />
+      )
+    })
   )
 
   const GalleryUnmatched = () => (
