@@ -32,11 +32,11 @@ function uploadImageFromUri(uri, name_make_it_unique, catchFunction) {
       console.log({ errorMessage: error.message, error});
     }));
 }
-function uploadProfileImageFromUri(uri, name_make_it_unique, catchFunction) {
+function old_uploadProfileImagefromUri(uri, name_make_it_unique, catchFunction) {
   return fetch(uri)
     .then((res) => res.blob())
     .then((blob) => {
-      userUploadProfileImage(blob, name_make_it_unique);
+      userUploadProfileImage_Old(blob, name_make_it_unique);
     }) .catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message, error });
     }));
@@ -58,7 +58,7 @@ function userUploadImage(file, uniqueName_eg_DateNow, catchFunction) {
     }));
 }
 
-function userUploadProfileImage(file, uniqueName_eg_DateNow, catchFunction) {
+function userUploadProfileImage_Old(file, uniqueName_eg_DateNow, catchFunction) {
   return uploadImage(file, uniqueName_eg_DateNow)
     .then((res) => {
       addProfilePic(uniqueName_eg_DateNow);
@@ -105,13 +105,20 @@ function getAllImageURLsByUser(uid,catchFunction){
   }
 function uploadProfileImagefromFile(file,path){
   if(!path) path = Date.now().toString()
-    userUploadProfileImage(file, path)
+    userUploadProfileImage_Old(file, path)
     .then(()=>{
      return getImageUrl(path)
     }).then((url)=>patchProfile(undefined,url))
-  
+}
+function uploadProfileImagefromUri(uri,path){
+  if(!path) path = Date.now().toString()
+    old_uploadProfileImagefromUri(uri, path)
+    .then(()=>{
+     return getImageUrl(path)
+    }).then((url)=>patchProfile(undefined,url))
 }
 export {
+  uploadProfileImagefromUri,
   uploadProfileImagefromFile,
   getAllImageURLsByUser,
   getAllImageURLs,
@@ -119,10 +126,10 @@ export {
   uploadImage,
   getImageUrl,
   userUploadImage,
-  userUploadProfileImage,
+  userUploadProfileImage_Old,
   deleteImage,
   storage,
   getAllImagePaths,
   uploadImageFromUri,
-  uploadProfileImageFromUri,
+  old_uploadProfileImagefromUri,
 };
