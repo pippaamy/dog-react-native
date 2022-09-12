@@ -1,10 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
-import { getUserDatabyUID, useLoggedInUser } from "../api";
+import { getUserDatabyUID, patchProfile, useLoggedInUser } from "../api";
 import { auth } from "../firebase";
+import UploadImage from "./uploadImage";
 
 const ProfileScreen = () => {
   const [user, setUser] = useState({});
+  const [name, setName] = useState("guest");
+
+  // patchProfile()
 
   getUserDatabyUID(auth.currentUser.uid).then((loggedInUser) => {
     setUser(loggedInUser);
@@ -12,7 +16,10 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text>{user.email}</Text>
+      <UploadImage />
+      <Text> Name: {user.displayName}</Text>
+      <Text>Email: {user.email}</Text>
+      <Text>Dogs caught :{user.dogsCaught}/50</Text>
     </View>
   );
 };
