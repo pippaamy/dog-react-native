@@ -1,14 +1,17 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { addFriend, getUserData, getUserDatabyUID } from "../api";
+import { addFriend, getUserData } from "../api";
 import { auth } from "../firebase";
-import { Button } from "react-native-elements";
 
 const FriendsScreen = () => {
   const [viewAll,setViewAll] = useState(false)
   const [allUsers,setAllUsers] = useState([])
   const [friendsData,setFriendData]= useState([])
   const [loggedInUser,setLoggedInUser] =useState({...auth.currentUser, friends:[]})
+  const [reloadVar,setReloadVar]= useState(0)
+  function reload(){
+    setReloadVar(x=>x+1)
+  }
   useEffect(()=>{
     getUserData()
     .then(dataArray=>{
@@ -23,17 +26,30 @@ const FriendsScreen = () => {
       setFriendData( dataArray.filter(item=>loggedUserData.friends.includes(item.uid))
         )
     })
-  },[viewAll])
+  },[])
+  useEffect(()=>{
+
+  },[reloadVar])
 
   function addFriendFront(uid){
+    console.log('button pressed');
+   
     return addFriend(uid).then((res)=>{
       setLoggedInUser(current=>{
         let updated =current
         updated.friends.push(uid)
         return updated
       })
-      setTimeout( ()=>setAllUsers(x=>x), 300)
-    })
+      console.log( friendsData);
+      setFriendData(current=>{
+        let updated =current
+        updated.push(allUsers.filter(item=>item.uid===uid)[0])
+        return updated
+      }
+      )
+      console.log(friendsData);
+      console.log(loggedInUser);
+    }) .then(reload)
   }
   
     if(viewAll){
