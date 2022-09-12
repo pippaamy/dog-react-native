@@ -1,13 +1,39 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from 'react';
-import { getAllImagePaths } from '../storage-api';
+import Breeds from '../public/breeds.js'
+import GalleryCard from "../public/components/GalleryCard.js";
+
 
 const GalleryScreen = () => {
+  const [allCardsLoaded, setAllCardsLoaded] = useState(false);
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
+  
+  const GalleryNine = () => (
+    <GalleryCard />
+  )
+
+  const GalleryPlus = () => (
+    <View>
+      <Text>Full Gallery</Text>
+    </View>
+  )
+
+  const GalleryUnmatched = () => (
+    <View>
+      <Text>Unmatched photos</Text>
+    </View>
+  )
+
+  const loadAllCards = () => {
+    setAllCardsLoaded(true)
+  }
+
+  const hideAllCards = () => {
+    setAllCardsLoaded(false)
+  }
 
   const loadUnmatched = () => {
     setUnmatchedLoaded(true)
-
   }
 
   const hideUnmatched = () => {
@@ -18,6 +44,26 @@ const GalleryScreen = () => {
     <View style={styles.container}>
       <Text style={styles.titleText}>Matched Dogs!</Text>
       <Text style={styles.mainText}>How many will you collect?</Text>
+      <GalleryNine />
+      {!allCardsLoaded? (
+        <TouchableOpacity onPress={loadAllCards}>
+          <Text style={styles.button}>View All</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={hideAllCards}>
+          <Text style={styles.button}>Hide All</Text>
+        </TouchableOpacity>
+      )}
+      {allCardsLoaded? (
+        <>
+        <GalleryPlus />
+        <TouchableOpacity onPress={hideAllCards}>
+          <Text style={styles.button}>Hide All</Text>
+        </TouchableOpacity>
+        </>
+      ) : (
+        <></>
+      )}
       <Text style={styles.titleText}>Unmatched Snaps</Text>
       <Text style={styles.mainText}>(Possibly not a dog)</Text>
       {!unmatchedLoaded? (
@@ -28,6 +74,16 @@ const GalleryScreen = () => {
         <TouchableOpacity onPress={hideUnmatched}>
           <Text style={styles.button}>Hide All</Text>
         </TouchableOpacity>
+      )}
+      {unmatchedLoaded? (
+        <>
+        <GalleryUnmatched />
+        <TouchableOpacity onPress={hideUnmatched}>
+          <Text style={styles.button}>Hide All</Text>
+        </TouchableOpacity>
+        </>
+      ) : (
+        <></>
       )}
     </View>
   );
@@ -40,27 +96,28 @@ const styles = StyleSheet.create({
     backgroundColor: "#7a4815", 
     color: "#fff", 
     fontSize: 20, 
-    marginLeft: 20,
+    marginBottom: 10,
     marginTop: 10,
     padding: 5
   },
   container: {
-    flex: 1,
-    backgroundColor: "#f6d186",
     alignItems: "flex-start",
+    backgroundColor: "#f6d186",
+    flex: 1,
     justifyContent: "flex-start",
+    padding: 20,
+  },
+  gallery: {
+
   },
   mainText: { 
     color: "#a45c5c", 
     fontWeight: "700", 
     fontSize: 16, 
-    paddingLeft: 20 
   },
   titleText: { 
     color: "#a45c5c", 
     fontWeight: "900", 
     fontSize: 24, 
-    paddingLeft: 20,
-    paddingTop: 20,
   },
 });
