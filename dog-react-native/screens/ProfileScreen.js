@@ -17,9 +17,9 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <UploadImage />
-      <Text> Name: {user.displayName}</Text>
-      <Text>Email: {user.email}</Text>
-      <Text>Dogs caught :{user.dogsCaught}/50</Text>
+      <Text style={styles.name}> Name: {user.displayName}</Text>
+      <Text style={styles.email}>Email: {user.email}</Text>
+      <Text style={styles.dogCatch}>Dogs caught :{user.dogsCaught}/50</Text>
     </View>
   );
 };
