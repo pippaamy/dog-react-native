@@ -39,7 +39,7 @@ function getBadges(breed, catchFunction) {
         })
     );
 }
-function getAllBadges(catchFunc) {
+function getAllBadges(catchFunction) {
   return getDocs(badgeData)
     .then((res) => {
       res.docs.map((badge) => badge.data());
@@ -51,7 +51,7 @@ function getAllBadges(catchFunc) {
         })
     );
 }
-function getUserData(catchFunc) {
+function getUserData(catchFunction) {
   return getDocs(userCollection)
     .then((res) => {
       const documents = res.docs;
