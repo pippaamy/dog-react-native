@@ -138,8 +138,11 @@ function addProfilePicURL(URL, catchFunction) {
   return auth.onAuthStateChanged((user) => {
     const { uid } = user;
     return updateDoc(userDoc(uid), {
-      profilePicURL: URL,
-    }).catch(catchFunction||((error) => {
+      photoURL: URL,
+    })
+    .then((res)=>{console.log('profile pic updated')
+  return res})
+    .catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message, msg: "while adding Profile Image", error });
     }));
   });
@@ -148,24 +151,24 @@ function addFriend(friendId, catchFunction) {
   return auth.onAuthStateChanged((user) => {
     updateDoc(userDoc(user.uid), {
       friends: arrayUnion(friendId),
-    }).catch(catchFunction||((error) => {
+    }).then(()=>console.log('friend added'))
+    .catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message, msg: "while adding friend", error });
     }));
   });
 }
-
 function addCaughtDog(dogName, catchFunction) {
   return auth.onAuthStateChanged((user) => {
     if (user) {
       updateDoc(userDoc(user.uid), {
         dogsCaught: arrayUnion(dogName),
-      }).catch(catchFunction||((error) => {
+      }).then(()=>console.log('caught dog added'))
+      .catch(catchFunction||((error) => {
         console.log({ errorMessage: error.message, msg: "while adding caught dog",error });
       }));
     } else console.log("not logged in");
   });
 }
-
 function emailLogin(email, password, catchFunction) {
   return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -238,7 +241,6 @@ function addDisplayNameToUserDatabase(displayName, catchFunction) {
 
 export {
   addProfilePicURL,
-  addDisplayNameToUserDatabase,
   patchProfile,
   useLoggedInUser,
   userData,
@@ -253,5 +255,5 @@ export {
   getUserData,
   getBadges,
   addImagePath,
-  addProfilePic,
+  addProfilePic
 };
