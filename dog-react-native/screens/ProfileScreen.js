@@ -16,10 +16,6 @@ const ProfileScreen = () => {
     });
   }, []);
 
-  getUserDatabyUID(auth.currentUser.uid).then((loggedInUser) => {
-    setUser(loggedInUser);
-  });
-
   return (
     <View style={styles.container}>
       <UploadImage />
