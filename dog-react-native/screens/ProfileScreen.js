@@ -36,7 +36,7 @@ const ProfileScreen = () => {
     setEdit((x) => !x);
   };
   if (edit) {
-    return <ProfileInfo />;
+    return <ProfileInfo edit= {edit} setEdit={setEdit} />;
   }
 
   return (
