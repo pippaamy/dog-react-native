@@ -1,82 +1,67 @@
-import { View, Text, Image, TouchableOpacity } from "react-native"
-import { Button } from "react-native-elements"
+import { View, Text, Image, TouchableOpacity } from "react-native";
+import { Button } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
-import { uploadImageFromUri, userUploadImage } from "../storage-api"
-import { StyleSheet } from "react-native"
-import { DogCard } from "./DogCard";
+import { uploadImageFromUri, userUploadImage } from "../storage-api";
+import { StyleSheet } from "react-native";
+// import { DogCard } from "./DogCard";
 import { useState } from "react";
-const dogs = require("../public/breeds-50-lower - breeds.json")
+const dogs = require("../public/breeds-50-lower - breeds.json");
 
+export const PredictedDog = ({ image, predictions }) => {
+  const [clicked, setClicked] = useState(false);
 
-export const PredictedDog = ({image, predictions}) => {
-const [clicked, setClicked] = useState(false)
+  let formattedPredictions = [];
+  const format = () => {
+    predictions.forEach((prediction) => {
+      for (let i = 0; i < Object.keys(dogs).length; i++) {
+        if (
+          prediction.className.toLowerCase().includes(dogs[i].nameLower) &&
+          prediction.probability > 0
+        ) {
+          formattedPredictions.push(dogs[i].breed, prediction.probability);
+        }
+      }
+    });
+  };
 
+  format();
+  const navigation = useNavigation();
+  const handleNo = () => {
+    navigation.replace("Camera");
+  };
 
-    let formattedPredictions = []
-    const format = () => {
-        predictions.forEach((prediction) => {
-            for(let i=0; i<Object.keys(dogs).length; i++) {
-                if (prediction.className.toLowerCase().includes(dogs[i].nameLower) && prediction.probability > 0) {
-                    formattedPredictions.push(dogs[i].breed, prediction.probability)
-                }
-            }
-        })
-    }
-    
-    format()
-    const navigation = useNavigation();
-    const handleNo = () => {
-        navigation.replace("Camera");
-    }
+  const saveUnmatched = () => {
+    const id = `__${Date.now().toString()}`;
+    uploadImageFromUri(image, id);
+  };
 
-    const saveUnmatched = () => {    
-        const id = `__${Date.now().toString()}`; 
-        uploadImageFromUri(image, id)
-    }
+  const handleYes = () => {
+    // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
+    setClicked(true);
+  };
 
-       const handleYes = () => {
-        // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
-        setClicked(true)
-       }
-
-
-        if (formattedPredictions.length !== 0) {
-            return (
-                <>
+  if (formattedPredictions.length !== 0) {
+    return (
+      <>
         <View style={style.container}>
-        <Image style={style.image} 
-        source={{uri: image}}/>
-            <Text style={style.mainText}>
-                There is a {(formattedPredictions[1] * 100).toFixed(1)}% chance that dog is a {formattedPredictions[0]}!
-            </Text>
-            <Text style={style.confirmText}>
-                Is that right?
-            </Text>
-            
-            <View style={style.buttonWrapper}>
+          <Image style={style.image} source={{ uri: image }} />
+          <Text style={style.mainText}>
+            There is a {(formattedPredictions[1] * 100).toFixed(1)}% chance that
+            dog is a {formattedPredictions[0]}!
+          </Text>
+          <Text style={style.confirmText}>Is that right?</Text>
 
-            <TouchableOpacity 
-            style={style.button}
-            onPress={handleYes}>
-                <Text style={style.buttonText}>
-                    Yes
-                </Text>
-                </TouchableOpacity> 
-                <TouchableOpacity 
-            style={style.button}
-            onPress={handleNo}>
-                <Text style={style.buttonText}>
-                    No
-                </Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                style={style.button} 
-                onPress={saveUnmatched}>
-                  <Text style={style.buttonText}>
-                    Save Anyway
-                  </Text>
-                </TouchableOpacity>
-                </View>
+          <View style={style.buttonWrapper}>
+            <TouchableOpacity style={style.button} onPress={handleYes}>
+              <Text style={style.buttonText}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.button} onPress={handleNo}>
+              <Text style={style.buttonText}>No</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.button} onPress={saveUnmatched}>
+              <Text style={style.buttonText}>Save Anyway</Text>
+            </TouchableOpacity>
+          </View>
         </View>
                     </>
         )
@@ -108,13 +93,12 @@ const [clicked, setClicked] = useState(false)
                   </Text>
                 </TouchableOpacity>
                     </View>
-        </View>
 
-    </>
-    )
-    }
-    
-}
+        </View>
+      </>
+    );
+  }
+};
 
 const style = StyleSheet.create({
     button: {
