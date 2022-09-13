@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Text } from "react-native-elements";
+import { Image, Text } from "react-native-elements";
 import { patchProfile } from "../api";
 import { auth } from "../firebase";
 
@@ -28,6 +28,19 @@ const ProfileInfo = ({ edit, setEdit }) => {
     <>
       <View style={styles.inputContainer}>
         <KeyboardAvoidingView style={styles.inputContainer}>
+          <Image
+            source={require("../public/images/draw.png")}
+            style={{
+              width: 50,
+              height: 30,
+              display: "flex",
+              flexDirection: "row",
+            }}
+            resizeMode="contain"
+            resizeMethod="resize"
+            justifyContent="center"
+            alignItems="left"
+          />
           <TextInput
             placeholderTextColor="gray"
             value={name}
