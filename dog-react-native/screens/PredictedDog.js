@@ -104,6 +104,7 @@ const [clicked, setClicked] = useState(false)
                   <Text style={style.errorButtonText}>
                     Save Anyway
                     
+                
                   </Text>
                 </TouchableOpacity>
                     </View>
