@@ -11,23 +11,24 @@ const GalleryScreen = () => {
   const [allCardsLoaded, setAllCardsLoaded] = useState(false);
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
   const [userPhotosObj, setUserPhotosObj] = useState({});
+  const [userPhotosArray, setUserPhotosArray] = useState([]);
   
   useEffect(()=>{
     getDogImageUrls().then((obj)=>{
       setUserPhotosObj(obj)
     })
-  },[])
-
-  console.log(userPhotosObj)
+    getAllImageURLsByUser(auth.currentUser.uid).then(arrayOfUrls=>{
+      setUserPhotosArray(arrayOfUrls);
+    })
+  },[],[])
 
   const GalleryNine = () => (
     <View style={styles.list}>
       {Breeds.breeds.map((dog)=>{
         if (Common.common.indexOf(dog.breed) !== -1) {
-          const dogUpperCase = dog.breed.toUpperCase()
+          const dogUpperCase = dog.breed.toUpperCase();
           if (userPhotosObj.hasOwnProperty(dogUpperCase)) {
-            const dogUrl = userPhotosObj[dogUpperCase][0]
-            console.log(dogUrl)
+            const dogUrl = userPhotosObj[dogUpperCase][0];
             return (
               <Image
                 key={dogUpperCase}
@@ -38,13 +39,13 @@ const GalleryScreen = () => {
           } else {
             return (
               <ImageBackground 
+                key={dogUpperCase}  
                 resizeMode="contain" 
                 source = {require("../public/assets/mystery-dog.jpg")} 
                 style={styles.mystery}    
               />
             )
           }
-          
         }
       })}
     </View>
@@ -53,30 +54,45 @@ const GalleryScreen = () => {
   const GalleryPlus = () => (
     <View style={styles.list}>
       {Breeds.breeds.map((dog)=>{
-        return (
-          <GalleryCard 
-            key = {dog.breed}
-            breed={dog.breed}
-          />
-        )
-    })}
+          const dogUpperCase = dog.breed.toUpperCase();
+          if (userPhotosObj.hasOwnProperty(dogUpperCase)) {
+            const dogUrl = userPhotosObj[dogUpperCase][0];
+            return (
+              <Image
+                key={dogUpperCase}
+                source={{uri: dogUrl}}  
+                style={styles.photo}
+              />
+            )
+          } else {
+            return (
+              <ImageBackground 
+              key={dogUpperCase}
+                resizeMode="contain" 
+                source = {require("../public/assets/mystery-dog.jpg")} 
+                style={styles.mystery}    
+              />
+            )
+          }
+      })}
     </View>
   )
 
   const GalleryUnmatched = () => (
-    <></>
-    // <View style={styles.list}>
-    //   {userPhotos.map((photoUrl)=>{
-    //     if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
-    //       return (
-    //         <Image
-    //           style={styles.unmatched}
-    //           source={{uri: photoUrl}}
-    //           />
-    //       )
-    //     }
-    //   })}
-    // </View>
+    <View style={styles.list}>
+      {userPhotosArray.map((photoUrl)=>{
+        const key = userPhotosArray.indexOf(photoUrl)
+        if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
+          return (
+            <Image
+              key={key}
+              source={{uri: photoUrl}}
+              style={styles.photo}
+            />
+          )
+        }
+      })}
+    </View>
   )
 
   const loadAllCards = () => {
