@@ -36,19 +36,21 @@ const ProfileScreen = () => {
     setEdit((x) => !x);
   };
   if (edit) {
-    return <ProfileInfo edit= {edit} setEdit={setEdit} />;
+    return <ProfileInfo edit={edit} setEdit={setEdit} />;
   }
 
   return (
     <View style={styles.container}>
       <UploadImage />
-      <Text>Name: {name} </Text>
-      <Text>Email: {email}</Text>
+      <Text style={styles.input}>Name: {name} </Text>
+      <Text style={styles.input}>Email: {email}</Text>
       <TouchableOpacity onPress={handleEdit} style={styles.button}>
         <Text style={styles.buttonText}> Edit Info</Text>
       </TouchableOpacity>
       <Text style={styles.dogCatch}>
-        Dogs caught :{Object.keys(dogObject).length}/50
+        {" "}
+        {"\n"}
+        Dogs caught: {Object.keys(dogObject).length} / 50
       </Text>
     </View>
   );
@@ -62,6 +64,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#f6d186",
     alignItems: "center",
     justifyContent: "center",
+    padding: 10,
+    borderWidth: 10,
+    borderColor: "#dc7646",
   },
   button: {
     backgroundColor: "#dc7646",
@@ -71,6 +76,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
+    fontWeight: "bold",
+    fontSize: 23,
+  },
+  buttonText: {
+    fontSize: 17,
+  },
+  dogCatch: {
+    fontWeight: "bold",
     fontSize: 23,
   },
 });

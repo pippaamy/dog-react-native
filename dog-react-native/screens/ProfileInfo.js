@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Text } from "react-native-elements";
+import { Image, Text } from "react-native-elements";
 import { patchProfile } from "../api";
 import { auth } from "../firebase";
 
@@ -26,8 +26,21 @@ const ProfileInfo = ({ edit, setEdit }) => {
   };
   return (
     <>
-      <KeyboardAvoidingView>
-        <View style={styles.inputContainer}>
+      <View style={styles.inputContainer}>
+        <KeyboardAvoidingView style={styles.inputContainer}>
+          <Image
+            source={require("../public/images/draw.png")}
+            style={{
+              width: 50,
+              height: 30,
+              display: "flex",
+              flexDirection: "row",
+            }}
+            resizeMode="contain"
+            resizeMethod="resize"
+            justifyContent="center"
+            alignItems="left"
+          />
           <TextInput
             placeholderTextColor="gray"
             value={name}
@@ -49,28 +62,43 @@ const ProfileInfo = ({ edit, setEdit }) => {
             style={styles.input}
             secureTextEntry
           />
-        </View>
-      </KeyboardAvoidingView>
-      <TouchableOpacity onPress={handleBack} style={styles.button}>
-        <Text style={styles.buttonText}>Go back to Profile</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleSubmit} style={styles.button}>
-        <Text style={styles.buttonText}> Submit changes</Text>
-      </TouchableOpacity>
+          <Text> {"\n"}</Text>
+
+          <TouchableOpacity onPress={handleBack} style={styles.button}>
+            <Text style={styles.buttonText}>Go back to Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+            <Text style={styles.buttonText}> Submit changes</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </View>
     </>
   );
 };
 
 export default ProfileInfo;
 const styles = StyleSheet.create({
+  inputContainer: {
+    alignItems: "center",
+    backgroundColor: "#f6d186",
+    justifyContent: "center",
+    flex: 1,
+  },
   button: {
     backgroundColor: "#dc7646",
-    width: "50%",
-    padding: 15,
+    width: "70%",
+    padding: 20,
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 5,
+    borderColor: "black",
+    borderWidth: 3,
   },
+
   input: {
     fontSize: 23,
+  },
+  buttonText: {
+    fontWeight: "700",
   },
 });
