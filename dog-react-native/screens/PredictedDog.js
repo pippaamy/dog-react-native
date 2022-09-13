@@ -90,13 +90,23 @@ const [clicked, setClicked] = useState(false)
             <Text style={style.errorText}>
                 We're not sure that is a dog! Try again or save your photo for later
             </Text>
+                <View style={style.buttonWrapper}>
             <TouchableOpacity 
-            style={style.button}
+            style={style.errorButton}
             onPress={handleNo}>
-                <Text style={style.buttonText}>
+                <Text style={style.errorButtonText}>
                     Try again
                 </Text>
                 </TouchableOpacity>
+                <TouchableOpacity 
+                style={style.errorButton} 
+                onPress={saveUnmatched}>
+                  <Text style={style.errorButtonText}>
+                    Save Anyway
+                    
+                  </Text>
+                </TouchableOpacity>
+                    </View>
         </View>
 
     </>
@@ -144,9 +154,22 @@ const style = StyleSheet.create({
       errorText: {
         fontSize: 30,
         alignItems: "center",
-        marginLeft: 20,
-        marginRight: 20,
+        marginLeft: 23,
+        marginRight: 23,
         marginTop: 10,
         marginBottom: 10
+      }, 
+      errorButton: {
+        backgroundColor: "#dc7646",
+        width: "40%",
+        padding: 15,
+        borderRadius: 10,
+        alignItems: "center",
+        margin: 10
+      }, 
+      errorButtonText: {
+        color: "white",
+        fontWeight: "700",
+        fontSize: 18,
       }
 })
