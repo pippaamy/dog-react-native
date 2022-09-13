@@ -31,11 +31,11 @@ const HomeScreen = () => {
         <Image
           source={require("../public/assets/autmndognew.gif")}
           style={{
-            paddingLeft: 20,
             width: 320,
             height: 200,
             display: "flex",
             flexDirection: "row",
+            marginLeft: 55
           }}
           resizeMode="contain"
           resizeMethod="resize"
@@ -65,19 +65,26 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#dc7646",
     width: "100%",
+    height: 100,
     padding: 15,
+    paddingTop: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     alignItems: "center",
+    marginBottom: 20,
+    zIndex: 1
   },
 
   buttonText: {
     color: "white",
     fontWeight: "700",
     fontSize: 16,
+    textAlignVertical: "center",
+    
   },
   mainText: {
     padding: 10,
+    paddingTop: 30,
     textAlign: "center",
     color: "#a45c5c",
     fontWeight: "700",

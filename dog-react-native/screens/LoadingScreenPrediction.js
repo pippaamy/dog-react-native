@@ -8,16 +8,9 @@ const LoadingScreen = () => {
       <View style={styles.container}>
         <Image
           source={require("../public/assets/dograinbow.gif")}
-          style={{
-            width: 420,
-            height: 370,
-            display: "flex",
-            flexDirection: "row",
-          }}
+          style={styles.rainbowImg}
           resizeMode="contain"
           resizeMethod="resize"
-          justifyContent="center"
-          alignItems="center"
         />
         <Text style={styles.title}>FETCHING YOUR DOG...</Text>
       </View>
@@ -39,4 +32,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "black",
   },
+  rainbowImg: {
+    width: 420,
+            height: 370,
+            // display: "flex",
+            // flexDirection: "row",
+            marginRight: 15
+  }
 });

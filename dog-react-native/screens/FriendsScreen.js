@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { addFriend, getUserData } from "../api";
 import { auth } from "../firebase";
@@ -54,9 +54,7 @@ const FriendsScreen = () => {
   
     if(viewAll){
     return (<>
-      <View style={styles.container}>
-        <Text style={styles.title}>All users</Text>
-      </View>
+      <ScrollView style={{backgroundColor: "#f6d186"}}>
       {allUsers.map(userData=>{
         let {displayName, photoURL, email,uid}= userData
         if (!photoURL) {photoURL= 'https://cdn-icons-png.flaticon.com/512/1250/1250689.png'}
@@ -67,6 +65,7 @@ const FriendsScreen = () => {
         :<TouchableOpacity  onPress={()=>addFriendFront(uid)}><Text> Add friend </Text></TouchableOpacity>}
     </View>
       })}
+      </ScrollView>
       <TouchableOpacity onPress={()=>setViewAll((x)=>!x)} style={styles.button}>
             <View style={styles.button}>
               <Text style={styles.buttonText}> View friends! </Text>
@@ -74,9 +73,7 @@ const FriendsScreen = () => {
           </TouchableOpacity>
       </>)
     } else  return (<>
-    <View style={styles.container}>
-      <Text style={styles.title}> Friends </Text>
-    </View>
+    <ScrollView style={{backgroundColor: "#f6d186"}}>
     {friendsData.map(friend=>{
         let {displayName, photoURL, email,uid}= friend
         if (!photoURL) {photoURL= 'https://cdn-icons-png.flaticon.com/512/1250/1250689.png'}
@@ -84,7 +81,7 @@ const FriendsScreen = () => {
           <Image source={{uri:photoURL}} style={{width:15, height:15}}/>
         <Text style={styles.title}> {displayName?displayName +"  |  " +email: email}</Text> 
       </View>
-      })}
+      })}</ScrollView>
     <TouchableOpacity onPress={()=>setViewAll((x)=>!x)} style={styles.button}>
           <View style={styles.button}>
             <Text style={styles.buttonText}> Find more friends! </Text>
