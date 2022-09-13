@@ -3,16 +3,31 @@ import { Button } from "react-native-elements"
 import { useNavigation } from "@react-navigation/native";
 import { uploadImageFromUri, userUploadImage } from "../storage-api"
 import { StyleSheet } from "react-native"
+import { DogCard } from "./DogCard";
+import { useState } from "react";
+const dogs = require("../public/breeds-50-lower - breeds.json")
 
 
 export const PredictedDog = ({image, predictions}) => {
+const [clicked, setClicked] = useState(false)
+
+
+    let formattedPredictions = []
+    const format = () => {
+        predictions.forEach((prediction) => {
+            for(let i=0; i<Object.keys(dogs).length; i++) {
+                if (prediction.className.toLowerCase().includes(dogs[i].nameLower) && prediction.probability > 0) {
+                    formattedPredictions.push(dogs[i].breed, prediction.probability)
+                }
+            }
+        })
+    }
+    
+    format()
     const navigation = useNavigation();
     const handleNo = () => {
         navigation.replace("Camera");
     }
-
-
-
 
     const saveUnmatched = () => {    
         const id = `__${Date.now().toString()}`; 
@@ -20,17 +35,19 @@ export const PredictedDog = ({image, predictions}) => {
     }
 
        const handleYes = () => {
-        uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
+        // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
+        setClicked(true)
        }
 
 
-    return (
-        <>
+        if (formattedPredictions.length !== 0) {
+            return (
+                <>
         <View style={style.container}>
         <Image style={style.image} 
         source={{uri: image}}/>
             <Text style={style.mainText}>
-                There is a {(predictions[0].probability * 100).toFixed(1)}% chance that dog is a {predictions[0].className}!
+                There is a {(formattedPredictions[1] * 100).toFixed(1)}% chance that dog is a {formattedPredictions[0]}!
             </Text>
             <Text style={style.confirmText}>
                 Is that right?
@@ -61,8 +78,31 @@ export const PredictedDog = ({image, predictions}) => {
                 </TouchableOpacity>
                 </View>
         </View>
-        </>
+                    </>
+        )
+    }
+    if (formattedPredictions.length === 0) {
+        return (
+<>
+            <View style={style.container}>
+            <Image style={style.image} 
+        source={{uri: image}}/>
+            <Text style={style.errorText}>
+                We're not sure that is a dog! Try again or save your photo for later
+            </Text>
+            <TouchableOpacity 
+            style={style.button}
+            onPress={handleNo}>
+                <Text style={style.buttonText}>
+                    Try again
+                </Text>
+                </TouchableOpacity>
+        </View>
+
+    </>
     )
+    }
+    
 }
 
 const style = StyleSheet.create({
@@ -100,5 +140,13 @@ const style = StyleSheet.create({
       mainText: {
         fontSize: 30,
         // fontWeight: 500
+      },
+      errorText: {
+        fontSize: 30,
+        alignItems: "center",
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 10,
+        marginBottom: 10
       }
 })
