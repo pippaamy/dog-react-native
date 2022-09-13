@@ -8,7 +8,9 @@ const GalleryCard = ({ image }) => {
   const [isDeleted, setIsDeleted] = useState({});
 
 
-  return <></>
+  return (
+    <Text style={styles.titleText}>This Is Possibly Not A Dog</Text>
+  )
 
 }
 
@@ -26,5 +28,10 @@ const styles = StyleSheet.create({
     height: 150,
     margin: 10,
     width: 100, 
+  },
+  titleText: { 
+    color: "#a45c5c", 
+    fontWeight: "900", 
+    fontSize: 24, 
   }
 });

@@ -21,6 +21,14 @@ const GalleryScreen = () => {
     })
   },[])
 
+  // const unmatchedFullView = () => {
+  //   setUnmatchedFull(true)
+  // }
+
+  // const dogCardFullView = () => {
+  //   setdogCardFull(true)
+  // }
+
   const GalleryNine = () => (
     <View style={styles.list}>
       {Breeds.breeds.map((dog)=>{
@@ -30,6 +38,7 @@ const GalleryScreen = () => {
             <GalleryCard 
               key={dogUpperCase}
               breed={dogUpperCase}
+              isMatch={true}
             />
           )
         }
@@ -45,15 +54,12 @@ const GalleryScreen = () => {
             <GalleryCard 
               key={dogUpperCase}
               breed={dogUpperCase}
+              isMatch={true}
             />
           )
       })}
     </View>
   )
-
-  const fullView = () => {
-    setUnmatchedFull(true)
-  }
 
   const GalleryUnmatched = () => (
     <View style={styles.list}>
@@ -61,19 +67,11 @@ const GalleryScreen = () => {
         const key = userPhotosArray.indexOf(photoUrl)
         if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
           return (
-            <>
-              <ImageBackground
-                key={key}
-                resizeMode="stretch" 
-                source={{uri: photoUrl}}
-                style={styles.photo}
-              >
-                <View style={styles.overPic}>
-                  <TouchableOpacity onPress={fullView} style={styles.press}/>
-                </View>
-              </ImageBackground>
-              
-            </>
+            <GalleryCard 
+              key={key}
+              photoUrl={photoUrl}
+              isMatch={false}
+            />
           )
         }
       })}
@@ -98,7 +96,7 @@ const GalleryScreen = () => {
   
   return (
     <SafeAreaView style={styles.container}>
-      {!unmatchedFull ? (
+      {!dogCardFull ? (
          <ScrollView style={styles.scrollView}>
          <Text style={styles.titleText}>Matched Dogs!</Text>
          <Text style={styles.subtitleText}>How many will you collect?</Text>

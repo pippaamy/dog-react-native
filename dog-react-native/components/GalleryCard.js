@@ -3,33 +3,49 @@ import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from
 import { getDogImageUrls } from '../storage-api.js';
 
 
-const GalleryCard = ({ breed }) => {
-    const [userPhotosObj, setUserPhotosObj] = useState({});
+const GalleryCard = ({ breed, isMatch, photoUrl }) => {
+  const [userPhotosObj, setUserPhotosObj] = useState({});
 
-    useEffect(()=>{
+  useEffect(()=>{
         getDogImageUrls().then((obj)=>{
           setUserPhotosObj(obj)
         })
-    },[])
+  },[])
 
 
-    if (userPhotosObj.hasOwnProperty(breed)) {
-        const dogUrl = userPhotosObj[breed][0];
-        return (
-          <Image
-            source={{uri: dogUrl}}  
-            style={styles.photo}
-          />
-        )
-      } else {
-        return (
-          <ImageBackground 
-            resizeMode="center" 
-            source={require("../public/assets/mystery-dog.jpg")} 
-            style={styles.photo}    
-          />
-        )
-    }
+  if (isMatch && userPhotosObj.hasOwnProperty(breed)) {
+    const dogUrl = userPhotosObj[breed][0];
+    return (
+      <ImageBackground
+        source={{uri: dogUrl}}  
+        style={styles.photo}
+      >
+        <View style={styles.overPic}>
+          {/* <TouchableOpacity onPress={fullView} style={styles.press}/> */}
+        </View>
+      </ImageBackground>
+    )
+  } else if (!isMatch) {
+    return (
+      <ImageBackground
+        resizeMode="stretch" 
+        source={{uri: photoUrl}}
+        style={styles.photo}
+      >
+        <View style={styles.overPic}>
+          {/* <TouchableOpacity onPress={fullView} style={styles.press}/> */}
+        </View>
+      </ImageBackground>
+    )
+  } else {
+    return (
+      <ImageBackground 
+        resizeMode="center" 
+        source={require("../public/assets/mystery-dog.jpg")} 
+        style={styles.photo}    
+      />
+    )
+  }
 
 }
 
