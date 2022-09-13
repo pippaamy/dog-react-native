@@ -4,48 +4,31 @@ import Breeds from '../public/breeds.js';
 import Common from '../public/common.js';
 import {auth} from "../firebase.js"
 import { getAllImageURLsByUser } from '../storage-api.js';
-import { getDogImageUrls } from '../storage-api.js';
+import GalleryCard from '../components/GalleryCard.js';
 
 
 const GalleryScreen = () => {
   const [allCardsLoaded, setAllCardsLoaded] = useState(false);
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
-  const [userPhotosObj, setUserPhotosObj] = useState({});
   const [userPhotosArray, setUserPhotosArray] = useState([]);
   
   useEffect(()=>{
-    getDogImageUrls().then((obj)=>{
-      setUserPhotosObj(obj)
-    })
     getAllImageURLsByUser(auth.currentUser.uid).then(arrayOfUrls=>{
       setUserPhotosArray(arrayOfUrls);
     })
-  },[],[])
+  },[])
 
   const GalleryNine = () => (
     <View style={styles.list}>
       {Breeds.breeds.map((dog)=>{
         if (Common.common.indexOf(dog.breed) !== -1) {
           const dogUpperCase = dog.breed.toUpperCase();
-          if (userPhotosObj.hasOwnProperty(dogUpperCase)) {
-            const dogUrl = userPhotosObj[dogUpperCase][0];
-            return (
-              <Image
-                key={dogUpperCase}
-                source={{uri: dogUrl}}  
-                style={styles.photo}
-              />
-            )
-          } else {
-            return (
-              <ImageBackground 
-                key={dogUpperCase}  
-                resizeMode="contain" 
-                source = {require("../public/assets/mystery-dog.jpg")} 
-                style={styles.mystery}    
-              />
-            )
-          }
+          return (
+            <GalleryCard 
+              key={dogUpperCase}
+              breed={dogUpperCase}
+            />
+          )
         }
       })}
     </View>
@@ -55,25 +38,12 @@ const GalleryScreen = () => {
     <View style={styles.list}>
       {Breeds.breeds.map((dog)=>{
           const dogUpperCase = dog.breed.toUpperCase();
-          if (userPhotosObj.hasOwnProperty(dogUpperCase)) {
-            const dogUrl = userPhotosObj[dogUpperCase][0];
-            return (
-              <Image
-                key={dogUpperCase}
-                source={{uri: dogUrl}}  
-                style={styles.photo}
-              />
-            )
-          } else {
-            return (
-              <ImageBackground 
+          return (
+            <GalleryCard 
               key={dogUpperCase}
-                resizeMode="contain" 
-                source = {require("../public/assets/mystery-dog.jpg")} 
-                style={styles.mystery}    
-              />
-            )
-          }
+              breed={dogUpperCase}
+            />
+          )
       })}
     </View>
   )
@@ -192,18 +162,6 @@ const styles = StyleSheet.create({
   mainText: { 
     color: "#a45c5c", 
     fontSize: 16, 
-  },
-  mystery: {
-    alignItems: "center",
-    borderColor: "#7a4815",
-    borderRadius: 5,
-    borderWidth: 3,
-    flex: 1,
-    height: 150,
-    justifyContent: "center",
-    margin: 10,
-    maxWidth: 100,
-    minWidth: 100,
   },
   photo: {
     borderColor: "#7a4815",
