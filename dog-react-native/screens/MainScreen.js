@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#c79e58",
     display: "flex",
     height: 80,
+    zIndex: 1
   },
   tabView: {
     alignItems: "center",
@@ -123,13 +124,16 @@ const styles = StyleSheet.create({
     height: 70,
     justifyContent: "center",
     width: 90,
+    zIndex: 1
   },
   tabImage: {
     width: 40,
     height: 40,
+    zIndex: 1
   },
   tabText: {
     color: "#fff",
     fontSize: 20,
+    zIndex: 1
   },
 });
