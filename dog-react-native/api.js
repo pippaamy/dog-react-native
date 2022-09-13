@@ -261,6 +261,7 @@ function setNewEmail(newEmail,catchFunction){
     return res
   }).catch(catchFunction||console.log)
 }
+
 export {
   deleteAccount,
   addProfilePicURL_db_only,
