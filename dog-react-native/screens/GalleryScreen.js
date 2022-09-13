@@ -5,11 +5,14 @@ import Common from '../public/common.js';
 import {auth} from "../firebase.js"
 import { getAllImageURLsByUser } from '../storage-api.js';
 import GalleryCard from '../components/GalleryCard.js';
+import UnmatchedCard from "./UnmatchedCard";
 
 
 const GalleryScreen = () => {
   const [allCardsLoaded, setAllCardsLoaded] = useState(false);
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
+  const [unmatchedFull, setUnmatchedFull] = useState(false);
+  const [dogCardFull, setdogCardFull] = useState(false);
   const [userPhotosArray, setUserPhotosArray] = useState([]);
   
   useEffect(()=>{
@@ -48,17 +51,29 @@ const GalleryScreen = () => {
     </View>
   )
 
+  const fullView = () => {
+    setUnmatchedFull(true)
+  }
+
   const GalleryUnmatched = () => (
     <View style={styles.list}>
       {userPhotosArray.map((photoUrl)=>{
         const key = userPhotosArray.indexOf(photoUrl)
         if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
           return (
-            <Image
-              key={key}
-              source={{uri: photoUrl}}
-              style={styles.photo}
-            />
+            <>
+              <ImageBackground
+                key={key}
+                resizeMode="stretch" 
+                source={{uri: photoUrl}}
+                style={styles.photo}
+              >
+                <View style={styles.overPic}>
+                  <TouchableOpacity onPress={fullView} style={styles.press}/>
+                </View>
+              </ImageBackground>
+              
+            </>
           )
         }
       })}
@@ -83,53 +98,59 @@ const GalleryScreen = () => {
   
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-      <Text style={styles.titleText}>Matched Dogs!</Text>
-      <Text style={styles.subtitleText}>How many will you collect?</Text>
-      <Text style={styles.mainText}>Nine most popular breeds...</Text>
-      <GalleryNine />
-      <Text style={styles.mainText}>All breeds...</Text>
-      {!allCardsLoaded? (
-        <TouchableOpacity onPress={loadAllCards}>
-          <Text style={styles.button}>View All</Text>
-        </TouchableOpacity>
+      {!unmatchedFull ? (
+         <ScrollView style={styles.scrollView}>
+         <Text style={styles.titleText}>Matched Dogs!</Text>
+         <Text style={styles.subtitleText}>How many will you collect?</Text>
+         <Text style={styles.mainText}>Nine most popular breeds...</Text>
+         <GalleryNine />
+         <Text style={styles.mainText}>All breeds...</Text>
+         {!allCardsLoaded? (
+           <TouchableOpacity onPress={loadAllCards}>
+             <Text style={styles.button}>View All</Text>
+           </TouchableOpacity>
+         ) : (
+           <TouchableOpacity onPress={hideAllCards}>
+             <Text style={styles.button}>Hide All</Text>
+           </TouchableOpacity>
+         )}
+         {allCardsLoaded? (
+           <>
+           <GalleryPlus />
+           <TouchableOpacity onPress={hideAllCards}>
+             <Text style={styles.button}>Hide All</Text>
+           </TouchableOpacity>
+           </>
+         ) : (
+           <></>
+         )}
+         <Text style={styles.titleText}>Unmatched Snaps</Text>
+         <Text style={styles.mainText}>(Possibly not a dog)</Text>
+         {!unmatchedLoaded? (
+           <TouchableOpacity onPress={loadUnmatched}>
+             <Text style={styles.button}>View All</Text>
+           </TouchableOpacity>
+         ) : (
+           <TouchableOpacity onPress={hideUnmatched}>
+             <Text style={styles.button}>Hide All</Text>
+           </TouchableOpacity>
+         )}
+         {unmatchedLoaded? (
+           <>
+           <GalleryUnmatched />
+           <TouchableOpacity onPress={hideUnmatched}>
+             <Text style={styles.button}>Hide All</Text>
+           </TouchableOpacity>
+           </>
+         ) : (
+           <></>
+         )}
+         </ScrollView>
       ) : (
-        <TouchableOpacity onPress={hideAllCards}>
-          <Text style={styles.button}>Hide All</Text>
-        </TouchableOpacity>
-      )}
-      {allCardsLoaded? (
-        <>
-        <GalleryPlus />
-        <TouchableOpacity onPress={hideAllCards}>
-          <Text style={styles.button}>Hide All</Text>
-        </TouchableOpacity>
-        </>
-      ) : (
-        <></>
-      )}
-      <Text style={styles.titleText}>Unmatched Snaps</Text>
-      <Text style={styles.mainText}>(Possibly not a dog)</Text>
-      {!unmatchedLoaded? (
-        <TouchableOpacity onPress={loadUnmatched}>
-          <Text style={styles.button}>View All</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={hideUnmatched}>
-          <Text style={styles.button}>Hide All</Text>
-        </TouchableOpacity>
-      )}
-      {unmatchedLoaded? (
-        <>
-        <GalleryUnmatched />
-        <TouchableOpacity onPress={hideUnmatched}>
-          <Text style={styles.button}>Hide All</Text>
-        </TouchableOpacity>
-        </>
-      ) : (
-        <></>
-      )}
-      </ScrollView>
+        <UnmatchedCard />
+      )
+      }
+     
     </SafeAreaView>
   );
 };
@@ -163,6 +184,15 @@ const styles = StyleSheet.create({
     color: "#a45c5c", 
     fontSize: 16, 
   },
+  overPic: {
+    alignItems: 'stretch',
+    bottom: 0, 
+    justifyContent: 'flex-end',
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,   
+  }, 
   photo: {
     borderColor: "#7a4815",
     borderRadius: 5,
@@ -170,6 +200,9 @@ const styles = StyleSheet.create({
     height: 150,
     margin: 10,
     width: 100, 
+  },
+  press: {
+    flex: 1,
   },
   subtitleText: { 
     color: "#a45c5c", 
