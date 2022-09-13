@@ -1,34 +1,50 @@
 import React, { useEffect,useState } from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Breeds from '../public/breeds.js';
 import Common from '../public/common.js';
-import GalleryCard from "../public/components/GalleryCard.js";
 import {auth} from "../firebase.js"
 import { getAllImageURLsByUser } from '../storage-api.js';
+import { getDogImageUrls } from '../storage-api.js';
 
 
 const GalleryScreen = () => {
   const [allCardsLoaded, setAllCardsLoaded] = useState(false);
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
-  const [userPhotos, setUserPhotos] = useState([]);
+  const [userPhotosObj, setUserPhotosObj] = useState({});
   
   useEffect(()=>{
-    getAllImageURLsByUser(auth.currentUser.uid).then(arrayOfUrls=>{
-      setUserPhotos(arrayOfUrls);
-      console.log(userPhotos)
+    getDogImageUrls().then((obj)=>{
+      setUserPhotosObj(obj)
     })
   },[])
+
+  console.log(userPhotosObj)
 
   const GalleryNine = () => (
     <View style={styles.list}>
       {Breeds.breeds.map((dog)=>{
         if (Common.common.indexOf(dog.breed) !== -1) {
-          return (
-            <GalleryCard 
-              key = {dog.breed}
-              breed={dog.breed}
-            />
-          )
+          const dogUpperCase = dog.breed.toUpperCase()
+          if (userPhotosObj.hasOwnProperty(dogUpperCase)) {
+            const dogUrl = userPhotosObj[dogUpperCase][0]
+            console.log(dogUrl)
+            return (
+              <Image
+                key={dogUpperCase}
+                source={{uri: dogUrl}}  
+                style={styles.photo}
+              />
+            )
+          } else {
+            return (
+              <ImageBackground 
+                resizeMode="contain" 
+                source = {require("../public/assets/mystery-dog.jpg")} 
+                style={styles.mystery}    
+              />
+            )
+          }
+          
         }
       })}
     </View>
@@ -48,18 +64,19 @@ const GalleryScreen = () => {
   )
 
   const GalleryUnmatched = () => (
-    <View style={styles.list}>
-      {userPhotos.map((photoUrl)=>{
-        if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
-          return (
-            <Image
-              style={styles.unmatched}
-              source={{uri: photoUrl}}
-              />
-          )
-        }
-      })}
-    </View>
+    <></>
+    // <View style={styles.list}>
+    //   {userPhotos.map((photoUrl)=>{
+    //     if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
+    //       return (
+    //         <Image
+    //           style={styles.unmatched}
+    //           source={{uri: photoUrl}}
+    //           />
+    //       )
+    //     }
+    //   })}
+    // </View>
   )
 
   const loadAllCards = () => {
@@ -160,6 +177,26 @@ const styles = StyleSheet.create({
     color: "#a45c5c", 
     fontSize: 16, 
   },
+  mystery: {
+    alignItems: "center",
+    borderColor: "#7a4815",
+    borderRadius: 5,
+    borderWidth: 3,
+    flex: 1,
+    height: 150,
+    justifyContent: "center",
+    margin: 10,
+    maxWidth: 100,
+    minWidth: 100,
+  },
+  photo: {
+    borderColor: "#7a4815",
+    borderRadius: 5,
+    borderWidth: 3,
+    height: 150,
+    margin: 10,
+    width: 100, 
+  },
   subtitleText: { 
     color: "#a45c5c", 
     fontWeight: "700", 
@@ -169,13 +206,5 @@ const styles = StyleSheet.create({
     color: "#a45c5c", 
     fontWeight: "900", 
     fontSize: 24, 
-  },
-  unmatched: {
-    borderColor: "#7a4815",
-    borderRadius: 5,
-    borderWidth: 3,
-    height: 150,
-    margin: 10,
-    width: 100, 
   }
 });

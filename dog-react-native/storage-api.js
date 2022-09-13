@@ -132,7 +132,7 @@ function getDogImageUrls(optionalCatchFunction){
     })
     .then(imageUrls=>{
         imageUrls.forEach((url,index)=>{
-          const name = pathArray[index].split('_')[0]
+          const name = pathArray[index].split('_')[0].toUpperCase()
           if (obj.hasOwnProperty(name) ){
             obj[name].push(url)
           } else obj[name]=[url]
