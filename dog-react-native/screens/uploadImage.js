@@ -9,11 +9,14 @@ import {
   StyleSheet,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { uploadProfileImagefromFile } from "../storage-api";
 
 export default function UploadImage() {
   const [image, setImage] = useState(null);
+  const [changedImage, setChangedImage] = useState(false);
 
   const addImage = async () => {
+    setChangedImage(false);
     let _image = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -21,7 +24,13 @@ export default function UploadImage() {
       quality: 0.5,
     });
     setImage(_image.uri);
+    setChangedImage(true);
   };
+  console.log(image);
+
+  if (changedImage === true) {
+    uploadProfileImagefromFile(image, "kjdkjsda").catch(console.log);
+  }
 
   return (
     <View style={imageUploaderStyles.container}>
