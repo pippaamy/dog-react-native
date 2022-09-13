@@ -117,7 +117,30 @@ function uploadProfileImagefromUri(uri,path){
      return getImageUrl(path)
     }).then((url)=>patchProfile(undefined,url))
 }
-export {
+function getDogImageUrls(optionalCatchFunction){
+  let pathArray =[]
+  const obj ={}
+  return getUserDatabyUID(auth.currentUser.uid)
+    .then(data=>{
+      return data.imagePaths
+    })
+    .then(imagePaths=>{
+      pathArray= imagePaths
+      return Promise.all(imagePaths.map(path=>{
+        return getImageUrl(path)
+      }))
+    })
+    .then(imageUrls=>{
+        imageUrls.forEach((url,index)=>{
+          const name = pathArray[index].split('_')[0]
+          if (obj.hasOwnProperty(name) ){
+            obj[name].push(url)
+          } else obj[name]=[url]
+        })
+        return obj
+    }).catch(optionalCatchFunction ||((error)=>console.log({errMessage:error.message,error})))
+}
+export {getDogImageUrls,
   uploadProfileImagefromUri,
   uploadProfileImagefromFile,
   getAllImageURLsByUser,
