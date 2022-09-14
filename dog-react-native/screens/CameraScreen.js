@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Button, Image, Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import Prediction from './Prediction';
+import { useNavigation } from "@react-navigation/native";
 
 export default function CameraScreen() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -10,7 +11,7 @@ export default function CameraScreen() {
   const [isHidden, setisHidden] = useState(true)
   const [error, setError] = useState(false)
   const ref = useRef(null);
-
+  const navigation = useNavigation();
   if (!permission) {
     return <View />;
   }
@@ -74,6 +75,9 @@ export default function CameraScreen() {
     )
   }
   if(error){
+    setTimeout(() => {
+      navigation.replace("Main");
+    }, 2000)
     return (
       <View>
         <Camera>
@@ -94,6 +98,7 @@ export default function CameraScreen() {
         </Camera>
       </View>
     )
+    
   }
   return (
     <>
