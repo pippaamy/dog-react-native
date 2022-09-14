@@ -12,10 +12,12 @@ const FriendsScreen = () => {
   const [reloadVar,setReloadVar]= useState(0)
   const [profileInView,setProfileInView] = useState(false)
   const [friendProps,setFriendProps] = useState({profileInView,setProfileInView})
+  const [loading,setLoading] = useState(false)
   function reload(){
     setReloadVar(x=>x+1)
   }
   useEffect(()=>{
+    setLoading(true)
     getUserData()
     .then(dataArray=>{
       let loggedUserData ={}
@@ -28,7 +30,7 @@ const FriendsScreen = () => {
       setAllUsers(dataArray)
       setFriendData( dataArray.filter(item=>loggedUserData.friends.includes(item.uid))
         )
-    })
+    }).then(()=>setLoading(false))
   },[])
   useEffect(()=>{
 
@@ -60,6 +62,7 @@ const FriendsScreen = () => {
     return profileInView?<FriendProfile {...friendProps}/>
      :viewAll?(<>
       <ScrollView style={{backgroundColor: "#f6d186"}}>
+        {loading?<View style={styles.container}><Text> Loading... </Text></View>:null}
       {allUsers.map(userData=>{
         let {displayName, photoURL, email,uid}= userData
         if (!photoURL) {photoURL= 'https://cdn-icons-png.flaticon.com/512/1250/1250689.png'}
@@ -86,6 +89,7 @@ const FriendsScreen = () => {
       </>)
       : (<>
     <ScrollView style={{backgroundColor: "#f6d186"}}>
+    {loading?<View style={styles.container}><Text> Loading... </Text></View>:null}
     {friendsData.map(friend=>{
         let {displayName, photoURL, email,uid}= friend
         if (!photoURL) {photoURL= 'https://cdn-icons-png.flaticon.com/512/1250/1250689.png'}
