@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from "react";
 import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { deleteImage, getDogImageUrls } from "../storage-api.js";
+import { getDogImageUrls } from "../storage-api.js";
 
 
 const GalleryCard = ({ breed, isMatch, photoUrl }) => {
@@ -23,7 +23,7 @@ const GalleryCard = ({ breed, isMatch, photoUrl }) => {
       <ImageBackground
         resizeMethod="auto"   
         source={{uri: dogUrl}}  
-        style={styles.photoMatched}
+        style={styles.photo}
       >
         {/* <View style={styles.overPic}>
           <TouchableOpacity onPress={loadDogCard(breed)} style={styles.press}/>
@@ -39,21 +39,27 @@ const GalleryCard = ({ breed, isMatch, photoUrl }) => {
           source={{uri: photoUrl}}
           style={styles.photo}
         />
-      <TouchableOpacity 
-        // onPress={handleDelete(photoUrl)}
+      {/* <TouchableOpacity 
+        onPress={handleDelete(photoUrl)}
       >
         <Text style={styles.delete}>Delete?</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       </View>
       
     )
   } else {
     return (
-      <Image 
+      <ImageBackground
         resizeMode="center" 
         source={require("../public/assets/mystery-dog.jpg")} 
         style={styles.photo}    
-      />
+      >
+        <View style={styles.overPic}>
+          <TouchableOpacity>
+            <Text style={styles.breed}>{breed}</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     )
   }
 
@@ -62,6 +68,10 @@ const GalleryCard = ({ breed, isMatch, photoUrl }) => {
 export default GalleryCard;
 
 const styles = StyleSheet.create({
+  breed: {
+    fontSize: 12,
+    fontWeight: "bold"
+  },  
   delete: {
     fontSize: 15,
     marginLeft: 10,
@@ -94,21 +104,13 @@ const styles = StyleSheet.create({
     fontSize: 16, 
   },
   photo: {
-    borderColor: "#7a4815",
-    borderRadius: 5,
-    borderWidth: 3,
     height: 150,
     margin: 10,
     marginBottom: 0,
     width: 100, 
   },
-  photoMatched: {
-    height: 150,
-    margin: 10,
-    width: 100, 
-  },
   overPic: {
-    alignItems: 'stretch',
+    alignItems: 'center',
     bottom: 0, 
     justifyContent: 'flex-end',
     left: 0,
