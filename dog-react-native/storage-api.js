@@ -107,7 +107,7 @@ function userUploadProfileImage_Old(
 }
 
 function deleteImage(imagePath, catchFunction) {
-  if(imageName.length >8){ return deleteObject(ref(storage, imagePath))
+  if(imagePath.length >8){ return deleteObject(ref(storage, imagePath))
     .then(() => {
       console.log("File " + imagePath + " deleted successfully");
     })
