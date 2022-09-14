@@ -15,6 +15,7 @@ import {
   getDoc,
   getDocs,
   collection,
+  arrayRemove,
 } from "firebase/firestore";
 import { dataBase } from "./firebase";
 
@@ -130,6 +131,21 @@ function addImagePath(imagePath, catchFunction) {
           });
         })
     );
+}
+function removeImagePath(imagePath, catchFunction) {
+    const { uid } = auth.currentUser
+    return updateDoc(userDoc(uid), {
+      imagePaths: arrayRemove(imagePath),
+    }).catch(catchFunction||((error) => {
+      console.log({ errorMessage: error.message, msg: "while removing Image", error });
+    }))
+}
+function resetImagePathsByUserUID( uid, catchFunction) {
+    return updateDoc(userDoc(uid), {
+      imagePaths: []
+    }).catch(catchFunction||((error) => {
+      console.log({ errorMessage: error.message, msg: "while resetting Images", error });
+    }))
 }
 function addProfilePic(path, catchFunction) {
   const { uid } = auth.currentUser;
@@ -377,6 +393,8 @@ function setNewEmail(newEmail, catchFunction) {
 }
 
 export {
+  resetImagePathsByUserUID,
+  removeImagePath,
   deleteAccount,
   addProfilePicURL_db_only,
   patchProfile,

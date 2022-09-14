@@ -27,7 +27,10 @@ const HomeScreen = () => {
         <Text style={styles.warning}>
           Make sure you have permission to take a dog picture!
         </Text>
-        <Text>{"\n"}</Text>
+        <Text style={styles.usage}>
+          *Your photos will only be used within this app and belong to you.
+          {"\n"}
+        </Text>
         <Image
           source={require("../public/assets/autmndognew.gif")}
           style={{
@@ -35,7 +38,7 @@ const HomeScreen = () => {
             height: 200,
             display: "flex",
             flexDirection: "row",
-            marginLeft: 55
+            marginLeft: 55,
           }}
           resizeMode="contain"
           resizeMethod="resize"
@@ -65,14 +68,14 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#dc7646",
     width: "100%",
-    height: 100,
+    height: 70,
     padding: 15,
     paddingTop: 10,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     alignItems: "center",
     marginBottom: 20,
-    zIndex: 1
+    zIndex: 1,
   },
 
   buttonText: {
@@ -80,7 +83,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
     textAlignVertical: "center",
-    
   },
   mainText: {
     padding: 10,
@@ -100,5 +102,10 @@ const styles = StyleSheet.create({
     color: "#b45c5c",
     fontWeight: "bold",
     fontSize: 18,
+  },
+  usage: {
+    textAlign: "center",
+    color: "#b45c5c",
+    fontSize: 13,
   },
 });

@@ -11,6 +11,7 @@ import {
   addProfilePic,
   getUserDatabyUID,
   patchProfile,
+  removeImagePath,
 } from "./api";
 import { auth } from "./firebase";
 
@@ -36,7 +37,9 @@ function uploadImageFromUri(uri, name_make_it_unique, catchFunction) {
     .then((res) => {
       res.blob()})
     .then((blob) => {
+      console.log(blob)
       userUploadImage(blob, name_make_it_unique);
+      /// dont ask me why this console log is needed to make the function work it just does
     })
     .catch(
       catchFunction ||
@@ -105,18 +108,46 @@ function userUploadProfileImage_Old(
     );
 }
 
-function deleteImage(imageName, catchFunction) {
-  return deleteObject(ref(storage, imageName))
+function deleteImage(imagePath, catchFunction) {
+  if (typeof(imagePath)!=='string'){
+    console.log('Image path must be a string');
+    return new Promise()
+  } else if(imagePath.length >8){ 
+    return getUserDatabyUID(auth.currentUser.uid)
+    .then(({imagePaths})=>{
+       if(!imagePaths.includes(imagePath)){
+      console.log("doesn't belong to logged in user or doesnt exist! try deleteImageNoWarn ");
+    }else return deleteObject(ref(storage, imagePath))
     .then(() => {
-      console.log("File" + imageName + "deleted successfully");
+      console.log("File " + imagePath + " deleted successfully");
+      return removeImagePath(imagePath)
     })
     .catch(
       catchFunction ||
         ((error) => {
           console.log({ errorMessage: error.message, error });
         })
-    );
+    )
+    }).catch(catchFunction || console.log)
+   } else{
+      console.log("Are you sure you want to delete all images starting with"+imagePath+"?, use deleteImageNoWarn");
+      return new Promise()
+    }
 }
+function deleteImageNoWarn(imagePath, catchFunction) {
+  return deleteObject(ref(storage, imagePath))
+    .then(() => {
+      console.log("File " + imagePath + " deleted successfully");
+      return removeImagePath(imagePath)
+    })
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({ errorMessage: error.message, error });
+        })
+    )
+}
+
 function getAllImagePaths(catchFunction) {
   return listAll(ref(storage))
     .then((res) => {
@@ -201,6 +232,7 @@ function getDogImageUrls(optionalCatchFunction) {
     );
 }
 export {
+  deleteImageNoWarn,
   getDogImageUrls,
   uploadProfileImagefromUri,
   uploadProfileImagefromFile,

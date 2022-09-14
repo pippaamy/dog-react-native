@@ -1,5 +1,5 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import { Button } from "react-native-elements";
+
+import { View, Text, Image, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { uploadImageFromUri, userUploadImage } from "../storage-api";
 import { StyleSheet } from "react-native";
@@ -48,6 +48,10 @@ export const PredictedDog = ({ image, predictions }) => {
     // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
     setClicked(true);
   };
+
+if (clicked) {
+    return <DogCard image={image} formattedPredictions={formattedPredictions}/>
+}
 
   if (formattedPredictions.length !== 0) {
     return (
