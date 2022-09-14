@@ -72,7 +72,6 @@ class Prediction extends React.Component {
     } catch (error) { 
       try {
       const imageId= document.getElementById('imageId')
-      console.log(imageId);
     const imageTensor = tf.browser.fromPixels( imageId)
     const predictions = await this.model.classify(imageTensor)
     this.setState({ predictions:predictions })
@@ -117,7 +116,8 @@ class Prediction extends React.Component {
     return (
       <>
         <LoadingScreen />
-        <img src={image} id='imageId' hidden/> 
+        {/* un comment line below for wsl */}
+        {/* <img src={image} id='imageId' hidden/>  */}
       </>
     );
   }

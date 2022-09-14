@@ -10,20 +10,20 @@ export const PredictedDog = ({ image, predictions }) => {
   const [clicked, setClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  let formattedPredictions = [];
-  const format = () => {
-    predictions.forEach((prediction) => {
-      for (let i = 0; i < Object.keys(dogs).length; i++) {
-        if (
-          prediction.className.toLowerCase().includes(dogs[i].nameLower) &&
-          prediction.probability > 0
-        ) {
-          formattedPredictions.push(dogs[i].breed, prediction.probability);
-        }
-      }
-    });
-  };
 
+
+
+    let formattedPredictions = []
+    const format = () => {
+        predictions.forEach((prediction) => {
+            for(let i=0; i<Object.keys(dogs).length; i++) {
+                if (prediction.className.toLowerCase().includes(dogs[i].nameLower) && prediction.probability > 0.2) {
+                    formattedPredictions.push(dogs[i].breed, prediction.probability)
+                }
+            }
+        })
+    }
+    
   format();
   const navigation = useNavigation();
   const handleNo = () => {

@@ -95,19 +95,16 @@ const FriendsScreen = () => {
                 key={uid}
                 style={{ ...styles.container, flexDirection: "row" }}
               >
-                {/* <TouchableOpacity onPress={()=>viewProfile(userData)}> */}
                 <View>
                   <Image
                     source={{ uri: photoURL }}
                     style={{ width: 25, height: 25 }}
                   />
                 </View>
-                {/* </TouchableOpacity> */}
                 <Text style={styles.title}>
                   {" "}
                   {
                     displayName || "Guest " + uid.substring(0, 4)
-                    // displayName?displayName+"  |  " +email: email
                   }
                 </Text>
                 {loggedInUser.friends.includes(uid) ? (
@@ -152,13 +149,14 @@ const FriendsScreen = () => {
           return (
             <View
               key={uid}
-              style={{ ...styles.container, flexDirection: "row" }}
+              style={{ ...styles.container, flexDirection: "row",
+          justifyContent:"flex-start" }}
             >
               <TouchableOpacity onPress={() => viewProfile(friend)}>
                 <View>
                   <Image
                     source={{ uri: photoURL }}
-                    style={{ width: 25, height: 25 }}
+                    style={{ width: 70, height: 70, margin:5,marginLeft:0 }}
                   />
                 </View>
               </TouchableOpacity>
@@ -215,5 +213,5 @@ const styles = StyleSheet.create({
   },
   smallButtonText: {
     fontSize: 1,
-  },
+  }
 });
