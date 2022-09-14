@@ -29,7 +29,7 @@ export const PredictedDog = ({ image, predictions }) => {
 
     const saveUnmatched = async () => {    
         const id = `__${Date.now().toString()}`; 
-        await uploadImageFromUri(image, "id")
+        await uploadImageFromUri(image, id)
         // navigation.replace("Gallery")
     }
 
@@ -73,7 +73,6 @@ if (clicked) {
                     Save Anyway
                   </Text>
                 </TouchableOpacity>
-                </View>
                 </View>
                     </>
         )

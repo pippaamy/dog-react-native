@@ -89,8 +89,8 @@ const FriendsScreen = () => {
     {friendsData.map(friend=>{
         let {displayName, photoURL, email,uid}= friend
         if (!photoURL) {photoURL= 'https://cdn-icons-png.flaticon.com/512/1250/1250689.png'}
-        return<View key={uid} style={{...styles.container, flexDirection:'row'}}>
-          <TouchableOpacity onPress={()=>viewProfile(friend)}><View><Image source={{uri:photoURL}} style={{width:25, height:25}}/></View></TouchableOpacity>
+        return<View key={uid} style={{...styles.container, flexDirection:'row', justifyContent: "flex-start"}}>
+          <TouchableOpacity onPress={()=>viewProfile(friend)}><View><Image source={{uri:photoURL}} style={{width:90, height:90, margin: 5, marginLeft: 0}}/></View></TouchableOpacity>
         <Text style={styles.title}> {(displayName || "Guest "+  uid.substring(0,4) )+ "   |   " +email}</Text> 
       </View>
       })}
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingLeft:40,
     margin:5,
-    marginRight:40
+    marginRight:40,
   },
   button: {
     backgroundColor: "#dc7646",
@@ -133,5 +133,8 @@ const styles = StyleSheet.create({
   },
   smallButtonText:{
     fontSize:1
+  },
+  title: {
+    fontSize: 16,
   }
 });
