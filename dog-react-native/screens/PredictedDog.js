@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { uploadImageFromUri, userUploadImage } from "../storage-api";
 import { StyleSheet } from "react-native";
@@ -8,6 +8,7 @@ const dogs = require("../public/breeds-50-lower - breeds.json");
 
 export const PredictedDog = ({ image, predictions }) => {
   const [clicked, setClicked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   let formattedPredictions = [];
   const format = () => {
@@ -15,7 +16,7 @@ export const PredictedDog = ({ image, predictions }) => {
       for (let i = 0; i < Object.keys(dogs).length; i++) {
         if (
           prediction.className.toLowerCase().includes(dogs[i].nameLower) &&
-          prediction.probability > 0.2
+          prediction.probability > 0
         ) {
           formattedPredictions.push(dogs[i].breed, prediction.probability);
         }
@@ -28,15 +29,21 @@ export const PredictedDog = ({ image, predictions }) => {
   const handleNo = () => {
     navigation.replace("Camera");
   };
-
-  const saveUnmatched = async () => {
+  const saveUnmatched = (event) => {
+    setIsLoading(false);
     const id = `__${Date.now().toString()}`;
-    await uploadImageFromUri(image, "id");
-    // navigation.replace("Gallery")
+    uploadImageFromUri(image, id).then(() => {
+      setTimeout(() => {
+        setIsLoading(true);
+      }, 2000);
+    }).catch(() => {
+      console.log("caught at posting img");
+      navigation.replace("Main")
+    })
   };
 
   const handleYes = () => {
-    uploadImageFromUri(image, formattedPredictions[0]);
+    // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
     setClicked(true);
   };
 
@@ -56,15 +63,24 @@ export const PredictedDog = ({ image, predictions }) => {
             dog is a {formattedPredictions[0]}!
           </Text>
           <Text style={style.confirmText}>Is that right?</Text>
-          <TouchableOpacity style={style.button} onPress={handleYes}>
-            <Text style={style.buttonText}>Yes</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={style.button} onPress={handleNo}>
-            <Text style={style.buttonText}>No</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={style.button} onPress={saveUnmatched}>
-            <Text style={style.buttonText}>Save Anyway</Text>
-          </TouchableOpacity>
+          <Text>
+            {isLoading ? (
+              <></>
+            ) : (
+              <Text style={style.confirmText}>saving....</Text>
+            )}
+          </Text>
+          <View style={style.buttonWrapper}>
+            <TouchableOpacity style={style.button} onPress={handleYes}>
+              <Text style={style.buttonText}>Yes</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.button} onPress={handleNo}>
+              <Text style={style.buttonText}>No</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={style.button} onPress={saveUnmatched}>
+              <Text style={style.buttonText}>Save Anyway</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </>
     );
@@ -76,6 +92,13 @@ export const PredictedDog = ({ image, predictions }) => {
           <Image style={style.image} source={{ uri: image }} />
           <Text style={style.errorText}>
             We're not sure that is a dog! Try again or save your photo for later
+          </Text>
+          <Text>
+            {isLoading ? (
+              <></>
+            ) : (
+              <Text style={style.confirmText}>saving....</Text>
+            )}
           </Text>
           <View style={style.buttonWrapper}>
             <TouchableOpacity style={style.errorButton} onPress={handleNo}>
