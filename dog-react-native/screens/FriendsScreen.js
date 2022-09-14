@@ -75,7 +75,7 @@ const FriendsScreen = () => {
     <FriendProfile {...friendProps} />
   ) : viewAll ? (
     <>
-      <View style={{backgroundColor: "#f6d186",
+      <View key={"loading"}style={{backgroundColor: "#f6d186",
     alignItems: "flex-end"}}>
         <Text>{isLoading ? <></> : <Text>Adding...</Text>}</Text>
       </View>
