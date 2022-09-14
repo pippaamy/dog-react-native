@@ -108,7 +108,15 @@ function userUploadProfileImage_Old(
 }
 
 function deleteImage(imagePath, catchFunction) {
-  if(imagePath.length >8){ return deleteObject(ref(storage, imagePath))
+  if (typeof(imagePath)!=='string'){
+    console.log('Image path must be a string');
+    return new Promise()
+  } else if(imagePath.length >8){ 
+    return getUserDatabyUID(auth.currentUser.uid)
+    .then(({imagePaths})=>{
+       if(!imagePaths.includes(imagePath)){
+      console.log("doesn't belong to logged in user or doesnt exist! try deleteImageNoWarn ");
+    }else return deleteObject(ref(storage, imagePath))
     .then(() => {
       console.log("File " + imagePath + " deleted successfully");
       return removeImagePath(imagePath)
@@ -118,7 +126,9 @@ function deleteImage(imagePath, catchFunction) {
         ((error) => {
           console.log({ errorMessage: error.message, error });
         })
-    )} else{
+    )
+    }).catch(catchFunction || console.log)
+   } else{
       console.log("Are you sure you want to delete all images starting with"+imagePath+"?, use deleteImageNoWarn");
       return new Promise()
     }
