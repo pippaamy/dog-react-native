@@ -10,35 +10,36 @@ const dogs = require("../public/breeds-50-lower - breeds.json");
 export const PredictedDog = ({ image, predictions }) => {
   const [clicked, setClicked] = useState(false);
 
-  let formattedPredictions = [];
-  const format = () => {
-    predictions.forEach((prediction) => {
-      for (let i = 0; i < Object.keys(dogs).length; i++) {
-        if (
-          prediction.className.toLowerCase().includes(dogs[i].nameLower) &&
-          prediction.probability > 0
-        ) {
-          formattedPredictions.push(dogs[i].breed, prediction.probability);
-        }
-      }
-    });
-  };
 
-  format();
-  const navigation = useNavigation();
-  const handleNo = () => {
-    navigation.replace("Camera");
-  };
+    let formattedPredictions = []
+    const format = () => {
+        predictions.forEach((prediction) => {
+            for(let i=0; i<Object.keys(dogs).length; i++) {
+                if (prediction.className.toLowerCase().includes(dogs[i].nameLower) && prediction.probability > 0.3) {
+                    formattedPredictions.push(dogs[i].breed, prediction.probability)
+                }
+            }
+        })
+    }
+    
+    format()
+    const navigation = useNavigation();
+    const handleNo = () => {
+        navigation.replace("Camera");
+    }
 
-  const saveUnmatched = () => {
-    const id = `__${Date.now().toString()}`;
-    uploadImageFromUri(image, id);
-  };
+    const saveUnmatched = () => {    
+        const id = `__${Date.now().toString()}`; 
+        uploadImageFromUri(image, "test12345678865432")
+    }
 
-  const handleYes = () => {
-    // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
-    setClicked(true);
-  };
+       const handleYes = () => {
+        setClicked(true)
+       }
+
+if (clicked) {
+    return <DogCard image={image} formattedPredictions={formattedPredictions}/>
+}
 
   if (formattedPredictions.length !== 0) {
     return (
@@ -94,11 +95,10 @@ export const PredictedDog = ({ image, predictions }) => {
                 </TouchableOpacity>
                     </View>
 
-        </View>
-      </>
-    );
-  }
-};
+    </>
+    )
+        }
+}
 
 const style = StyleSheet.create({
     button: {
