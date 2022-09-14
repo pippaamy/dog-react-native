@@ -36,8 +36,8 @@ function uploadImageFromUri(uri, name_make_it_unique, catchFunction) {
     .then((res) => res.blob())
     .then((blob) => {
       console.log(blob)
+      userUploadImage(blob, name_make_it_unique);
       /// dont ask me why this console log is needed to make the function work it just does
-      return userUploadImage(blob, name_make_it_unique);
     })
     .catch(
       catchFunction ||
