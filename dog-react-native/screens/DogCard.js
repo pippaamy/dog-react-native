@@ -32,7 +32,7 @@ export const DogCard = ({image, formattedPredictions}) => {
         </Text>
         {/* <Image source={require("../public/images/png/002-light.png")}/> */}
         <Text>
-        Playfulness: {breedInfo[0].e4_potential_for_playfulness}
+        Playfulness: {"*".repeat(breedInfo[0].e4_potential_for_playfulness)}
         {"\n"}
         Grooming Needs: {breedInfo[0].c3_easy_to_groom}
         {"\n"}
