@@ -1,6 +1,7 @@
 const dogs = require("../public/breeds-50-lower - breeds.json")
 import { View, Text, Image, TouchableOpacity } from "react-native"
 import { StyleSheet } from "react-native"
+import * as energyIcon from "../public/images/bw-icons/006-thunder.png"
 
 export const DogCard = ({image, formattedPredictions}) => {
     let breedInfo = []
@@ -20,23 +21,23 @@ export const DogCard = ({image, formattedPredictions}) => {
             <Text style={style.breedTitle}>
                 {formattedPredictions[0]}
             </Text>
+            <Text style={style.subtitle}>
+            {breedInfo[0].breed_group}
+            </Text>
             <View style={style.imageWrapper}>
             <Image style={style.image} 
         source={{uri: image}}/>
                 </View>
-        <Text>
-        Breed type: {breedInfo[0].breed_group}
+                <Image source={energyIcon}/>
+                <View style={style.infoTextWrapper}>
+        <Text style={style.infoText}>
+        Energy Level: {"⚡".repeat(breedInfo[0].e1_energy_level)}
         {"\n"}
-        Energy Level: {breedInfo[0].e1_energy_level}
+        Playfulness: {"🎾".repeat(breedInfo[0].e4_potential_for_playfulness)}
         {"\n"}
-        </Text>
-        {/* <Image source={require("../public/images/png/002-light.png")}/> */}
-        <Text>
-        Playfulness: {breedInfo[0].e4_potential_for_playfulness}
+        Grooming Needs: {"🎀".repeat(breedInfo[0].c3_easy_to_groom)}
         {"\n"}
-        Grooming Needs: {breedInfo[0].c3_easy_to_groom}
-        {"\n"}
-        Drooling Potential: {breedInfo[0].c2_drooling_potential}
+        Drooling Potential: {"💧".repeat(breedInfo[0].c2_drooling_potential)}
         {"\n"}
         Weight: {breedInfo[0].weight}
         {"\n"}
@@ -44,6 +45,7 @@ export const DogCard = ({image, formattedPredictions}) => {
         {"\n"}
         Lifespan: {breedInfo[0].life_span}
         </Text>
+                </View>
         </View>
     )
 }
@@ -56,7 +58,8 @@ const style = StyleSheet.create({
         margin: 10
       },
       breedTitle: {
-        fontSize: 30
+        fontSize: 30,
+        fontWeight: "600"
       },
       container: {
         flex: 1,
@@ -69,5 +72,19 @@ const style = StyleSheet.create({
         paddingBottom: 40,
         borderRadius: 15,
         backgroundColor: "#e8e8e3"
+      },
+      infoText: {
+        fontWeight: "600",
+        fontSize: 20,
+        textAlign: "center"
+
+      },
+      infoTextWrapper: {
+        marginTop: 20
+      },
+      subtitle: {
+        fontWeight: "500",
+        fontSize: 20,
+        marginBottom: 15
       }
 })
