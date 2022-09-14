@@ -26,6 +26,7 @@ const FriendsScreen = () => {
     setProfileInView,
   });
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   function reload() {
     setReloadVar((x) => x + 1);
   }
@@ -50,8 +51,10 @@ const FriendsScreen = () => {
   useEffect(() => {}, [reloadVar]);
 
   function addFriendFront(uid) {
+    setIsLoading(false);
     return addFriend(uid)
       .then((res) => {
+        setIsLoading(true);
         setLoggedInUser((current) => {
           let updated = current;
           updated.friends.push(uid);
@@ -76,12 +79,11 @@ const FriendsScreen = () => {
     <FriendProfile {...friendProps} />
   ) : viewAll ? (
     <>
+      <View style={{backgroundColor: "#f6d186",
+    alignItems: "flex-end"}}>
+        <Text>{isLoading ? <></> : <Text>Adding...</Text>}</Text>
+      </View>
       <ScrollView style={{ backgroundColor: "#f6d186" }}>
-        {loading ? (
-          <View style={styles.container}>
-            <Text> Loading... </Text>
-          </View>
-        ) : null}
         {allUsers.map((userData) => {
           let { displayName, photoURL, email, uid } = userData;
           if (!photoURL) {
@@ -89,38 +91,40 @@ const FriendsScreen = () => {
               "https://cdn-icons-png.flaticon.com/512/1250/1250689.png";
           }
           return (
-            <View
-              key={uid}
-              style={{ ...styles.container, flexDirection: "row" }}
-            >
-              {/* <TouchableOpacity onPress={()=>viewProfile(userData)}> */}
-              <View>
-                <Image
-                  source={{ uri: photoURL }}
-                  style={{ width: 25, height: 25 }}
-                />
+            <>
+              <View
+                key={uid}
+                style={{ ...styles.container, flexDirection: "row" }}
+              >
+                {/* <TouchableOpacity onPress={()=>viewProfile(userData)}> */}
+                <View>
+                  <Image
+                    source={{ uri: photoURL }}
+                    style={{ width: 25, height: 25 }}
+                  />
+                </View>
+                {/* </TouchableOpacity> */}
+                <Text style={styles.title}>
+                  {" "}
+                  {
+                    displayName || "Guest " + uid.substring(0, 4)
+                    // displayName?displayName+"  |  " +email: email
+                  }
+                </Text>
+                {loggedInUser.friends.includes(uid) ? (
+                  <Text> Your Friend !</Text>
+                ) : loggedInUser.uid === uid ? (
+                  <Text> You!</Text>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.smallButton}
+                    onPress={() => addFriendFront(uid)}
+                  >
+                    <Text> Add friend </Text>
+                  </TouchableOpacity>
+                )}
               </View>
-              {/* </TouchableOpacity> */}
-              <Text style={styles.title}>
-                {" "}
-                {
-                  displayName || "Guest " + uid.substring(0, 4)
-                  // displayName?displayName+"  |  " +email: email
-                }
-              </Text>
-              {loggedInUser.friends.includes(uid) ? (
-                <Text> Your Friend !</Text>
-              ) : loggedInUser.uid === uid ? (
-                <Text> You!</Text>
-              ) : (
-                <TouchableOpacity
-                  style={styles.smallButton}
-                  onPress={() => addFriendFront(uid)}
-                >
-                  <Text> Add friend </Text>
-                </TouchableOpacity>
-              )}
-            </View>
+            </>
           );
         })}
       </ScrollView>
