@@ -16,7 +16,7 @@ const [clicked, setClicked] = useState(false)
     const format = () => {
         predictions.forEach((prediction) => {
             for(let i=0; i<Object.keys(dogs).length; i++) {
-                if (prediction.className.toLowerCase().includes(dogs[i].nameLower) && prediction.probability > 0.3) {
+                if (prediction.className.toLowerCase().includes(dogs[i].nameLower) && prediction.probability > 0.2) {
                     formattedPredictions.push(dogs[i].breed, prediction.probability)
                 }
             }
