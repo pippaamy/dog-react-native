@@ -106,7 +106,22 @@ function userUploadProfileImage_Old(
     );
 }
 
-function deleteImage(imageName, catchFunction) {
+function deleteImage(imagePath, catchFunction) {
+  if(imagePath.length >8){ return deleteObject(ref(storage, imagePath))
+    .then(() => {
+      console.log("File " + imagePath + " deleted successfully");
+    })
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({ errorMessage: error.message, error });
+        })
+    )} else{
+      console.log("Are you sure you want to delete all images starting with"+imagePath+"?, use deleteImageNoWarn");
+      return new Promise()
+    }
+}
+function deleteImageNoWarn(imageName, catchFunction) {
   return deleteObject(ref(storage, imageName))
     .then(() => {
       console.log("File" + imageName + "deleted successfully");
@@ -202,6 +217,7 @@ function getDogImageUrls(optionalCatchFunction) {
     );
 }
 export {
+  deleteImageNoWarn,
   getDogImageUrls,
   uploadProfileImagefromUri,
   uploadProfileImagefromFile,
