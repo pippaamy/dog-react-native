@@ -9,28 +9,34 @@ import {
   StyleSheet,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { uploadProfileImagefromFile } from "../storage-api";
+import {
+  uploadProfileImagefromFile,
+  uploadProfileImagefromUri,
+} from "../storage-api";
+import { auth } from "../firebase";
 
 export default function UploadImage() {
-  const [image, setImage] = useState(null);
-  const [changedImage, setChangedImage] = useState(false);
+  const [image, setImage] = useState(auth.currentUser.photoURL);
+
+  useEffect(() => {
+    console.log(auth.currentUser.photoURL);
+  }, []);
 
   const addImage = async () => {
-    setChangedImage(false);
     let _image = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.5,
     });
-    setImage(_image.uri);
-    setChangedImage(true);
-  };
-  console.log(image);
 
-  if (changedImage === true) {
-    uploadProfileImagefromFile(image, "kjdkjsda").catch(console.log);
-  }
+    setImage(_image.uri);
+    if (_image.uri) {
+      uploadProfileImagefromUri(_image.uri, auth.currentUser.uid).catch(
+        console.log
+      );
+    }
+  };
 
   return (
     <View style={imageUploaderStyles.container}>
