@@ -91,7 +91,6 @@ const FriendsScreen = () => {
               "https://cdn-icons-png.flaticon.com/512/1250/1250689.png";
           }
           return (
-            <>
               <View
                 key={uid}
                 style={{ ...styles.container, flexDirection: "row" }}
@@ -124,7 +123,6 @@ const FriendsScreen = () => {
                   </TouchableOpacity>
                 )}
               </View>
-            </>
           );
         })}
       </ScrollView>
