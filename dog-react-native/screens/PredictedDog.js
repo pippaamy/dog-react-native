@@ -31,14 +31,31 @@ const [clicked, setClicked] = useState(false)
 
     const saveUnmatched = () => {    
         const id = `__${Date.now().toString()}`; 
-        uploadImageFromUri(image, id)
+        uploadImageFromUri(image, "test12345678865432")
     }
 
        const handleYes = () => {
         // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
         setClicked(true)
+        // console.log("345682793")
        }
 
+const clickedReturn = () => {
+    return (
+        <>
+        <View>
+            <Text>
+                kjdfnkcndv
+            </Text>
+        </View>
+        </>
+    )
+}
+
+console.log(clicked)
+if (clicked) {
+    return <DogCard image={image} formattedPredictions={formattedPredictions}/>
+}
 
         if (formattedPredictions.length !== 0) {
             return (
@@ -112,8 +129,7 @@ const [clicked, setClicked] = useState(false)
 
     </>
     )
-    }
-    
+        }
 }
 
 const style = StyleSheet.create({
