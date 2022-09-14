@@ -113,7 +113,7 @@ const LogInScreen = () => {
           >
             <Text style={styles.buttonOutlineText}> Register</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               navigation.replace("Main");
             }}
@@ -123,7 +123,7 @@ const LogInScreen = () => {
               {" "}
               ShortCut to Main (delete later){" "}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {/* <TouchableOpacity
             onPress={() => {
               navigation.replace("Test");

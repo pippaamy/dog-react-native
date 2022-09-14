@@ -1,51 +1,37 @@
 import React, { useEffect,useState } from 'react';
-import { Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Breeds from '../public/breeds.js';
 import Common from '../public/common.js';
 import {auth} from "../firebase.js"
 import { getAllImageURLsByUser } from '../storage-api.js';
-import { getDogImageUrls } from '../storage-api.js';
+import GalleryCard from '../components/GalleryCard.js';
 
 
 const GalleryScreen = () => {
   const [allCardsLoaded, setAllCardsLoaded] = useState(false);
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
-  const [userPhotosObj, setUserPhotosObj] = useState({});
+  const [isFullView, setIsFullView] = useState(false);
   const [userPhotosArray, setUserPhotosArray] = useState([]);
   
   useEffect(()=>{
-    getDogImageUrls().then((obj)=>{
-      setUserPhotosObj(obj)
-    })
     getAllImageURLsByUser(auth.currentUser.uid).then(arrayOfUrls=>{
       setUserPhotosArray(arrayOfUrls);
     })
-  },[],[])
+  },[])
+  
 
   const GalleryNine = () => (
     <View style={styles.list}>
       {Breeds.breeds.map((dog)=>{
         if (Common.common.indexOf(dog.breed) !== -1) {
           const dogUpperCase = dog.breed.toUpperCase();
-          if (userPhotosObj.hasOwnProperty(dogUpperCase)) {
-            const dogUrl = userPhotosObj[dogUpperCase][0];
-            return (
-              <Image
-                key={dogUpperCase}
-                source={{uri: dogUrl}}  
-                style={styles.photo}
-              />
-            )
-          } else {
-            return (
-              <ImageBackground 
-                key={dogUpperCase}  
-                resizeMode="contain" 
-                source = {require("../public/assets/mystery-dog.jpg")} 
-                style={styles.mystery}    
-              />
-            )
-          }
+          return (
+            <GalleryCard 
+              key={dogUpperCase}
+              breed={dogUpperCase}
+              isMatch={true}
+            />
+          )
         }
       })}
     </View>
@@ -55,25 +41,13 @@ const GalleryScreen = () => {
     <View style={styles.list}>
       {Breeds.breeds.map((dog)=>{
           const dogUpperCase = dog.breed.toUpperCase();
-          if (userPhotosObj.hasOwnProperty(dogUpperCase)) {
-            const dogUrl = userPhotosObj[dogUpperCase][0];
-            return (
-              <Image
-                key={dogUpperCase}
-                source={{uri: dogUrl}}  
-                style={styles.photo}
-              />
-            )
-          } else {
-            return (
-              <ImageBackground 
+          return (
+            <GalleryCard 
               key={dogUpperCase}
-                resizeMode="contain" 
-                source = {require("../public/assets/mystery-dog.jpg")} 
-                style={styles.mystery}    
-              />
-            )
-          }
+              breed={dogUpperCase}
+              isMatch={true}
+            />
+          )
       })}
     </View>
   )
@@ -84,11 +58,13 @@ const GalleryScreen = () => {
         const key = userPhotosArray.indexOf(photoUrl)
         if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
           return (
-            <Image
+            
+              <GalleryCard 
               key={key}
-              source={{uri: photoUrl}}
-              style={styles.photo}
-            />
+              photoUrl={photoUrl}
+              isMatch={false}
+              />
+
           )
         }
       })}
@@ -113,53 +89,58 @@ const GalleryScreen = () => {
   
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-      <Text style={styles.titleText}>Matched Dogs!</Text>
-      <Text style={styles.subtitleText}>How many will you collect?</Text>
-      <Text style={styles.mainText}>Nine most popular breeds...</Text>
-      <GalleryNine />
-      <Text style={styles.mainText}>All breeds...</Text>
-      {!allCardsLoaded? (
-        <TouchableOpacity onPress={loadAllCards}>
-          <Text style={styles.button}>View All</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={hideAllCards}>
-          <Text style={styles.button}>Hide All</Text>
-        </TouchableOpacity>
-      )}
-      {allCardsLoaded? (
-        <>
-        <GalleryPlus />
-        <TouchableOpacity onPress={hideAllCards}>
-          <Text style={styles.button}>Hide All</Text>
-        </TouchableOpacity>
-        </>
+      {!isFullView ? (
+         <ScrollView style={styles.scrollView}>
+         <Text style={styles.titleText}>Matched Dogs!</Text>
+         <Text style={styles.subtitleText}>How many will you collect?</Text>
+         <Text style={styles.mainText}>Nine most popular breeds...</Text>
+         <GalleryNine />
+         <Text style={styles.mainTextAll}>All breeds...</Text>
+         {!allCardsLoaded? (
+           <TouchableOpacity onPress={loadAllCards}>
+             <Text style={styles.button}>View All</Text>
+           </TouchableOpacity>
+         ) : (
+           <TouchableOpacity onPress={hideAllCards}>
+             <Text style={styles.button}>Hide All</Text>
+           </TouchableOpacity>
+         )}
+         {allCardsLoaded? (
+           <>
+           <GalleryPlus />
+           <TouchableOpacity onPress={hideAllCards}>
+             <Text style={styles.button}>Hide All</Text>
+           </TouchableOpacity>
+           </>
+         ) : (
+           <></>
+         )}
+         <Text style={styles.titleText}>Unmatched Snaps</Text>
+         <Text style={styles.mainText}>(Possibly not a dog)</Text>
+         {!unmatchedLoaded? (
+           <TouchableOpacity onPress={loadUnmatched}>
+             <Text style={styles.button}>View All</Text>
+           </TouchableOpacity>
+         ) : (
+           <TouchableOpacity onPress={hideUnmatched}>
+             <Text style={styles.button}>Hide All</Text>
+           </TouchableOpacity>
+         )}
+         {unmatchedLoaded? (
+           <>
+           <GalleryUnmatched />
+           <TouchableOpacity onPress={hideUnmatched}>
+             <Text style={styles.button}>Hide All</Text>
+           </TouchableOpacity>
+           </>
+         ) : (
+           <></>
+         )}
+         </ScrollView>
       ) : (
         <></>
-      )}
-      <Text style={styles.titleText}>Unmatched Snaps</Text>
-      <Text style={styles.mainText}>(Possibly not a dog)</Text>
-      {!unmatchedLoaded? (
-        <TouchableOpacity onPress={loadUnmatched}>
-          <Text style={styles.button}>View All</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity onPress={hideUnmatched}>
-          <Text style={styles.button}>Hide All</Text>
-        </TouchableOpacity>
-      )}
-      {unmatchedLoaded? (
-        <>
-        <GalleryUnmatched />
-        <TouchableOpacity onPress={hideUnmatched}>
-          <Text style={styles.button}>Hide All</Text>
-        </TouchableOpacity>
-        </>
-      ) : (
-        <></>
-      )}
-      </ScrollView>
+      )
+      }
     </SafeAreaView>
   );
 };
@@ -180,8 +161,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     backgroundColor: "#f6d186",
     flex: 1,
-    justifyContent: "flex-start",
-    padding: 20,
+    justifyContent: "flex-start"
   },
   list: {
     marginHorizontal: "auto",
@@ -193,25 +173,13 @@ const styles = StyleSheet.create({
     color: "#a45c5c", 
     fontSize: 16, 
   },
-  mystery: {
-    alignItems: "center",
-    borderColor: "#7a4815",
-    borderRadius: 5,
-    borderWidth: 3,
-    flex: 1,
-    height: 150,
-    justifyContent: "center",
-    margin: 10,
-    maxWidth: 100,
-    minWidth: 100,
+  mainTextAll: { 
+    color: "#a45c5c", 
+    fontSize: 16, 
+    marginTop: 10
   },
-  photo: {
-    borderColor: "#7a4815",
-    borderRadius: 5,
-    borderWidth: 3,
-    height: 150,
-    margin: 10,
-    width: 100, 
+  scrollView: {
+    paddingHorizontal: 20,
   },
   subtitleText: { 
     color: "#a45c5c", 
