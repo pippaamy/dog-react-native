@@ -10,6 +10,8 @@ import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as jpeg from "jpeg-js";
 import LoadingScreen from "./LoadingScreenPrediction";
 import { PredictedDog } from "./PredictedDog";
+import CameraScreen from "./CameraScreen";
+import { useNavigation } from "@react-navigation/native";
 
 class Prediction extends React.Component {
   state = {
@@ -17,9 +19,10 @@ class Prediction extends React.Component {
     isModelReady: false,
     predictions: null,
     image: this.props.capturedImage || null,
-    hasRendered: false
+    hasRendered: false,
+    fail:false
   };
-
+  
   async componentDidMount() {
     await tf.ready();
     this.setState({
@@ -66,21 +69,16 @@ class Prediction extends React.Component {
       const predictions = await this.model.classify(imageTensor);
       this.setState({ predictions });
       console.log(predictions, "predictions");
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) { 
+      try {
+      const imageId= document.getElementById('imageId')
+    const imageTensor = tf.browser.fromPixels( imageId)
+    const predictions = await this.model.classify(imageTensor)
+    this.setState({ predictions:predictions })
+    console.log({predictions})
+  } catch (error2) { console.log({error,error2}) 
+     this.setState({fail:true}) } }
   };
-  /* // DONT REMOVE!!  Replace the above function with this one for wsl
-  classifyImage = async (image) => {
-    try {
-        const imageId= document.getElementById('imageId')
-        console.log(imageId);
-      const imageTensor = tf.browser.fromPixels( imageId)
-      const predictions = await this.model.classify(imageTensor)
-      this.setState({ predictions:predictions })
-      console.log({predictions})
-    } catch (error) { console.log(error)    } 
-  } */
 
 
   renderPrediction = (prediction) => {
@@ -99,22 +97,26 @@ class Prediction extends React.Component {
   };
   
   render() {
-    const { isTfReady, isModelReady, predictions, image, hasRendered } = this.state;
+    const { isTfReady, isModelReady, predictions, image, hasRendered ,fail } = this.state;
+    const{navigation}=this.props
     if (isTfReady && isModelReady && image && hasRendered === false) {
       this.classifyImage(image);
     }
-
+    if(fail){setTimeout(() => {
+      navigation.replace("Camera");
+    }, 2000)
+    return <><Text style={{fontSize:20}}>
+    Something went wrong :(
+  </Text><LoadingScreen /></>}
     if (predictions !== null) {
       return (<>
         <PredictedDog image={image} predictions={predictions}/>
-        {/* //uncomment the line below for wsl */}
-        {/* <img src={image} id='imageId' hidden/>  */}
       </>);
     }
     return (
       <>
         <LoadingScreen />
-	{/* //uncomment the line below for wsl */}
+        {/* un comment line below for wsl */}
         {/* <img src={image} id='imageId' hidden/>  */}
       </>
     );
