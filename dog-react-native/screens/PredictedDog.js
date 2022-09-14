@@ -33,8 +33,8 @@ export const PredictedDog = ({ image, predictions }) => {
         // navigation.replace("Gallery")
     }
 
-       const handleYes = () => {
-        uploadImageFromUri(image, formattedPredictions[0])
+       const handleYes = async () => {
+        await uploadImageFromUri(image, formattedPredictions[0])
         setClicked(true)
        }
 
