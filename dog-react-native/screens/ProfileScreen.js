@@ -20,6 +20,7 @@ const ProfileScreen = () => {
   const [user, setUser] = useState(auth.currentUser);
   const [edit, setEdit] = useState(false);
   const [dogObject, setDogObject] = useState({});
+  const [dogsCaught, setDogsCaught] = useState([]);
 
   useEffect(() => {
     getUserDatabyUID(auth.currentUser.uid).then((loggedInUser) => {
@@ -27,11 +28,16 @@ const ProfileScreen = () => {
     });
     setName(auth.currentUser.displayName);
     setEmail(auth.currentUser.email);
-    getDogImageUrls().then((res) => {
-      setDogObject(res);
-    });
   }, [edit]);
-
+  useEffect(()=>{ getDogImageUrls().then((res) => {
+      setDogObject(res);
+      const arr = Object.keys(res)
+      const index = arr.indexOf('');
+      if (index > -1) { 
+        arr.splice(index, 1); 
+      }
+      setDogsCaught(arr)
+    })},[])
   const handleEdit = () => {
     setEdit((x) => !x);
   };
@@ -50,7 +56,7 @@ const ProfileScreen = () => {
       <Text style={styles.dogCatch}>
         {" "}
         {"\n"}
-        Dogs caught: {Object.keys(dogObject).length} / 50
+        Dogs caught: {dogsCaught.length} / 50
       </Text>
     </View>
   );
