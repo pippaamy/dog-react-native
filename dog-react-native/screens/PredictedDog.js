@@ -1,4 +1,3 @@
-
 import { View, Text, Image, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { uploadImageFromUri, userUploadImage } from "../storage-api";
@@ -30,7 +29,6 @@ export const PredictedDog = ({ image, predictions }) => {
   const handleNo = () => {
     navigation.replace("Camera");
   };
-
   const saveUnmatched = (event) => {
     setIsLoading(false);
     const id = `__${Date.now().toString()}`;
@@ -49,9 +47,11 @@ export const PredictedDog = ({ image, predictions }) => {
     setClicked(true);
   };
 
-if (clicked) {
-    return <DogCard image={image} formattedPredictions={formattedPredictions}/>
-}
+  if (clicked) {
+    return (
+      <DogCard image={image} formattedPredictions={formattedPredictions} />
+    );
+  }
 
   if (formattedPredictions.length !== 0) {
     return (
