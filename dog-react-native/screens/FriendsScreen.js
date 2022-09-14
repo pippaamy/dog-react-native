@@ -25,24 +25,28 @@ const FriendsScreen = () => {
     profileInView,
     setProfileInView,
   });
+  const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   function reload() {
     setReloadVar((x) => x + 1);
   }
   useEffect(() => {
-    getUserData().then((dataArray) => {
-      let loggedUserData = {};
-      dataArray.forEach((item) => {
-        if (item.uid === auth.currentUser.uid) {
-          loggedUserData = item;
-          setLoggedInUser(item);
-        }
-      });
-      setAllUsers(dataArray);
-      setFriendData(
-        dataArray.filter((item) => loggedUserData.friends.includes(item.uid))
-      );
-    });
+    setLoading(true);
+    getUserData()
+      .then((dataArray) => {
+        let loggedUserData = {};
+        dataArray.forEach((item) => {
+          if (item.uid === auth.currentUser.uid) {
+            loggedUserData = item;
+            setLoggedInUser(item);
+          }
+        });
+        setAllUsers(dataArray);
+        setFriendData(
+          dataArray.filter((item) => loggedUserData.friends.includes(item.uid))
+        );
+      })
+      .then(() => setLoading(false));
   }, []);
   useEffect(() => {}, [reloadVar]);
 
@@ -136,6 +140,11 @@ const FriendsScreen = () => {
   ) : (
     <>
       <ScrollView style={{ backgroundColor: "#f6d186" }}>
+        {loading ? (
+          <View style={styles.container}>
+            <Text> Loading... </Text>
+          </View>
+        ) : null}
         {friendsData.map((friend) => {
           let { displayName, photoURL, email, uid } = friend;
           if (!photoURL) {
