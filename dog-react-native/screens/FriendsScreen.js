@@ -64,8 +64,13 @@ const FriendsScreen = () => {
         let {displayName, photoURL, email,uid}= userData
         if (!photoURL) {photoURL= 'https://cdn-icons-png.flaticon.com/512/1250/1250689.png'}
         return<View key={uid} style={{...styles.container, flexDirection:'row'}}>
-           <TouchableOpacity onPress={()=>viewProfile(userData)}><View><Image source={{uri:photoURL}} style={{width:25, height:25}}/></View></TouchableOpacity>
-        <Text style={styles.title}> {displayName?displayName +"  |  " +email: email}</Text> 
+           {/* <TouchableOpacity onPress={()=>viewProfile(userData)}> */}
+            <View><Image source={{uri:photoURL}} style={{width:25, height:25}}/></View>
+            {/* </TouchableOpacity> */}
+        <Text style={styles.title}> {
+          displayName || "Guest "+  uid.substring(0,4)
+        // displayName?displayName+"  |  " +email: email
+         }</Text> 
         {loggedInUser.friends.includes(uid)
         ?<Text> Your Friend !</Text>
         :loggedInUser.uid === uid ?<Text> You!</Text>
@@ -86,7 +91,7 @@ const FriendsScreen = () => {
         if (!photoURL) {photoURL= 'https://cdn-icons-png.flaticon.com/512/1250/1250689.png'}
         return<View key={uid} style={{...styles.container, flexDirection:'row'}}>
           <TouchableOpacity onPress={()=>viewProfile(friend)}><View><Image source={{uri:photoURL}} style={{width:25, height:25}}/></View></TouchableOpacity>
-        <Text style={styles.title}> {displayName?displayName +"   |   " +email: email}</Text> 
+        <Text style={styles.title}> {(displayName || "Guest "+  uid.substring(0,4) )+ "   |   " +email}</Text> 
       </View>
       })}
       {friendsData.length===0
