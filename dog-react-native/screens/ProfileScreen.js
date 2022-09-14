@@ -25,19 +25,29 @@ const ProfileScreen = () => {
   useEffect(() => {
     getUserDatabyUID(auth.currentUser.uid).then((loggedInUser) => {
       setUser(loggedInUser);
+      const dogs=[]
+      loggedInUser.imagePaths.forEach(path=>{
+        const name = path.split('_')[0]
+        if(!dogs.includes(name)) dogs.push(name)
+      })
+      const index = dogs.indexOf('')
+      if (index > -1) { 
+        dogs.splice(index, 1); 
+      }
+      setDogsCaught(dogs)
     });
     setName(auth.currentUser.displayName);
     setEmail(auth.currentUser.email);
   }, [edit]);
-  useEffect(()=>{ getDogImageUrls().then((res) => {
-      setDogObject(res);
-      const arr = Object.keys(res)
-      const index = arr.indexOf('');
-      if (index > -1) { 
-        arr.splice(index, 1); 
-      }
-      setDogsCaught(arr)
-    })},[])
+  // useEffect(()=>{ getDogImageUrls().then((res) => {
+  //     setDogObject(res);
+  //     const arr = Object.keys(res)
+  //     const index = arr.indexOf('');
+  //     if (index > -1) { 
+  //       arr.splice(index, 1); 
+  //     }
+  //     setDogsCaught(arr)
+  //   })},[])
   const handleEdit = () => {
     setEdit((x) => !x);
   };
