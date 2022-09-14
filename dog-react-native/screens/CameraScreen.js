@@ -2,14 +2,16 @@ import React, { useState, useRef } from 'react';
 import { Button, Image, Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import Prediction from './Prediction';
+import { useNavigation } from "@react-navigation/native";
 
 export default function CameraScreen() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const [isHidden, setisHidden] = useState(true)
+  const [error, setError] = useState(false)
   const ref = useRef(null);
-
+  const navigation = useNavigation();
   if (!permission) {
     return <View />;
   }
@@ -72,7 +74,32 @@ export default function CameraScreen() {
       </View>
     )
   }
-  
+  if(error){
+    setTimeout(() => {
+      navigation.replace("Main");
+    }, 2000)
+    return (
+      <View>
+        <Camera>
+           <View
+           style={{
+            flex: 1, 
+            width: '100%',
+            height: '100%',
+            resizeMode: 'contain',
+            alignItems: 'center',
+            justifyContent: 'center', 
+            backgroundColor: 'red'
+        }}>
+            <Text style={{backgroundColor: 'white'}}>
+              something went wrong
+            </Text>
+           </View>
+        </Camera>
+      </View>
+    )
+    
+  }
   return (
     <>
     {isHidden ? <View style={{ flex: 1 }}>
@@ -90,6 +117,7 @@ export default function CameraScreen() {
         </View>
       ) : (
         <Camera
+        onMountError={(err) => setError(true)}
         style={{flex: 1,width:"100%"}}
         ref = {ref}
         >

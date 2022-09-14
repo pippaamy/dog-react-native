@@ -70,17 +70,17 @@ class Prediction extends React.Component {
       console.log(error);
     }
   };
-  /* // DONT REMOVE!!  Replace the above function with this one for wsl
-  classifyImage = async (image) => {
-    try {
-        const imageId= document.getElementById('imageId')
-        console.log(imageId);
-      const imageTensor = tf.browser.fromPixels( imageId)
-      const predictions = await this.model.classify(imageTensor)
-      this.setState({ predictions:predictions })
-      console.log({predictions})
-    } catch (error) { console.log(error)    } 
-  } */
+  //  // DONT REMOVE!!  Replace the above function with this one for wsl
+  // classifyImage = async (image) => {
+  //   try {
+  //       const imageId= document.getElementById('imageId')
+  //       console.log(imageId);
+  //     const imageTensor = tf.browser.fromPixels( imageId)
+  //     const predictions = await this.model.classify(imageTensor)
+  //     this.setState({ predictions:predictions })
+  //     console.log({predictions})
+  //   } catch (error) { console.log(error)    } 
+  // } 
 
 
   renderPrediction = (prediction) => {

@@ -34,7 +34,8 @@ function uploadImage(file, name_make_it_unique, catchFunction) {
 }
 function uploadImageFromUri(uri, name_make_it_unique, catchFunction) {
   return fetch(uri)
-    .then((res) => res.blob())
+    .then((res) => {
+      res.blob()})
     .then((blob) => {
       console.log(blob)
       userUploadImage(blob, name_make_it_unique);
@@ -83,7 +84,7 @@ function userUploadImage(file, uniqueName_eg_DateNow, catchFunction) {
     .catch(
       catchFunction ||
         ((error) => {
-          console.log({ error, code: error.code });
+          Promise.reject({ error, code: error.code });
         })
     );
 }
