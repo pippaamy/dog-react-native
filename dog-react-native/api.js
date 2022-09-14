@@ -15,6 +15,7 @@ import {
   getDoc,
   getDocs,
   collection,
+  arrayRemove,
 } from "firebase/firestore";
 import { dataBase } from "./firebase";
 
@@ -122,6 +123,14 @@ function addImagePath(imagePath, catchFunction) {
       imagePaths: arrayUnion(imagePath),
     }).catch(catchFunction||((error) => {
       console.log({ errorMessage: error.message, msg: "while adding Image", error });
+    }))
+}
+function removeImagePath(imagePath, catchFunction) {
+    const { uid } = auth.currentUser
+    return updateDoc(userDoc(uid), {
+      imagePaths: arrayRemove(imagePath),
+    }).catch(catchFunction||((error) => {
+      console.log({ errorMessage: error.message, msg: "while removing Image", error });
     }))
 }
 function addProfilePic(path, catchFunction) {
@@ -263,6 +272,7 @@ function setNewEmail(newEmail,catchFunction){
 }
 
 export {
+  removeImagePath,
   deleteAccount,
   addProfilePicURL_db_only,
   patchProfile,

@@ -11,6 +11,7 @@ import {
   addProfilePic,
   getUserDatabyUID,
   patchProfile,
+  removeImagePath,
 } from "./api";
 import { auth } from "./firebase";
 
@@ -106,18 +107,36 @@ function userUploadProfileImage_Old(
     );
 }
 
-function deleteImage(imageName, catchFunction) {
-  return deleteObject(ref(storage, imageName))
+function deleteImage(imagePath, catchFunction) {
+  if(imagePath.length >8){ return deleteObject(ref(storage, imagePath))
     .then(() => {
-      console.log("File" + imageName + "deleted successfully");
+      console.log("File " + imagePath + " deleted successfully");
+      return removeImagePath(imagePath)
     })
     .catch(
       catchFunction ||
         ((error) => {
           console.log({ errorMessage: error.message, error });
         })
-    );
+    )} else{
+      console.log("Are you sure you want to delete all images starting with"+imagePath+"?, use deleteImageNoWarn");
+      return new Promise()
+    }
 }
+function deleteImageNoWarn(imagePath, catchFunction) {
+  return deleteObject(ref(storage, imagePath))
+    .then(() => {
+      console.log("File " + imagePath + " deleted successfully");
+      return removeImagePath(imagePath)
+    })
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({ errorMessage: error.message, error });
+        })
+    )
+}
+
 function getAllImagePaths(catchFunction) {
   return listAll(ref(storage))
     .then((res) => {
@@ -202,6 +221,7 @@ function getDogImageUrls(optionalCatchFunction) {
     );
 }
 export {
+  deleteImageNoWarn,
   getDogImageUrls,
   uploadProfileImagefromUri,
   uploadProfileImagefromFile,
