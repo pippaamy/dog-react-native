@@ -177,6 +177,9 @@ function emailLogin(email, password, catchFunction) {
 function createEmailAndUser(email, password, username,catchFunction) {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
+      if(!email || !password){
+        return Promise.reject({msg: "error"})
+      }
       const user = userCredential.user;
       addUserToFirestore(user);
       console.log(
@@ -187,7 +190,8 @@ function createEmailAndUser(email, password, username,catchFunction) {
     .then(()=>patchProfile(username,'https://cdn-icons-png.flaticon.com/512/1250/1250689.png',catchFunction))
     .then(()=>username?addDisplayNameToUserDatabase(username):null)
     .catch(catchFunction||((error) => {
-      console.log({ errorMessage: error.message,msg: "while creating user" ,error });
+      return Promise.reject({msg: error})
+      
     }));
 }
 const signOut = (catchFunction) => {
