@@ -1,10 +1,9 @@
 import { View, Text, Image, TouchableOpacity } from "react-native"
-import { Button } from "react-native-elements"
 import { useNavigation } from "@react-navigation/native";
 import { uploadImageFromUri, userUploadImage } from "../storage-api"
 import { StyleSheet } from "react-native"
-import { DogCard } from "./DogCard";
 import { useState } from "react";
+import { DogCard } from "./DogCard";
 const dogs = require("../public/breeds-50-lower - breeds.json")
 
 
