@@ -40,7 +40,7 @@ export const PredictedDog = ({ image, predictions }) => {
       }, 2000);
     }).catch(() => {
       console.log("caught at posting img");
-      navigation.replace("Home")
+      navigation.replace("Main")
     })
   };
 
