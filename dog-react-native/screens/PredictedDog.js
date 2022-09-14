@@ -1,9 +1,9 @@
 import { View, Text, Image, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native";
-import { uploadImageFromUri, userUploadImage } from "../storage-api"
-import { StyleSheet } from "react-native"
-import { useState } from "react";
+import { uploadImageFromUri, userUploadImage } from "../storage-api";
+import { StyleSheet } from "react-native";
 import { DogCard } from "./DogCard";
+import { useState } from "react";
 const dogs = require("../public/breeds-50-lower - breeds.json")
 
 export const PredictedDog = ({ image, predictions }) => {
@@ -27,12 +27,14 @@ export const PredictedDog = ({ image, predictions }) => {
         navigation.replace("Camera");
     }
 
-    const saveUnmatched = () => {    
+    const saveUnmatched = async () => {    
         const id = `__${Date.now().toString()}`; 
-        uploadImageFromUri(image, "test12345678865432")
+        await uploadImageFromUri(image, "id")
+        // navigation.replace("Gallery")
     }
 
        const handleYes = () => {
+        uploadImageFromUri(image, formattedPredictions[0])
         setClicked(true)
        }
 
@@ -103,7 +105,7 @@ if (clicked) {
                   </Text>
                 </TouchableOpacity>
                     </View>
-
+</View>
     </>
     )
         }
