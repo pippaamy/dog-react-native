@@ -1,18 +1,16 @@
 import React, { useEffect,useState } from 'react';
-import { Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Breeds from '../public/breeds.js';
 import Common from '../public/common.js';
 import {auth} from "../firebase.js"
 import { getAllImageURLsByUser } from '../storage-api.js';
 import GalleryCard from '../components/GalleryCard.js';
-import UnmatchedCard from "./UnmatchedCard";
 
 
 const GalleryScreen = () => {
   const [allCardsLoaded, setAllCardsLoaded] = useState(false);
   const [unmatchedLoaded, setUnmatchedLoaded] = useState(false);
-  const [unmatchedFull, setUnmatchedFull] = useState(false);
-  const [dogCardFull, setdogCardFull] = useState(false);
+  const [isFullView, setIsFullView] = useState(false);
   const [userPhotosArray, setUserPhotosArray] = useState([]);
   
   useEffect(()=>{
@@ -20,14 +18,7 @@ const GalleryScreen = () => {
       setUserPhotosArray(arrayOfUrls);
     })
   },[])
-
-  // const unmatchedFullView = () => {
-  //   setUnmatchedFull(true)
-  // }
-
-  // const dogCardFullView = () => {
-  //   setdogCardFull(true)
-  // }
+  
 
   const GalleryNine = () => (
     <View style={styles.list}>
@@ -67,11 +58,13 @@ const GalleryScreen = () => {
         const key = userPhotosArray.indexOf(photoUrl)
         if (/(.+com\/o\/__.+)\w+/.test(photoUrl)) {
           return (
-            <GalleryCard 
+            
+              <GalleryCard 
               key={key}
               photoUrl={photoUrl}
               isMatch={false}
-            />
+              />
+
           )
         }
       })}
@@ -96,13 +89,13 @@ const GalleryScreen = () => {
   
   return (
     <SafeAreaView style={styles.container}>
-      {!dogCardFull ? (
+      {!isFullView ? (
          <ScrollView style={styles.scrollView}>
          <Text style={styles.titleText}>Matched Dogs!</Text>
          <Text style={styles.subtitleText}>How many will you collect?</Text>
          <Text style={styles.mainText}>Nine most popular breeds...</Text>
          <GalleryNine />
-         <Text style={styles.mainText}>All breeds...</Text>
+         <Text style={styles.mainTextAll}>All breeds...</Text>
          {!allCardsLoaded? (
            <TouchableOpacity onPress={loadAllCards}>
              <Text style={styles.button}>View All</Text>
@@ -145,10 +138,9 @@ const GalleryScreen = () => {
          )}
          </ScrollView>
       ) : (
-        <UnmatchedCard />
+        <></>
       )
       }
-     
     </SafeAreaView>
   );
 };
@@ -169,8 +161,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     backgroundColor: "#f6d186",
     flex: 1,
-    justifyContent: "flex-start",
-    padding: 20,
+    justifyContent: "flex-start"
   },
   list: {
     marginHorizontal: "auto",
@@ -182,25 +173,13 @@ const styles = StyleSheet.create({
     color: "#a45c5c", 
     fontSize: 16, 
   },
-  overPic: {
-    alignItems: 'stretch',
-    bottom: 0, 
-    justifyContent: 'flex-end',
-    left: 0,
-    position: 'absolute',
-    right: 0,
-    top: 0,   
-  }, 
-  photo: {
-    borderColor: "#7a4815",
-    borderRadius: 5,
-    borderWidth: 3,
-    height: 150,
-    margin: 10,
-    width: 100, 
+  mainTextAll: { 
+    color: "#a45c5c", 
+    fontSize: 16, 
+    marginTop: 10
   },
-  press: {
-    flex: 1,
+  scrollView: {
+    paddingHorizontal: 20,
   },
   subtitleText: { 
     color: "#a45c5c", 
