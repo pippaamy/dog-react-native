@@ -35,6 +35,7 @@ function uploadImageFromUri(uri, name_make_it_unique, catchFunction) {
   return fetch(uri)
     .then((res) => res.blob())
     .then((blob) => {
+      console.log(blob)
       userUploadImage(blob, name_make_it_unique);
     })
     .catch(
