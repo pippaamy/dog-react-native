@@ -2,6 +2,7 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "rea
 import React, { useEffect, useState } from "react";
 import { addFriend, getUserData } from "../api";
 import { auth } from "../firebase";
+import FriendProfile from "./FriendProfile";
 
 const FriendsScreen = () => {
   const [viewAll,setViewAll] = useState(false)
@@ -9,6 +10,8 @@ const FriendsScreen = () => {
   const [friendsData,setFriendData]= useState([])
   const [loggedInUser,setLoggedInUser] =useState({...auth.currentUser, friends:[]})
   const [reloadVar,setReloadVar]= useState(0)
+  const [profileInView,setProfileInView] = useState(false)
+  const [friendProps,setFriendProps] = useState({profileInView,setProfileInView})
   function reload(){
     setReloadVar(x=>x+1)
   }
@@ -32,7 +35,6 @@ const FriendsScreen = () => {
   },[reloadVar])
 
   function addFriendFront(uid){
-    console.log('button pressed');
    
     return addFriend(uid).then((res)=>{
       setLoggedInUser(current=>{
@@ -51,18 +53,23 @@ const FriendsScreen = () => {
       console.log(loggedInUser);
     }) .then(reload)
   }
-  
-    if(viewAll){
-    return (<>
+  function viewProfile(data){
+    setFriendProps({profileInView,setProfileInView,...data})
+    setProfileInView(true)
+  }
+    return profileInView?<FriendProfile {...friendProps}/>
+     :viewAll?(<>
       <ScrollView style={{backgroundColor: "#f6d186"}}>
       {allUsers.map(userData=>{
         let {displayName, photoURL, email,uid}= userData
         if (!photoURL) {photoURL= 'https://cdn-icons-png.flaticon.com/512/1250/1250689.png'}
         return<View key={uid} style={{...styles.container, flexDirection:'row'}}>
-            <Image source={{uri:photoURL}} style={{width:15, height:15}}/>
+           <TouchableOpacity onPress={()=>viewProfile(userData)}><View><Image source={{uri:photoURL}} style={{width:25, height:25}}/></View></TouchableOpacity>
         <Text style={styles.title}> {displayName?displayName +"  |  " +email: email}</Text> 
-        {loggedInUser.friends.includes(uid)?null
-        :<TouchableOpacity  onPress={()=>addFriendFront(uid)}><Text> Add friend </Text></TouchableOpacity>}
+        {loggedInUser.friends.includes(uid)
+        ?<Text> Your Friend !</Text>
+        :loggedInUser.uid === uid ?<Text> You!</Text>
+        :<TouchableOpacity style={styles.smallButton} onPress={()=>addFriendFront(uid)}><Text> Add friend </Text></TouchableOpacity>}
     </View>
       })}
       </ScrollView>
@@ -72,16 +79,20 @@ const FriendsScreen = () => {
             </View>
           </TouchableOpacity>
       </>)
-    } else  return (<>
+      : (<>
     <ScrollView style={{backgroundColor: "#f6d186"}}>
     {friendsData.map(friend=>{
         let {displayName, photoURL, email,uid}= friend
         if (!photoURL) {photoURL= 'https://cdn-icons-png.flaticon.com/512/1250/1250689.png'}
         return<View key={uid} style={{...styles.container, flexDirection:'row'}}>
-          <Image source={{uri:photoURL}} style={{width:15, height:15}}/>
-        <Text style={styles.title}> {displayName?displayName +"  |  " +email: email}</Text> 
+          <TouchableOpacity onPress={()=>viewProfile(friend)}><View><Image source={{uri:photoURL}} style={{width:25, height:25}}/></View></TouchableOpacity>
+        <Text style={styles.title}> {displayName?displayName +"   |   " +email: email}</Text> 
       </View>
-      })}</ScrollView>
+      })}
+      {friendsData.length===0
+      ?<View style={styles.container}><Text> Find friends with the button below ! </Text></View>
+      :null}
+      </ScrollView>
     <TouchableOpacity onPress={()=>setViewAll((x)=>!x)} style={styles.button}>
           <View style={styles.button}>
             <Text style={styles.buttonText}> Find more friends! </Text>
@@ -98,7 +109,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f6d186",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    paddingLeft:40,
+    margin:5,
+    marginRight:40
   },
   button: {
     backgroundColor: "#dc7646",
@@ -109,8 +123,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   smallButton:{
-    padding:0,
-    height: "4em"
+    backgroundColor: "#dc7646",
+    borderRadius:10
   },
   smallButtonText:{
     fontSize:1
