@@ -36,7 +36,7 @@ const LogInScreen = () => {
   }, []);
 
   const handleSignUp = () => {
-    createEmailAndUser(email, password,name);
+    createEmailAndUser(email, password, name,(error) => alert(error.message));
   };
 
   const handleLogin = () => {
