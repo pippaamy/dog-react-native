@@ -1,11 +1,10 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import { Button } from "react-native-elements";
+import { View, Text, Image, TouchableOpacity } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import { uploadImageFromUri, userUploadImage } from "../storage-api";
 import { StyleSheet } from "react-native";
 import { DogCard } from "./DogCard";
 import { useState } from "react";
-const dogs = require("../public/breeds-50-lower - breeds.json");
+const dogs = require("../public/breeds-50-lower - breeds.json")
 
 export const PredictedDog = ({ image, predictions }) => {
   const [clicked, setClicked] = useState(false);
@@ -53,19 +52,28 @@ if (clicked) {
             dog is a {formattedPredictions[0]}!
           </Text>
           <Text style={style.confirmText}>Is that right?</Text>
-
-          <View style={style.buttonWrapper}>
-            <TouchableOpacity style={style.button} onPress={handleYes}>
-              <Text style={style.buttonText}>Yes</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.button} onPress={handleNo}>
-              <Text style={style.buttonText}>No</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={style.button} onPress={saveUnmatched}>
-              <Text style={style.buttonText}>Save Anyway</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+            <TouchableOpacity 
+            style={style.button}
+            onPress={handleYes}>
+                <Text style={style.buttonText}>
+                    Yes
+                </Text>
+                </TouchableOpacity> 
+                <TouchableOpacity 
+            style={style.button}
+            onPress={handleNo}>
+                <Text style={style.buttonText}>
+                    No
+                </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                style={style.button} 
+                onPress={saveUnmatched}>
+                  <Text style={style.buttonText}>
+                    Save Anyway
+                  </Text>
+                </TouchableOpacity>
+                </View>
                     </>
         )
     }

@@ -42,15 +42,15 @@ const FriendsScreen = () => {
         updated.friends.push(uid)
         return updated
       })
-      console.log( friendsData);
+      // console.log( friendsData);
       setFriendData(current=>{
         let updated =current
         updated.push(allUsers.filter(item=>item.uid===uid)[0])
         return updated
       }
       )
-      console.log(friendsData);
-      console.log(loggedInUser);
+      // console.log(friendsData);
+      // console.log(loggedInUser);
     }) .then(reload)
   }
   function viewProfile(data){
