@@ -117,51 +117,88 @@ function getUserDatabyUID(uid, catchFunction) {
 }
 
 function addImagePath(imagePath, catchFunction) {
-    const { uid } = auth.currentUser
-    return updateDoc(userDoc(uid), {
-      imagePaths: arrayUnion(imagePath),
-    }).catch(catchFunction||((error) => {
-      console.log({ errorMessage: error.message, msg: "while adding Image", error });
-    }))
+  const { uid } = auth.currentUser;
+  return updateDoc(userDoc(uid), {
+    imagePaths: arrayUnion(imagePath),
+  }).catch(
+      catchFunction ||
+        ((error) => {
+          Promise.reject({
+            errorMessage: error.message,
+            msg: "while adding Image",
+            error,
+          });
+        })
+    );
 }
 function addProfilePic(path, catchFunction) {
- 
-    const { uid } = auth.currentUser
-    return updateDoc(userDoc(uid), {
-      profilePic: path,
-    }).catch(catchFunction||((error) => {
-      console.log({ errorMessage: error.message, msg: "while adding Profile Image", error });
-    }));
+  const { uid } = auth.currentUser;
+  return updateDoc(userDoc(uid), {
+    profilePic: path,
+  }).catch(
+    catchFunction ||
+      ((error) => {
+        console.log({
+          errorMessage: error.message,
+          msg: "while adding Profile Image",
+          error,
+        });
+      })
+  );
 }
 function addProfilePicURL_db_only(URL, catchFunction) {
-    const { uid } = auth.currentUser
-    return updateDoc(userDoc(uid), {
-      photoURL: URL,
+  const { uid } = auth.currentUser;
+  return updateDoc(userDoc(uid), {
+    photoURL: URL,
+  })
+    .then((res) => {
+      console.log("profile pic updated");
+      return res;
     })
-    .then((res)=>{console.log('profile pic updated')
-  return res})
-    .catch(catchFunction||((error) => {
-      console.log({ errorMessage: error.message, msg: "while adding Profile Image", error });
-    }));
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({
+            errorMessage: error.message,
+            msg: "while adding Profile Image",
+            error,
+          });
+        })
+    );
 }
 function addFriend(friendId, catchFunction) {
   return updateDoc(userDoc(auth.currentUser.uid), {
-      friends: arrayUnion(friendId),
-    }).then(()=>console.log('friend added'))
-    .catch(catchFunction||((error) => {
-      console.log({ errorMessage: error.message, msg: "while adding friend", error });
-    }));
-
+    friends: arrayUnion(friendId),
+  })
+    .then(() => console.log("friend added"))
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({
+            errorMessage: error.message,
+            msg: "while adding friend",
+            error,
+          });
+        })
+    );
 }
 function addCaughtDog(dogName, catchFunction) {
-    if (auth.currentUser) {
-      updateDoc(userDoc(auth.currentUser.uid), {
-        dogsCaught: arrayUnion(dogName),
-      }).then(()=>console.log('caught dog added'))
-      .catch(catchFunction||((error) => {
-        console.log({ errorMessage: error.message, msg: "while adding caught dog",error });
-      }));
-    } else console.log("not logged in");
+  if (auth.currentUser) {
+    updateDoc(userDoc(auth.currentUser.uid), {
+      dogsCaught: arrayUnion(dogName),
+    })
+      .then(() => console.log("caught dog added"))
+      .catch(
+        catchFunction ||
+          ((error) => {
+            console.log({
+              errorMessage: error.message,
+              msg: "while adding caught dog",
+              error,
+            });
+          })
+      );
+  } else console.log("not logged in");
 }
 function emailLogin(email, password, catchFunction) {
   return signInWithEmailAndPassword(auth, email, password)
@@ -170,15 +207,22 @@ function emailLogin(email, password, catchFunction) {
       console.log(user.displayName || user.email + "logged in!");
       return userCredential;
     })
-    .catch(catchFunction||((error) => {
-      console.log({ errorMessage: error.message, msg: "while logging in with email", error });
-    }));
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({
+            errorMessage: error.message,
+            msg: "while logging in with email",
+            error,
+          });
+        })
+    );
 }
-function createEmailAndUser(email, password, username,catchFunction) {
+function createEmailAndUser(email, password, username, catchFunction) {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      if(!email || !password){
-        return Promise.reject({msg: "error"})
+      if (!email || !password) {
+        return Promise.reject({ msg: "error" });
       }
       const user = userCredential.user;
       addUserToFirestore(user);
@@ -187,12 +231,20 @@ function createEmailAndUser(email, password, username,catchFunction) {
       );
       return userCredential;
     })
-    .then(()=>patchProfile(username,'https://cdn-icons-png.flaticon.com/512/1250/1250689.png',catchFunction))
-    .then(()=>username?addDisplayNameToUserDatabase(username):null)
-    .catch(catchFunction||((error) => {
-      return Promise.reject({msg: error})
-      
-    }));
+    .then(() =>
+      patchProfile(
+        username,
+        "https://cdn-icons-png.flaticon.com/512/1250/1250689.png",
+        catchFunction
+      )
+    )
+    .then(() => (username ? addDisplayNameToUserDatabase(username) : null))
+    .catch(
+      catchFunction ||
+        ((error) => {
+          return Promise.reject({ msg: error });
+        })
+    );
 }
 const signOut = (catchFunction) => {
   return auth
@@ -201,69 +253,127 @@ const signOut = (catchFunction) => {
       console.log("signed out");
       return res;
     })
-    .catch(catchFunction||((error) => {
-      console.log({ errorMessage: error.message,msg:'while signing out', error });
-    }));
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({
+            errorMessage: error.message,
+            msg: "while signing out",
+            error,
+          });
+        })
+    );
 };
-function useLoggedInUser(functionWithUserAsParameter){
-  return auth.onAuthStateChanged((user)=>{
-    if(user){
-        functionWithUserAsParameter(user)
-  } else console.log('not logged in')})
+function useLoggedInUser(functionWithUserAsParameter) {
+  return auth.onAuthStateChanged((user) => {
+    if (user) {
+      functionWithUserAsParameter(user);
+    } else console.log("not logged in");
+  });
 }
-function patchProfile(displayName,photoURL, newEmail, newPassword, catchFunction){
-  const updateObj={}
-  let updateStr=''
-  if(displayName) {updateObj.displayName= displayName
-  updateStr+='Name updated,'}
-  if (photoURL) {updateObj.photoURL=photoURL
-  updateStr+='photo updated,'}
-  return updateProfile(auth.currentUser, updateObj).then((res) => {
-   console.log(updateStr); 
-   if (displayName )return addDisplayNameToUserDatabase(displayName)
-  }).then(()=>{ if (photoURL) return addProfilePicURL_db_only(photoURL)})
-  .then(()=>{
-    console.log('database updated');
-   return newEmail? setNewEmail(newEmail):null})
-   .catch(console.log)
-  .then(()=>{newEmail? console.log('email updated'):null 
-  return newPassword?setPassword(newPassword):null})
-  .then(()=>newPassword?console.log('password updated'):null)
-  .catch(catchFunction||((error) => {
-    console.log({ errorMessage: error.message,msg: "while updating user" ,error });
-  }));
+function patchProfile(
+  displayName,
+  photoURL,
+  newEmail,
+  newPassword,
+  catchFunction
+) {
+  const updateObj = {};
+  let updateStr = "";
+  if (displayName) {
+    updateObj.displayName = displayName;
+    updateStr += "Name updated,";
+  }
+  if (photoURL) {
+    updateObj.photoURL = photoURL;
+    updateStr += "photo updated,";
+  }
+  return updateProfile(auth.currentUser, updateObj)
+    .then((res) => {
+      console.log(updateStr);
+      if (displayName) return addDisplayNameToUserDatabase(displayName);
+    })
+    .then(() => {
+      if (photoURL) return addProfilePicURL_db_only(photoURL);
+    })
+    .then(() => {
+      console.log("database updated");
+      return newEmail ? setNewEmail(newEmail) : null;
+    })
+    .catch(console.log)
+    .then(() => {
+      newEmail ? console.log("email updated") : null;
+      return newPassword ? setPassword(newPassword) : null;
+    })
+    .then(() => (newPassword ? console.log("password updated") : null))
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({
+            errorMessage: error.message,
+            msg: "while updating user",
+            error,
+          });
+        })
+    );
 }
 function addDisplayNameToUserDatabase(displayName, catchFunction) {
-    const {uid}= auth.currentUser
-    return displayName? updateDoc(userDoc(uid), {
-      displayName
-    }).catch(catchFunction||((error) => {
-      console.log({ errorMessage: error.message, msg: "while adding Display Name", error });
-    }))
-    : updateDoc(userDoc(uid), {
-    }).catch(catchFunction||((error) => {
-      console.log({ errorMessage: error.message, msg: "while adding Display Name", error });
-    }))
-  
+  const { uid } = auth.currentUser;
+  return displayName
+    ? updateDoc(userDoc(uid), {
+        displayName,
+      }).catch(
+        catchFunction ||
+          ((error) => {
+            console.log({
+              errorMessage: error.message,
+              msg: "while adding Display Name",
+              error,
+            });
+          })
+      )
+    : updateDoc(userDoc(uid), {}).catch(
+        catchFunction ||
+          ((error) => {
+            console.log({
+              errorMessage: error.message,
+              msg: "while adding Display Name",
+              error,
+            });
+          })
+      );
 }
-function setPassword(newPassword,catchFunction){
-  return updatePassword(auth.currentUser, newPassword).then(() => {
-    console.log('Password changed');
-  }).catch(catchFunction||((error) => {
-    console.log({ errorMessage: error.message,msg: "while updating password" ,error });
-  }));
+function setPassword(newPassword, catchFunction) {
+  return updatePassword(auth.currentUser, newPassword)
+    .then(() => {
+      console.log("Password changed");
+    })
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({
+            errorMessage: error.message,
+            msg: "while updating password",
+            error,
+          });
+        })
+    );
 }
-function deleteAccount(catchFunction){
-  return deleteUser(auth.currentUser).then((res) => {
-    console.log('User deleted.');
-    return res
-  }).catch(catchFunction||console.log)
+function deleteAccount(catchFunction) {
+  return deleteUser(auth.currentUser)
+    .then((res) => {
+      console.log("User deleted.");
+      return res;
+    })
+    .catch(catchFunction || console.log);
 }
-function setNewEmail(newEmail,catchFunction){
-  return updateEmail(auth.currentUser, newEmail).then((res) => {
-    console.log('Email updated!'); 
-    return res
-  }).catch(catchFunction||console.log)
+function setNewEmail(newEmail, catchFunction) {
+  return updateEmail(auth.currentUser, newEmail)
+    .then((res) => {
+      console.log("Email updated!");
+      return res;
+    })
+    .catch(catchFunction || console.log);
 }
 
 export {
@@ -283,5 +393,5 @@ export {
   getUserData,
   getBadges,
   addImagePath,
-  addProfilePic
+  addProfilePic,
 };

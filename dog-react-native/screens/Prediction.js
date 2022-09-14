@@ -5,7 +5,7 @@ import {
 } from "react-native";
 import * as tf from "@tensorflow/tfjs";
 import * as FileSystem from 'expo-file-system';
-import {decodeJpeg, fetch} from '@tensorflow/tfjs-react-native'; // comment out this line for wsl
+//import {decodeJpeg, fetch} from '@tensorflow/tfjs-react-native'; // comment out this line for wsl
 import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as jpeg from "jpeg-js";
 import LoadingScreen from "./LoadingScreenPrediction";
@@ -47,30 +47,30 @@ class Prediction extends React.Component {
     return tf.tensor3d(buffer, [height, width, 3]);
   }
 
-  classifyImage = async (image) => {
-    console.log(image, "image")
-    try {
-      // const imageAssetPath = Image.resolveAssetSource(this.state.image)
-      //const response = await fetch(image, {}, { isBinary: true });
-      //console.log(response, "response")
-      //const rawImageData = await response.arrayBuffer();
-      const fileUri = image;      
-      const imgB64 = await FileSystem.readAsStringAsync(fileUri, {
-	      encoding: FileSystem.EncodingType.Base64,
-      });
-      const imgBuffer = tf.util.encodeString(imgB64, 'base64').buffer;
-      const raw = new Uint8Array(imgBuffer)  
-      const imageTensor = decodeJpeg(raw);
-      //const imageTensor = this.imageToTensor(rawImageData);
-      console.log(imageTensor, "imagetensor");
-      const predictions = await this.model.classify(imageTensor);
-      this.setState({ predictions });
-      console.log(predictions, "predictions");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  /* // DONT REMOVE!!  Replace the above function with this one for wsl
+  // classifyImage = async (image) => {
+  //   console.log(image, "image")
+  //   try {
+  //     // const imageAssetPath = Image.resolveAssetSource(this.state.image)
+  //     //const response = await fetch(image, {}, { isBinary: true });
+  //     //console.log(response, "response")
+  //     //const rawImageData = await response.arrayBuffer();
+  //     const fileUri = image;      
+  //     const imgB64 = await FileSystem.readAsStringAsync(fileUri, {
+	//       encoding: FileSystem.EncodingType.Base64,
+  //     });
+  //     const imgBuffer = tf.util.encodeString(imgB64, 'base64').buffer;
+  //     const raw = new Uint8Array(imgBuffer)  
+  //     const imageTensor = decodeJpeg(raw);
+  //     //const imageTensor = this.imageToTensor(rawImageData);
+  //     console.log(imageTensor, "imagetensor");
+  //     const predictions = await this.model.classify(imageTensor);
+  //     this.setState({ predictions });
+  //     console.log(predictions, "predictions");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+   // DONT REMOVE!!  Replace the above function with this one for wsl
   classifyImage = async (image) => {
     try {
         const imageId= document.getElementById('imageId')
@@ -80,7 +80,7 @@ class Prediction extends React.Component {
       this.setState({ predictions:predictions })
       console.log({predictions})
     } catch (error) { console.log(error)    } 
-  } */
+  } 
 
 
   renderPrediction = (prediction) => {
@@ -108,14 +108,14 @@ class Prediction extends React.Component {
       return (<>
         <PredictedDog image={image} predictions={predictions}/>
         {/* //uncomment the line below for wsl */}
-        {/* <img src={image} id='imageId' hidden/>  */}
+        <img src={image} id='imageId' hidden/> 
       </>);
     }
     return (
       <>
         <LoadingScreen />
 	{/* //uncomment the line below for wsl */}
-        {/* <img src={image} id='imageId' hidden/>  */}
+        <img src={image} id='imageId' hidden/> 
       </>
     );
   }
