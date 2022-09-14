@@ -9,20 +9,19 @@ import CameraScreen from "./screens/CameraScreen";
 const Stack = createNativeStackNavigator();
 
 const headerOptions = {
-  title: 'Gone For A Bork!',
-  headerTitleAlign: 'center',
+  title: "Gone For A Bork!",
+  headerTitleAlign: "center",
   headerStyle: {
-    backgroundColor: '#c79e58',
+    backgroundColor: "#c79e58",
   },
-  headerTintColor: '#fff',
+  headerTintColor: "#fff",
   headerTitleStyle: {
     fontSize: 30,
-    fontWeight: 'bold',
-  }
-}
+    fontWeight: "bold",
+  },
+};
 
 export default function App() {
-  
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -31,23 +30,22 @@ export default function App() {
           component={LogInScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen 
-          name="Main" 
-          component={MainScreen} 
-          options={headerOptions} 
+        <Stack.Screen
+          name="Main"
+          component={MainScreen}
+          options={headerOptions}
         />
         <Stack.Screen
           name="Camera"
           component={CameraScreen}
           options={{
             headerStyle: {
-              backgroundColor: '#c79e58',
+              backgroundColor: "#c79e58",
             },
-            headerTintColor: '#fff'
+            headerTintColor: "#fff",
           }}
         />
       </Stack.Navigator>
     </NavigationContainer>
-          
   );
 }

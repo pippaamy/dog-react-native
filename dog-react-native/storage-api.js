@@ -37,6 +37,7 @@ function uploadImageFromUri(uri, name_make_it_unique, catchFunction) {
     .then((blob) => {
       console.log(blob)
       userUploadImage(blob, name_make_it_unique);
+      /// dont ask me why this console log is needed to make the function work it just does
     })
     .catch(
       catchFunction ||
@@ -105,7 +106,22 @@ function userUploadProfileImage_Old(
     );
 }
 
-function deleteImage(imageName, catchFunction) {
+function deleteImage(imagePath, catchFunction) {
+  if(imagePath.length >8){ return deleteObject(ref(storage, imagePath))
+    .then(() => {
+      console.log("File " + imagePath + " deleted successfully");
+    })
+    .catch(
+      catchFunction ||
+        ((error) => {
+          console.log({ errorMessage: error.message, error });
+        })
+    )} else{
+      console.log("Are you sure you want to delete all images starting with"+imagePath+"?, use deleteImageNoWarn");
+      return new Promise()
+    }
+}
+function deleteImageNoWarn(imageName, catchFunction) {
   return deleteObject(ref(storage, imageName))
     .then(() => {
       console.log("File" + imageName + "deleted successfully");
@@ -188,7 +204,7 @@ function getDogImageUrls(optionalCatchFunction) {
     })
     .then((imageUrls) => {
       imageUrls.forEach((url, index) => {
-        const name = pathArray[index].split("_")[0];
+        const name = pathArray[index].split("_")[0].toUpperCase();
         if (obj.hasOwnProperty(name)) {
           obj[name].push(url);
         } else obj[name] = [url];
@@ -201,6 +217,7 @@ function getDogImageUrls(optionalCatchFunction) {
     );
 }
 export {
+  deleteImageNoWarn,
   getDogImageUrls,
   uploadProfileImagefromUri,
   uploadProfileImagefromFile,

@@ -6,9 +6,8 @@ import { useState } from "react";
 import { DogCard } from "./DogCard";
 const dogs = require("../public/breeds-50-lower - breeds.json")
 
-
-export const PredictedDog = ({image, predictions}) => {
-const [clicked, setClicked] = useState(false)
+export const PredictedDog = ({ image, predictions }) => {
+  const [clicked, setClicked] = useState(false);
 
 
     let formattedPredictions = []
@@ -34,43 +33,23 @@ const [clicked, setClicked] = useState(false)
     }
 
        const handleYes = () => {
-        // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
         setClicked(true)
-        // console.log("345682793")
        }
 
-const clickedReturn = () => {
-    return (
-        <>
-        <View>
-            <Text>
-                kjdfnkcndv
-            </Text>
-        </View>
-        </>
-    )
-}
-
-console.log(clicked)
 if (clicked) {
     return <DogCard image={image} formattedPredictions={formattedPredictions}/>
 }
 
-        if (formattedPredictions.length !== 0) {
-            return (
-                <>
+  if (formattedPredictions.length !== 0) {
+    return (
+      <>
         <View style={style.container}>
-        <Image style={style.image} 
-        source={{uri: image}}/>
-            <Text style={style.mainText}>
-                There is a {(formattedPredictions[1] * 100).toFixed(1)}% chance that dog is a {formattedPredictions[0]}!
-            </Text>
-            <Text style={style.confirmText}>
-                Is that right?
-            </Text>
-            
-            <View style={style.buttonWrapper}>
-
+          <Image style={style.image} source={{ uri: image }} />
+          <Text style={style.mainText}>
+            There is a {(formattedPredictions[1] * 100).toFixed(1)}% chance that
+            dog is a {formattedPredictions[0]}!
+          </Text>
+          <Text style={style.confirmText}>Is that right?</Text>
             <TouchableOpacity 
             style={style.button}
             onPress={handleYes}>
@@ -124,7 +103,6 @@ if (clicked) {
                   </Text>
                 </TouchableOpacity>
                     </View>
-        </View>
 
     </>
     )
