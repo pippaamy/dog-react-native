@@ -9,10 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import {
-  uploadProfileImagefromFile,
-  uploadProfileImagefromUri,
-} from "../storage-api";
+import { uploadProfileImagefromUri } from "../storage-api";
 import { auth } from "../firebase";
 
 export default function UploadImage() {

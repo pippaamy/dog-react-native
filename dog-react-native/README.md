@@ -1,4 +1,4 @@
-# Go for a Bork
+# Gone for a Bork
 
 Our App is a gamified dog breed identifier. You take a picture of a dog and it will match with a breed. It will give you a card with some fun facts about the breed. These will be shown within the gallery. You can see how many of the 50 you have collected and compare with friends on the app. If you take a picture and it is'nt a collectable you have the option to save it anyway.
 
