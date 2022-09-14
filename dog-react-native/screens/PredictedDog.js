@@ -94,7 +94,7 @@ if (clicked) {
                   </Text>
                 </TouchableOpacity>
                 </View>
-        </View>
+                </View>
                     </>
         )
     }
