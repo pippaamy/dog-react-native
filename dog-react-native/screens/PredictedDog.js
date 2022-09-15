@@ -49,9 +49,9 @@ export const PredictedDog = ({ image, predictions }) => {
     }
   };
 
-  const handleYes = () => {
+  const handleYes = async () => {
     // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
-    uploadImageFromUri(image,formattedPredictions[0]+`_${Date.now().toString()}`)
+    await uploadImageFromUri(image,formattedPredictions[0]+`_${Date.now().toString()}`)
     setClicked(true);
   };
 
