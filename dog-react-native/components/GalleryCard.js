@@ -28,11 +28,6 @@ const GalleryCard = ({ breed, isMatch, photoUrl }) => {
         {/* <View style={styles.overPic}>
           <TouchableOpacity onPress={loadDogCard(breed)} style={styles.press}/>
         </View> */}
-        <View style={styles.overPic}>
-          <TouchableOpacity style={styles.matchLabel}>
-            <Text style={styles.breed}>{breed}</Text>
-          </TouchableOpacity>
-        </View>
       </ImageBackground>
     )
   } else if (!isMatch) {
@@ -60,7 +55,7 @@ const GalleryCard = ({ breed, isMatch, photoUrl }) => {
         style={styles.photo}    
       >
         <View style={styles.overPic}>
-          <TouchableOpacity style={styles.matchLabel}>
+          <TouchableOpacity>
             <Text style={styles.breed}>{breed}</Text>
           </TouchableOpacity>
         </View>
@@ -108,10 +103,6 @@ const styles = StyleSheet.create({
     color: "#a45c5c", 
     fontSize: 16, 
   },
-  matchLabel: {
-    backgroundColor: "white",
-    marginBottom:3
-  }, 
   photo: {
     height: 150,
     margin: 10,
