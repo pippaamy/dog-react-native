@@ -50,8 +50,8 @@ export const PredictedDog = ({ image, predictions }) => {
   };
 
   const handleYes = () => {
-    uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
-    // uploadImageFromUri(image,formattedPredictions[0])
+    // uploadImageFromUri(image,predictions[0].className+`_${Date.now().toString()}`)
+    uploadImageFromUri(image,formattedPredictions[0]+`_${Date.now().toString()}`)
     setClicked(true);
   };
 
