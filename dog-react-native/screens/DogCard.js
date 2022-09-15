@@ -27,7 +27,7 @@ export const DogCard = ({image, formattedPredictions}) => {
             <Image style={style.image} 
         source={{uri: image}}/>
                 </View>
-                <Image />
+                <Image source={energyIcon}/>
                 <View style={style.infoTextWrapper}>
         <Text style={style.infoText}>
         Energy Level: {"⚡".repeat(breedInfo[0].e1_energy_level)}
