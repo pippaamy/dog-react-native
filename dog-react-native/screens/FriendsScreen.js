@@ -156,7 +156,7 @@ const FriendsScreen = () => {
                 <View>
                   <Image
                     source={{ uri: photoURL }}
-                    style={{ width: 70, height: 70, margin:5,marginLeft:0 }}
+                    style={{ width: 90, height: 90, margin:5,marginLeft:0 }}
                   />
                 </View>
               </TouchableOpacity>
