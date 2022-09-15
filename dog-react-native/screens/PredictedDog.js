@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native"
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { uploadImageFromUri, userUploadImage } from "../storage-api";
 import { StyleSheet } from "react-native";
@@ -30,16 +30,23 @@ export const PredictedDog = ({ image, predictions }) => {
     navigation.replace("Camera");
   };
   const saveUnmatched = (event) => {
-    setIsLoading(false);
-    const id = `__${Date.now().toString()}`;
-    uploadImageFromUri(image, id).then(() => {
-      setTimeout(() => {
-        setIsLoading(true);
-      }, 2000);
-    }).catch(() => {
-      console.log("caught at posting img");
-      navigation.replace("Main")
-    })
+    event.defaultPrevented = true;
+    if (event.currentTarget.disabled === true) {}
+    else{
+      event.currentTarget.disabled = true;
+      setIsLoading(false);
+      const id = `__${Date.now().toString()}`;
+      uploadImageFromUri(image, id)
+        .then(() => {
+          setTimeout(() => {
+            setIsLoading(true);
+          }, 2000);
+        })
+        .catch(() => {
+          console.log("caught at posting img");
+          navigation.replace("Main");
+        });
+    }
   };
 
   const handleYes = () => {
