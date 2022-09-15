@@ -111,6 +111,8 @@ class Prediction extends React.Component {
     if (predictions !== null) {
       return (<>
         <PredictedDog image={image} predictions={predictions}/>
+         {/* un comment line below for wsl */}
+        {/* <img src={image} id='imageId' hidden/>  */}
       </>);
     }
     return (

@@ -154,7 +154,7 @@ export default function CameraScreen() {
       </Camera>
       )} 
 
-    </View> : <Prediction capturedImage={capturedImage}/>}
+    </View> : <Prediction capturedImage={capturedImage} navigation={navigation}/>}
     
       </>
   );
