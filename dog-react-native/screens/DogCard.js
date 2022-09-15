@@ -1,6 +1,7 @@
 const dogs = require("../public/breeds-50-lower - breeds.json")
 import { View, Text, Image, TouchableOpacity } from "react-native"
 import { StyleSheet } from "react-native"
+import * as energyIcon from "../public/images/bw-icons/006-thunder.png"
 
 export const DogCard = ({image, formattedPredictions}) => {
     let breedInfo = []
